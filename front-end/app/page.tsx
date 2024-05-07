@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Login from "@/components/forms/login";
 
-export default function Home() {
-  return <Button>click me</Button>;
-}
+const page = () => {
+  return <Login />;
+};
+
+export default page;

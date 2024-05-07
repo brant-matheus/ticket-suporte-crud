@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ExternalsController {
-  async store() {}
-  async login() {}
+  async store({ request }: HttpContext) {}
+  async login({ request }: HttpContext) {}
 }

@@ -3,7 +3,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 
 export default class UsersController {
-  async index({}: HttpContext) {}
+  async index() {}
 
   async store({ request, auth }: HttpContext) {}
 
