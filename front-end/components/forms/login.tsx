@@ -59,9 +59,11 @@ export default function Login() {
   });
 
   async function login(loginForm: z.infer<typeof formSchema>) {
-    console.log(loginForm);
     try {
-    } catch (error) {}
+      const { status, data } = await instance.post("auth", loginForm);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -100,7 +102,7 @@ export default function Login() {
                 )}
               />
               <FormField
-                // controll save input
+                // controll saves input
                 control={form.control}
                 // ctrl+space should auto complete the name, default values
                 name="password"
@@ -124,7 +126,7 @@ export default function Login() {
                 )}
               />
               <Button className="w-full" type="submit" disabled={loginButton}>
-                Submit
+                Login
               </Button>
               <p className="text-[red]">{loginError}</p>
               <p>
