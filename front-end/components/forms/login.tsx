@@ -59,9 +59,21 @@ export default function Login() {
   });
 
   async function login(loginForm: z.infer<typeof formSchema>) {
+    setLoginButton(true);
     try {
-      const { status, data } = await instance.post("auth", loginForm);
+      const { data } = await instance.post("auth", loginForm);
+      localStorage.setItem("userId", data.id);
+      localStorage.setItem("token", data.token.token);
+
+      if (data.isAdmin) {
+        router.push("/suporte");
+      } else {
+        router.push("/guest");
+      }
     } catch (error) {
+      setLoginButton(false);
+      setLoginError("*Error no login, confira suas credenciais");
+      form.resetField("password");
       console.log(error);
     }
   }

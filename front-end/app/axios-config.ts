@@ -8,6 +8,7 @@ export const instance = axios.create({
 export const authInstance = axios.create({
   baseURL: process.env.API_URL,
   headers: {
-    Authorization: "Bearer " + localStorage.getItem("bearer"),
+    Authorization: "Bearer " + localStorage.getItem("token"),
+    id: localStorage.getItem("id"),
   },
 });

@@ -11,7 +11,7 @@ export default class AuthController {
     // create acess token.
     const token = await User.accessTokens.create(user)
     // return token, user id to be saved in front-end.
-    return { token: token, id: user.id }
+    return { token: token, id: user.id, isAdmin: user.isAdmin }
   }
   async logout({ auth }: HttpContext) {
     //delete all tokenable id
