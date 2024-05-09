@@ -74,7 +74,6 @@ export default function Login() {
       setLoginButton(false);
       setLoginError("*Error no login, confira suas credenciais");
       form.resetField("password");
-      console.log(error);
     }
   }
 

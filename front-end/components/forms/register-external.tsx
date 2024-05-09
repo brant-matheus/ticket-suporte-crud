@@ -77,11 +77,9 @@ const RegisterExternal = () => {
         router.push("guest");
       }
     } catch (error) {
-      if (error instanceof Error) {
-        setLoginButton(false);
-        form.resetField("email");
-        setLoginError("*Email já existe no Banco de dados");
-      }
+      setLoginButton(false);
+      form.resetField("email");
+      setLoginError("*Email já existe no Banco de dados");
     }
   }
   return (
