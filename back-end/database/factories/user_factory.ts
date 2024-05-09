@@ -4,10 +4,10 @@ import User from '#models/user'
 export const UserFactory = factory
   .define(User, async ({ faker }) => {
     return {
-      email: 'cliente@sagatech.com',
-      fullName: 'cliente saga',
+      email: 'suporte@sagatech.com',
+      fullName: 'suporte sagatech',
       password: 'Testing@123',
-      isAdmin: false,
+      isAdmin: true,
     }
   })
   .build()

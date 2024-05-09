@@ -10,6 +10,7 @@ import {
 
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 /* 
 1. icons: Home: ticket visualization; Settings: User settings; Filecog: defacul ticket form; UserCog: users managment
@@ -22,6 +23,8 @@ interface onPage {
 }
 
 const AdminSideBar = ({ onPage }: onPage) => {
+  const router = useRouter();
+
   return (
     <div>
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -51,16 +54,18 @@ const AdminSideBar = ({ onPage }: onPage) => {
               <TooltipTrigger asChild>
                 {/*h height, w width */}
                 {onPage === "home" ? (
-                  <Button className="h-7 rounded-full">
-                    <Link href="/suporte">
-                      <Home className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    className="h-7 rounded-full"
+                    onClick={() => router.push("/suporte")}
+                  >
+                    <Home className="h-6 w-6 " />
                   </Button>
                 ) : (
-                  <Button variant={"ghost"}>
-                    <Link href="/suporte">
-                      <Home className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => router.push("/suporte")}
+                  >
+                    <Home className="h-6 w-6 " />
                   </Button>
                 )}
               </TooltipTrigger>
@@ -72,16 +77,18 @@ const AdminSideBar = ({ onPage }: onPage) => {
               <TooltipTrigger asChild>
                 {/*h height, w width */}
                 {onPage === "users-managment" ? (
-                  <Button className="h-7  rounded-full">
-                    <Link href="/suporte/gestao-usuario">
-                      <UserCog className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    className="h-7  rounded-full"
+                    onClick={() => router.push("/suporte/gestao-usuarios")}
+                  >
+                    <UserCog className="h-6 w-6 " />
                   </Button>
                 ) : (
-                  <Button variant={"ghost"}>
-                    <Link href="/suporte/gestao-usuarios">
-                      <UserCog className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => router.push("/suporte/gestao-usuarios")}
+                  >
+                    <UserCog className="h-6 w-6 " />
                   </Button>
                 )}
               </TooltipTrigger>
@@ -93,16 +100,18 @@ const AdminSideBar = ({ onPage }: onPage) => {
               <TooltipTrigger asChild>
                 {/*h height, w width */}
                 {onPage === "set-ticket" ? (
-                  <Button className="h-7 rounded-full">
-                    <Link href="/suporte/definir-ticket">
-                      <FileCog className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    className="h-7 rounded-full"
+                    onClick={() => router.push("/suporte/definir-ticket")}
+                  >
+                    <FileCog className="h-6 w-6 " />
                   </Button>
                 ) : (
-                  <Button variant={"ghost"}>
-                    <Link href="/suporte/definir-ticket">
-                      <FileCog className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => router.push("/suporte/definir-ticket")}
+                  >
+                    <FileCog className="h-6 w-6 " />
                   </Button>
                 )}
               </TooltipTrigger>
@@ -114,16 +123,19 @@ const AdminSideBar = ({ onPage }: onPage) => {
               <TooltipTrigger asChild>
                 {/*h height, w width */}
                 {onPage === "user-settings" ? (
-                  <Button className="h-7 rounded-full">
-                    <Link href="/suporte/configuracao-usuario">
-                      <Settings className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    variant={"default"}
+                    className="h-7 rounded-full"
+                    onClick={() => router.push("/suporte/configuracao-usuario")}
+                  >
+                    <Settings className="h-6 w-6 " />
                   </Button>
                 ) : (
-                  <Button variant={"ghost"}>
-                    <Link href="/suporte/configuracao-usuario">
-                      <Settings className="h-6 w-6 " />
-                    </Link>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => router.push("/suporte/configuracao-usuario")}
+                  >
+                    <Settings className="h-6 w-6 " />
                   </Button>
                 )}
               </TooltipTrigger>
