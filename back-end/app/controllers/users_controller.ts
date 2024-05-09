@@ -12,7 +12,7 @@ import { DateTime } from 'luxon'
 
 export default class UsersController {
   async index() {
-    return (await User.all()).reverse()
+    return await User.first()
   }
 
   async store({ request, auth }: HttpContext) {

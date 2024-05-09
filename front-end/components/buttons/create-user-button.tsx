@@ -24,7 +24,7 @@ import {
 import RegisterModal from "../forms/register-modal";
 const CreateUserButton = () => {
   return (
-    <div className="">
+    <div className="absolute top-0 right-0 mt-14 mr-48 ">
       <Dialog>
         <DialogTrigger asChild>
           <Button size="sm" className="h-8 gap-1">
