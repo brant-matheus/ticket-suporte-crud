@@ -30,14 +30,14 @@ export default class UsersController {
       const payload = await request.validateUsing(InternalUserValidator) //status 400 error
       // create user
       await User.create(payload)
-    } else {
       // guest creating itself. MUST HAVE BY DEFAULT isAdmin's flag false. merge before validation, to make sure isAdmin is false
+    } else {
       const user = Object.assign(request.all(), { isAdmin: false })
       // validate input
-      const payload = await ExternalUserValidator.validate(user) //status 422 error, bad request
+      const payload = await ExternalUserValidator.validate(user) //status 400 error, bad request
 
       // create user
-      await User.create(payload)
+      return (await User.create(payload)).isAdmin
     }
   }
 
