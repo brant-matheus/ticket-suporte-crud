@@ -25,7 +25,7 @@ export const ExternalUserValidator = vine.compile(
   })
 )
 
-export const PostUserValidator = vine.compile(
+export const InternalUserValidator = vine.compile(
   vine.object({
     email: vine
       .string()
@@ -60,5 +60,31 @@ export const PutUserValidator = vine.compile(
       .trim()
       .toLowerCase(),
     isAdmin: vine.boolean(),
+  })
+)
+
+export const PutPasswordValidator = vine.compile(
+  vine.object({
+    password: vine
+      .string()
+      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
+      .confirmed({
+        confirmationField: 'passwordConfirmation',
+      }),
+  })
+)
+
+export const PutGuestValidator = vine.compile(
+  vine.object({
+    email: vine
+      .string()
+      .trim()
+      .toLowerCase()
+      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/),
+    fullName: vine
+      .string()
+      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
+      .trim()
+      .toLowerCase(),
   })
 )

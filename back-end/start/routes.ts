@@ -15,7 +15,10 @@ router
   })
   .middleware(middleware.auth())
 
-// external, no auth.
+// login
 router.post('auth', [AuthController, 'login'])
 
+//guest register by guest
 router.post('externalUser', [UsersController, 'store'])
+
+//
