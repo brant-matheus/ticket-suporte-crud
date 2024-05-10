@@ -17,11 +17,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
-const RegisterModal = () => {
-  const [errorMessage, setErrorMessage] = useState("");
-  const [error, setError] = useState(false);
-  const [sucess, setSucess] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
+import { useToast } from "@/components/ui/use-toast";
+interface props {
+  closeDialog: any;
+}
+const RegisterModal = ({ closeDialog }: props) => {
+  const { toast } = useToast();
   const [loginButton, setLoginButton] = useState(false);
   const formSchema = z
     .object({
@@ -70,14 +71,26 @@ const RegisterModal = () => {
     console.log(dataForm);
     try {
       await authInstance.post("user", dataForm);
+      closeDialog();
+
       setLoginButton(false);
-      setSucess(true);
+      toast({
+        variant: "sucess",
+        title: "Usuário criado com sucesso.",
+        description:
+          "O usuário foi criado com sucesso, reinicie a página para visualizar a alteração",
+      });
+
       form.reset();
     } catch (error) {
       setLoginButton(false);
-      setError(true);
-      setErrorMessage("*Email existente!");
       form.resetField("email");
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          "Error ao criar usuário, email já existente no banco de dados.",
+      });
     }
   }
   return (
@@ -86,10 +99,7 @@ const RegisterModal = () => {
         <form
           onSubmit={form.handleSubmit(modalRegister)}
           className="grid gap-4 "
-          onKeyUp={() => {
-            setError(false);
-            setSucess(false);
-          }}
+
           //make staus message invisible after typing
         >
           <FormField
@@ -188,10 +198,6 @@ const RegisterModal = () => {
             <PlusCircle className="h-4 w-4" />
             <div className="text-[15px]">Cadastrar</div>
           </Button>
-          {sucess ? (
-            <p className="text-green-700">*Usuário criado com sucesso</p>
-          ) : null}
-          {error ? <p className="text-red-600">{errorMessage}</p> : null}
         </form>
       </Form>
     </div>

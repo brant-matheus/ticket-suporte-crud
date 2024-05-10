@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,9 +24,13 @@ import {
 } from "@/components/ui/form";
 import RegisterModal from "../forms/register-modal";
 const CreateUserButton = () => {
+  const [open, setOpen] = useState(false);
+  function closeDialog() {
+    setOpen(false);
+  }
   return (
     <div className="absolute top-0 right-0 mt-14 mr-48 ">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size="sm" className="h-8 gap-1">
             <PlusCircle className="h-4 w-4" /> Criar Usuário
@@ -33,7 +38,7 @@ const CreateUserButton = () => {
         </DialogTrigger>
         <DialogContent>
           {/* form  */}
-          <RegisterModal />
+          <RegisterModal closeDialog={closeDialog} />
         </DialogContent>
       </Dialog>
     </div>

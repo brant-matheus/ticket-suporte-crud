@@ -64,7 +64,7 @@ const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
     defaultValues: {
       fullName: `${fullName}`,
       email: `${email}`,
-      isAdmin: isAdmin.toString()! as string,
+      isAdmin: isAdmin.toString(),
     },
   });
   async function userEdit(editForm: z.infer<typeof editSchema>) {
@@ -91,7 +91,7 @@ const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
         variant: "destructive",
         title: "Error",
         description:
-          "O usuário não existe em nosso banco de dados, atualize a página.",
+          "Error: Usuário inexistente, digitação errada ou email já existente.",
       });
     }
   }
@@ -171,7 +171,7 @@ const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
               )}
             ></FormField>
             <Button type="submit" disabled={boolEditButton}>
-              Editar
+              Salvar
             </Button>
           </form>
         </Form>

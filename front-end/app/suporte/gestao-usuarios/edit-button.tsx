@@ -12,7 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FormEdit from "./general-form-edit";
 import { Button } from "@/components/ui/button";
-
+import PasswordFormEdit from "./password-from-edit";
 interface props {
   fullName: string;
   email: string;
@@ -43,12 +43,11 @@ const EditButton = ({ fullName, email, isAdmin, userId }: props) => {
               email={email}
               isAdmin={isAdmin}
               userId={userId}
-              key={null}
               closeDialog={closeDialog}
             />
           </TabsContent>
           <TabsContent value="password">
-            <h2>REDEFINIR PASSWORD FORM HERE</h2>
+            <PasswordFormEdit closeDialog={closeDialog} userId={userId} />
           </TabsContent>
         </Tabs>
       </DialogContent>
