@@ -6,10 +6,10 @@ async function getData(): Promise<UsersData[]> {
   // Fetch data from your API here.
   return [
     {
-      id: 31,
+      id: 2,
       fullName: "suporte sagatech",
-      email: "m@example.com",
-      isAdmin: 1,
+      email: "editaresseusuario@hotmail.com",
+      isAdmin: 0,
     },
   ];
 }

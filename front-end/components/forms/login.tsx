@@ -93,7 +93,7 @@ export default function Login() {
             {/* html form, submit inputs registered by control*/}
             <form onSubmit={form.handleSubmit(login)} className="grid gap-4">
               <FormField
-                // controll save input
+                // make sure we can acess the expected type. (fullName, email...)
                 control={form.control}
                 // ctrl+space should auto complete the name, default values
                 name="email"
@@ -113,7 +113,7 @@ export default function Login() {
                 )}
               />
               <FormField
-                // controll saves input
+                // make sure we can acess the expected type. (fullName, email...)
                 control={form.control}
                 // ctrl+space should auto complete the name, default values
                 name="password"

@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
+import EditButton from "./edit-button";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -45,12 +46,21 @@ export const columns: ColumnDef<UsersData>[] = [
       const user = row.original;
       return (
         <>
-          <DeleteDialog
-            route="user"
-            title="Usuário"
-            params={user.id}
-            key={user.id}
-          />
+          <div className="flex space-x-2">
+            <DeleteDialog
+              route="user"
+              title="Usuário"
+              params={user.id}
+              key={user.id}
+            />
+            <EditButton
+              fullName={user.fullName}
+              email={user.email}
+              isAdmin={user.isAdmin}
+              userId={user.id}
+              key={null}
+            />
+          </div>
         </>
       );
     },

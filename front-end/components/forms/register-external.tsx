@@ -100,7 +100,7 @@ const RegisterExternal = () => {
               className="grid gap-4"
             >
               <FormField
-                // controll save input
+                // make sure we can acess the expected type. (fullName, email...)
                 control={form.control}
                 // ctrl+space should auto complete the name, default values
                 name="fullName"
@@ -120,7 +120,7 @@ const RegisterExternal = () => {
                 )}
               />
               <FormField
-                // controll save input
+                // make sure we can acess the expected type. (fullName, email...)
                 control={form.control}
                 // ctrl+space should auto complete the name, default values
                 name="email"
@@ -140,7 +140,7 @@ const RegisterExternal = () => {
                 )}
               />
               <FormField
-                // controll save input
+                // make sure we can acess the expected type. (fullName, email...)
                 control={form.control}
                 // ctrl+space should auto complete the name, default values
                 name="password"
@@ -164,7 +164,7 @@ const RegisterExternal = () => {
                 )}
               />
               <FormField
-                // controll save input
+                // make sure we can acess the expected type. (fullName, email...)
                 control={form.control}
                 // ctrl+space should auto complete the name, default values
                 name="passwordConfirmation"
