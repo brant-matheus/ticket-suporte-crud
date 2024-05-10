@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import db from '@adonisjs/lucid/services/db'
 
@@ -19,5 +19,11 @@ export default class AuthController {
     const userId = auth.user?.id! as number
     //delete from table, where column id equals user id
     await db.from('auth_access_tokens').where('tokenable_id', userId).delete()
+  }
+
+  async adminAuth({ auth, params }: HttpContext) {
+    if (auth.user?.isAdmin) {
+      return true
+    }
   }
 }

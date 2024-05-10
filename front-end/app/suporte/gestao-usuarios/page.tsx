@@ -14,7 +14,7 @@ async function getData(): Promise<UsersData[]> {
     {
       id: 4,
       fullName: "suporte sagatech",
-      email: "editaresseusuario@hotmail.com",
+      email: "zara@hotmail.com",
       isAdmin: 1,
     },
   ];
@@ -25,11 +25,11 @@ export default async function DemoPage() {
 
   return (
     <>
-      <div className="absolute top-0 right-0 mt-11 mr-36 ">
+      <div className="absolute top-0 right-0 mt-[105px] mr-48 ">
         <CreateUserButton />
       </div>
       <AdminSideBar onPage="users-managment" />
-      <div className="container mx-auto p-[85px] ">
+      <div className="container mx-auto p-20 ">
         <DataTable columns={columns} data={data} />
       </div>
     </>

@@ -7,21 +7,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Settings } from "lucide-react";
+import { Button } from "../ui/button";
 import { authInstance } from "@/app/axios-config";
+import { useRouter } from "next/navigation";
 
 const Logout = () => {
+  const router = useRouter();
+  async function logout() {
+    try {
+      await authInstance.get(`user`);
+      localStorage.clear();
+      router.push("/");
+    } catch (error) {}
+  }
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+      <DropdownMenuTrigger asChild>
+        <Settings className="cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <DropdownMenuLabel>Logout</DropdownMenuLabel>
+          <DropdownMenuLabel className="cursor-pointer" onClick={logout}>
+            Logout
+          </DropdownMenuLabel>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

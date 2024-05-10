@@ -1,16 +1,39 @@
 "use client";
-import React from "react";
-import { Home, Settings, FileCog, UserCog, User2 } from "lucide-react";
+import React, { useEffect } from "react";
+import {
+  Home,
+  Settings,
+  FileCog,
+  UserCog,
+  User2,
+  CircleUserRound,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import Logout from "./logout";
+import { authInstance } from "@/app/axios-config";
+import { useState } from "react";
 
 /* 
 1. icons: Home: ticket visualization; Settings: User settings; Filecog: defacul ticket form; UserCog: users managment
@@ -24,6 +47,20 @@ interface onPage {
 
 const AdminSideBar = ({ onPage }: onPage) => {
   const router = useRouter();
+  async function adminAuth() {
+    try {
+      const { data } = await authInstance.get("auth/1");
+      console.log(data);
+    } catch (error) {
+      if (error.response.status === 401) {
+        router.push("/");
+        localStorage.clear();
+      }
+    }
+  }
+  useEffect(() => {
+    adminAuth();
+  }, []);
 
   return (
     <div>
@@ -128,14 +165,14 @@ const AdminSideBar = ({ onPage }: onPage) => {
                     className="h-7 rounded-full"
                     onClick={() => router.push("/suporte/configuracao-usuario")}
                   >
-                    <Settings className="h-6 w-6 " />
+                    <CircleUserRound className="h-6 w-6 " />
                   </Button>
                 ) : (
                   <Button
                     variant={"ghost"}
                     onClick={() => router.push("/suporte/configuracao-usuario")}
                   >
-                    <Settings className="h-6 w-6 " />
+                    <CircleUserRound className="h-6 w-6 " />
                   </Button>
                 )}
               </TooltipTrigger>
@@ -143,6 +180,10 @@ const AdminSideBar = ({ onPage }: onPage) => {
               <TooltipContent side="right">
                 Configuração de usário
               </TooltipContent>
+            </Tooltip>
+            {/* user logout */}
+            <Tooltip>
+              <Logout></Logout>
             </Tooltip>
           </TooltipProvider>
         </nav>

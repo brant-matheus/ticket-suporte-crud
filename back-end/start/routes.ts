@@ -12,6 +12,7 @@ router
       .use(['index'], middleware.admin())
 
     router.get('auth', [AuthController, 'logout'])
+    router.get('auth/:id', [AuthController, 'adminAuth'])
   })
   .middleware(middleware.auth())
 
@@ -19,4 +20,8 @@ router
 router.post('auth', [AuthController, 'login'])
 
 //guest register by guest
-router.post('externalUser', [UsersController, 'store'])
+router
+  .post('externalUser', [UsersController, 'store'])
+
+  //
+  .use([middleware.auth()])
