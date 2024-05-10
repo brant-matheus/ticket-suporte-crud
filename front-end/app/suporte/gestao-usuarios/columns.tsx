@@ -3,6 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import EditButton from "./edit-button";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -28,7 +30,18 @@ export const columns: ColumnDef<UsersData>[] = [
   },
   {
     accessorKey: "isAdmin",
-    header: "Permissão",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Permissão
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+
     cell: ({ row }) => {
       const user = row.original;
       var permission = "administrador";
@@ -47,18 +60,12 @@ export const columns: ColumnDef<UsersData>[] = [
       return (
         <>
           <div className="flex space-x-2">
-            <DeleteDialog
-              route="user"
-              title="Usuário"
-              params={user.id}
-              key={user.id}
-            />
+            <DeleteDialog route="user" title="Usuário" params={user.id} />
             <EditButton
               fullName={user.fullName}
               email={user.email}
               isAdmin={user.isAdmin}
               userId={user.id}
-              key={null}
             />
           </div>
         </>
