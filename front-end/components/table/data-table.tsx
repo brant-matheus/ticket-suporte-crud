@@ -1,15 +1,16 @@
 "use client";
-import * as React from "react";
-import CreateUserButton from "../buttons/create-user-button";
+import { useState, useCallback, useEffect } from "react";
 import {
   ColumnDef,
   SortingState,
   ColumnFiltersState,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   flexRender,
   getCoreRowModel,
   useReactTable,
+  PaginationState,
 } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 
@@ -21,32 +22,72 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { authInstance } from "@/app/axios-config";
+import { DataTablePagination } from "./data-table-paginatio";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  route: string;
+  filterColumn: string;
 }
+export type MetaProps = {
+  total: number;
+  perPage: number;
+  currentPage: number;
+  lastPage: number;
+  firstPage: number;
+  firstPageUrl: string;
+  lastPageUrl: string;
+  nextPageUrl?: string;
+  previousPageUrl?: null;
+};
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
+  route,
+  filterColumn,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [data, setData] = useState<{ meta?: MetaProps; data: any[] }>({
+    meta: undefined,
+    data: [],
+  });
+  const getData = useCallback(async () => {
+    try {
+      const { data, request, status } = await authInstance.get(
+        `${route}?page=${pagination.pageIndex + 1}&pageSize=${
+          pagination.pageSize
+        }`
+      );
+      if ((request.status ?? status) === 200) {
+        setData(data);
+      }
+    } catch (error) {}
+  }, [pagination]);
+  useEffect(() => {
+    getData();
+  }, [pagination, getData]);
   const table = useReactTable({
-    data,
+    data: data.data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    manualPagination: true,
+    onPaginationChange: setPagination,
+    rowCount: data.meta?.total,
+
     state: {
       sorting,
       columnFilters,
+      pagination,
     },
   });
 
@@ -55,9 +96,11 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center py-4 ">
         <Input
           placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn(filterColumn)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -112,6 +155,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+        <DataTablePagination table={table} />
       </div>
     </div>
   );

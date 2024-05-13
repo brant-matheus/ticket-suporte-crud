@@ -22,8 +22,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare email: string
-
-  @column()
+  //serialized(format) set password to null, which means if we use a model query instead of a data base query the password will be excepted.
+  @column({ serializeAs: null })
   declare password: string
 
   @column()

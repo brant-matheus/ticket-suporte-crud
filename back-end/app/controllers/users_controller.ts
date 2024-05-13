@@ -11,13 +11,17 @@ import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
 export default class UsersController {
-  async index() {
-    return await User.first()
+  async index({ request }: HttpContext) {
+    // headers for postman testing
+    const page = request.input('page')
+    const pageSize = request.input('pageSize')
+    return await User.query().paginate(page, pageSize)
   }
 
   async store({ request, auth }: HttpContext) {
     // check if email already exists in our database.
     const { email } = request.only(['email'])
+
     const user = await User.findBy('email', email)
     // isPersisted true, user exist
     if (user?.$isPersisted) {

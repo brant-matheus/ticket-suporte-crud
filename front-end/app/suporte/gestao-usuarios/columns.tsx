@@ -7,15 +7,14 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type UsersData = {
+export type TData = {
   id: number;
   fullName: string;
   email: string;
   isAdmin: number;
 };
 
-export const columns: ColumnDef<UsersData>[] = [
+export const columns: ColumnDef<TData>[] = [
   {
     accessorKey: "id",
     header: "id do usuário",
