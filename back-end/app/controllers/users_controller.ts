@@ -12,9 +12,8 @@ import { DateTime } from 'luxon'
 
 export default class UsersController {
   async index({ request }: HttpContext) {
-    // headers for postman testing
-    const page = request.input('page')
-    const pageSize = request.input('pageSize')
+    const { page, pageSize } = request.only(['page', 'pageSize'])
+
     return await User.query().paginate(page, pageSize)
   }
 

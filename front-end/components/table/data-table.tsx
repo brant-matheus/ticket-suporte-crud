@@ -58,12 +58,15 @@ export function DataTable<TData, TValue>({
     data: [],
   });
   const getData = useCallback(async () => {
+    console.log(pagination);
     try {
-      const { data, request, status } = await authInstance.get(
-        `${route}?page=${pagination.pageIndex + 1}&pageSize=${
-          pagination.pageSize
-        }`
-      );
+      const { data, request, status } = await authInstance.get(`${route}`, {
+        params: {
+          page: pagination.pageIndex + 1, //first page {front: 0, back: 1}
+          pageSize: pagination.pageSize,
+        },
+      });
+      console.log(data.data[0]);
       if ((request.status ?? status) === 200) {
         setData(data);
       }
@@ -73,6 +76,7 @@ export function DataTable<TData, TValue>({
     getData();
   }, [pagination, getData]);
   const table = useReactTable({
+    // data is our object with meta and the actual data.
     data: data.data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -80,8 +84,10 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    // user manual paginate on click
     manualPagination: true,
     onPaginationChange: setPagination,
+    // since the user will manual paginate the table, we gotta have to use the meta total for total quantity of rows.
     rowCount: data.meta?.total,
 
     state: {
@@ -149,12 +155,14 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {/* loading and filter not found */}
+                  Sem resultados...
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
+        {/* data-table-pagination call */}
         <DataTablePagination table={table} />
       </div>
     </div>
