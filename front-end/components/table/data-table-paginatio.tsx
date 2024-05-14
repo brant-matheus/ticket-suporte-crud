@@ -13,6 +13,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+// pagination component requires
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }
