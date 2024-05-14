@@ -2,14 +2,25 @@
 "use client";
 import axios from "axios";
 
+var API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: API_URL,
 });
 
+var token;
+var userId;
+try {
+  token = `Bearer ${localStorage.getItem("token")}`;
+  userId = localStorage.getItem("userId");
+} catch (error) {
+  token = null;
+  userId = null;
+}
+
 export const authInstance = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: API_URL,
   headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-    userId: localStorage.getItem("userId"),
+    Authorization: token,
+    userId: userId,
   },
 });
