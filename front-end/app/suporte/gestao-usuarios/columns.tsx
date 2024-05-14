@@ -67,7 +67,7 @@ export const columns: ColumnDef<TData>[] = [
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost">
+              <Button variant="ghost" className="cursor-default">
                 <Eye />
               </Button>
             </TooltipTrigger>
