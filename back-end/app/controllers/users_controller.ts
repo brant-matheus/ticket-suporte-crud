@@ -12,6 +12,8 @@ import { DateTime } from 'luxon'
 
 export default class UsersController {
   async index({ request }: HttpContext) {
+    // return await User.query().orderBy('id', 'desc').paginate(page, pageSize)
+
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
     return await User.query().paginate(page, pageSize)

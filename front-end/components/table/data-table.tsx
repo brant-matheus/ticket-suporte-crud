@@ -6,6 +6,7 @@ import {
   ColumnFiltersState,
   getFilteredRowModel,
   getPaginationRowModel,
+  VisibilityState,
   getSortedRowModel,
   flexRender,
   getCoreRowModel,
@@ -13,6 +14,12 @@ import {
   PaginationState,
 } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   Table,
@@ -24,12 +31,15 @@ import {
 } from "@/components/ui/table";
 import { authInstance } from "@/app/axios-config";
 import { DataTablePagination } from "./data-table-paginatio";
-
+import { Button } from "../ui/button";
+import { ColumnVisiablity } from "./column-visibility";
+import CreateUserButton from "../buttons/create-user-button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   route: string;
   filterColumn: string;
   showFilter: boolean;
+  component: any;
 }
 export type MetaProps = {
   total: number;
@@ -48,9 +58,11 @@ export function DataTable<TData, TValue>({
   route,
   showFilter,
   filterColumn,
+  component,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -60,7 +72,6 @@ export function DataTable<TData, TValue>({
     data: [],
   });
   const getData = useCallback(async () => {
-    console.log(pagination);
     try {
       const { data, request, status } = await authInstance.get(`${route}`, {
         params: {
@@ -68,7 +79,6 @@ export function DataTable<TData, TValue>({
           pageSize: pagination.pageSize,
         },
       });
-      console.log(data.data[0]);
       if ((request.status ?? status) === 200) {
         setData(data);
       }
@@ -86,6 +96,8 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+
     // user manual paginate on click
     manualPagination: true,
     onPaginationChange: setPagination,
@@ -96,14 +108,15 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
       pagination,
+      columnVisibility,
     },
   });
 
   return (
     <div>
-      {/* add a rending condition showfilter: bool */}
+      {/* render condition show/not show filter */}
       {showFilter ? (
-        <div className="flex items-center py-4 ">
+        <div className="flex items-center py-2 space-x-4">
           <Input
             placeholder="Filter emails..."
             value={
@@ -114,8 +127,15 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm"
           />
+          <ColumnVisiablity table={table} />
+          {/* component */}
+          {component}
         </div>
-      ) : null}
+      ) : (
+        <div className="flex items-center py-4 ">
+          <ColumnVisiablity table={table} />
+        </div>
+      )}
 
       <div className="rounded-md border">
         <Table>
