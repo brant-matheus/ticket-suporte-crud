@@ -11,7 +11,12 @@ export default async function DemoPage() {
       </div>
       <AdminSideBar onPage="users-managment" />
       <div className="container  pt-4 pl-20 pb-5">
-        <DataTable columns={columns} filterColumn="email" route="user" />
+        <DataTable
+          columns={columns}
+          filterColumn="email"
+          route="user"
+          showFilter={true}
+        />
       </div>
     </>
   );

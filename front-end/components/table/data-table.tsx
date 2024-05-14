@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   route: string;
   filterColumn: string;
+  showFilter: boolean;
 }
 export type MetaProps = {
   total: number;
@@ -45,6 +46,7 @@ export type MetaProps = {
 export function DataTable<TData, TValue>({
   columns,
   route,
+  showFilter,
   filterColumn,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -99,18 +101,21 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 ">
-        <Input
-          placeholder="Filter emails..."
-          value={
-            (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn(filterColumn)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div>
+      {/* add a rending condition showfilter: bool */}
+      {showFilter ? (
+        <div className="flex items-center py-4 ">
+          <Input
+            placeholder="Filter emails..."
+            value={
+              (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(filterColumn)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        </div>
+      ) : null}
 
       <div className="rounded-md border">
         <Table>
