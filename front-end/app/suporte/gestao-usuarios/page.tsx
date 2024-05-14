@@ -6,11 +6,11 @@ import CreateUserButton from "@/components/buttons/create-user-button";
 export default async function DemoPage() {
   return (
     <>
-      <div className="absolute top-0 right-0 mt-[105px] mr-48 ">
+      <div className="pt-4 pl-20  ">
         <CreateUserButton />
       </div>
       <AdminSideBar onPage="users-managment" />
-      <div className="container mx-auto p-20 ">
+      <div className="container  pt-4 pl-20 pb-5">
         <DataTable columns={columns} filterColumn="email" route="user" />
       </div>
     </>

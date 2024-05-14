@@ -29,7 +29,7 @@ const CreateUserButton = () => {
     setOpen(false);
   }
   return (
-    <div >
+    <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size="sm" className="h-8 gap-1">
