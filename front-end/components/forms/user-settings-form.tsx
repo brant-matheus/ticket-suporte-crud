@@ -17,8 +17,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
-import { Separator } from "../ui/separator";
-const UserSettingsForm = () => {
+
+interface UserSettings {
+  userId: string;
+}
+
+const UserSettingsForm = ({ userId }: UserSettings) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
   const editSchema = z.object({
@@ -38,33 +42,31 @@ const UserSettingsForm = () => {
     },
   });
   async function editUser(editForm: z.infer<typeof editSchema>) {
-    console.log(editForm, editForm["fullName"]?.length);
+    // get all typed/validated inputs
+    const editData = {};
+    for (let key in editForm) {
+      let value = editForm[key];
+      // console.log(value.length);
+      if (value.length !== 0) {
+        editData[key] = value;
+      } else {
+        editData[key] = null;
+      }
+    }
+    if (Object.keys(editData).length !== 0) {
+      try {
+        const { data, request, status } = await authInstance.put(
+          `user/${userId}`
+        );
+      } catch (error) {}
+    }
   }
+
   return (
     <div className="">
       <Form {...form}>
         {/* html form, submit inputs registered by control*/}
         <form onSubmit={form.handleSubmit(editUser)} className="grid gap-4">
-          <FormField
-            // make sure we can acess the expected type. (fullName, email...)
-            control={form.control}
-            // ctrl+space should auto complete the name, default values
-            name="fullName"
-            //field name to validate the form field input and save it for email
-            render={({ field }) => (
-              //a single field
-              <FormItem>
-                {/* what is shown to user */}
-                <FormLabel>nome completo</FormLabel>
-                {/* register, validate then save the input, linked to dataType in ...field*/}
-                <FormControl>
-                  <Input placeholder="seu nome completo" {...field} />
-                </FormControl>
-                {/* zod message */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             // make sure we can acess the expected type. (fullName, email...)
             control={form.control}

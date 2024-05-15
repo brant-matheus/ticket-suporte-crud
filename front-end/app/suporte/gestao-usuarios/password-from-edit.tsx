@@ -56,9 +56,11 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
     },
   });
   async function passwordRedefine(passwordForm: z.infer<typeof editSchema>) {
-    console.log(passwordForm);
+    setBoolEditButton(true);
     try {
-      await authInstance.put(`user/${userId}`, passwordForm);
+      await authInstance.put(`user/${userId}`, passwordForm, {
+        params: { isProfile: false },
+      });
       closeDialog();
       toast({
         variant: "sucess",

@@ -49,8 +49,7 @@ const AdminSideBar = ({ onPage }: onPage) => {
   const router = useRouter();
   // async function adminAuth() {
   //   try {
-  //     const { data } = await authInstance.get("auth/1");
-  //     console.log(data);
+  //     await authInstance.get("auth/1");
   //   } catch (error) {
   //     if (error.response.status === 401) {
   //       router.push("/");

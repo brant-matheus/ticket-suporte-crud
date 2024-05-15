@@ -77,7 +77,11 @@ const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
 
     setBoolEditButton(true);
     try {
-      await authInstance.put(`user/${userId}`, editForm);
+      await authInstance.put(`user/${userId}`, editForm, {
+        params: {
+          isProfile: false,
+        },
+      });
       closeDialog();
       toast({
         variant: "sucess",

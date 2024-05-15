@@ -5,10 +5,11 @@ import {
   InternalUserValidator,
   PutUserValidator,
   PutPasswordValidator,
-  PutGuestValidator,
+  PutProfileValidator,
 } from '#validators/user'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
+import { ObjectType } from 'typescript'
 
 export default class UsersController {
   async index({ request }: HttpContext) {
@@ -47,36 +48,56 @@ export default class UsersController {
   }
 
   async update({ params, request, auth }: HttpContext) {
-    const userId = auth.user?.id! as number
-    const parameter = params.id //params= user id
-    const user = await User.findOrFail(parameter) //status 404 error
+    // check if the params sent is valid
+    const user = await User.findOrFail(params.id) //error 500
+    // update update at
     const updatedAt = { updatedAt: DateTime.local() } //update updateAt
-    const firstKey = Object.keys(request.all())[0] //get first key property
-    const notPassword = !(firstKey === 'password' || firstKey === 'passwordConfirmation') // if request not password
-
-    if (auth.isAuthenticated && auth.user?.isAdmin) {
-      // general update
-      if (notPassword) {
-        const payload = await request.validateUsing(PutUserValidator) //error 400
-
+    // check if the request is profile edit or user managment edit
+    const { isProfile } = request.only(['isProfile'])
+    const isPassword = request.all().hasOwnProperty('password') //check if has the key password in obj
+    // for admin actions
+    const isAdmin = auth.user?.isAdmin
+    // for profile, the user MUST edit itself.
+    const isUserProfileValid = auth.user?.id === parseInt(params.id)
+    // profile logic
+    if (isProfile && isUserProfileValid) {
+      // request is password
+      if (isPassword) {
+        const passwordObj = request.only(['password', 'passwordConfirmation'])
+        const payload = await PutPasswordValidator.validate(passwordObj)
         await user.merge(Object.assign(payload, updatedAt)).save()
       }
-      // password redefinition
+      //request is a general information
       else {
-        const payload = await request.validateUsing(PutPasswordValidator) //error 400
+        const data = request.only(['email', 'fullName'])
+        for (let key in data) {
+          // avoid typescript error
+          const keyProperty = key as keyof typeof data
+          if (data[keyProperty].length === 0) {
+            data[keyProperty] = user[keyProperty]
+          }
+        }
+        // validate input
+        const payload = await PutProfileValidator.validate(data) //error 400
+        // save modification, payload data to be edit original data, update update at
         await user.merge(Object.assign(payload, updatedAt)).save()
       }
-    } //guest update
-    else if (auth.isAuthenticated && !auth.user?.isAdmin && parseInt(parameter) === userId) {
-      //general update
-      if (notPassword) {
-        const payload = await request.validateUsing(PutGuestValidator) //error 400
+    }
+    //user managment
+    else if (!!isProfile && isAdmin) {
+      if (isPassword) {
+        const passwordObj = request.only(['password', 'passwordConfirmation'])
+        const payload = await PutPasswordValidator.validate(passwordObj)
         await user.merge(Object.assign(payload, updatedAt)).save()
-      } //password redefinition
-      else {
-        const payload = await request.validateUsing(PutPasswordValidator) //error 400
+      } else {
+        // validate input
+        const data = request.only(['email', 'fullName', 'isAdmin'])
+        const payload = await PutUserValidator.validate(data) //error 400
+        // save modification, payload data to be edit original data, update update at
         await user.merge(Object.assign(payload, updatedAt)).save()
       }
+    } else {
+      throw new Error() //status 500
     }
   }
 

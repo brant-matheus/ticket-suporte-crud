@@ -1,61 +1,45 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { PlusCircle, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { authInstance } from "@/app/axios-config";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { string } from "zod";
-import { register } from "module";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const UserDeleteButton = () => {
-  const deleteSchema = z.object({
-    confirmation: z.string().refine((data) => data === "DELETAR"),
-  });
-  // criar zod object para colocar strict, usar zod resolver
-  const { register, handleSubmit } = useForm<z.infer<typeof deleteSchema>>({
-    resolver: zodResolver(deleteSchema),
-  });
+import UserSettingsForm from "../forms/user-settings-form";
+import DeleteUserForm from "../forms/delete-user-settings-form";
+import { number, string } from "zod";
+interface UserSettings {
+  userId: string;
+}
+const CreateUserButton = ({ userId }: UserSettings) => {
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="destructive">deletar sua conta</Button>
+          <Button variant="destructive">Deletar sua conta</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>DELETAR SUA CONTA PERMANENTEMENTE</DialogTitle>
+            <DialogTitle>Delete sua conta</DialogTitle>
             <DialogDescription>
-              Essa ação não pode ser desfeita, ao confirmar, sua conta será
-              permanentemente deletada do nosso banco de dados.
+              Essa ação não pode ser desfeita, após a confirmação sua conta
+              deixará de existir em nosso banco de dados.
             </DialogDescription>
           </DialogHeader>
-          <form onClick={() => console.log(1)}>
-            <Label>Confirme sua ação digitando "DELETAR"</Label>
-            <Input
-              className="border-2 border-rose-500 focus-visible:ring-0"
-              placeholder="DELETAR"
-              {...register("confirmation")}
-            ></Input>
-            <Button type="submit" variant="destructive">
-              Deletar conta
-            </Button>
-          </form>
+          {/* form  */}
+          <DeleteUserForm userId={userId} />
         </DialogContent>
       </Dialog>
     </div>
   );
 };
 
-export default UserDeleteButton;
+export default CreateUserButton;

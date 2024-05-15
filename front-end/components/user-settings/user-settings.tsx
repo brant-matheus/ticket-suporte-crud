@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Separator } from "../ui/separator";
 import {
@@ -10,10 +11,30 @@ import {
 } from "@/components/ui/card";
 import UserSettingsForm from "../forms/user-settings-form";
 import UserDeleteButton from "../buttons/user-delete-button";
+import { authInstance } from "@/app/axios-config";
 const UserSettings = () => {
+  async function getProfileInfo() {
+    try {
+      await authInstance.get("");
+    } catch (error) {}
+  }
+  var userId: any;
+  try {
+    userId = localStorage.getItem("userId");
+  } catch (error) {
+    userId = null;
+  }
+
   return (
     <div className="container flex justify-center ">
       <Card className="w-11/12">
+        <CardHeader>
+          <CardTitle>Configuração de usuário</CardTitle>
+          <CardDescription>
+            Altere informações gerais, redefina sua senha e delete sua conta
+            aqui.
+          </CardDescription>
+        </CardHeader>
         {/* header geral */}
         <CardHeader>
           <CardTitle>Redefina suas configurações pessoais.</CardTitle>
@@ -24,10 +45,11 @@ const UserSettings = () => {
         </CardHeader>
         {/* geral content */}
         <CardContent>
-          <UserSettingsForm />
+          <UserSettingsForm userId={userId} />
         </CardContent>
-        {/* header password */}
         <Separator />
+
+        {/* header password */}
         <CardHeader>
           <CardTitle>Redefina sua senha</CardTitle>
           <CardDescription>
@@ -35,10 +57,10 @@ const UserSettings = () => {
           </CardDescription>
         </CardHeader>
         {/* password content */}
-        <CardContent>
-          <UserSettingsForm />
-        </CardContent>
+        <CardContent>{/* password form here */}</CardContent>
         <Separator />
+
+        {/* delete user header*/}
         <CardHeader>
           <CardTitle>Deletar permanentemente sua conta</CardTitle>
           <CardDescription>
@@ -46,9 +68,9 @@ const UserSettings = () => {
             sua conta deixará de existir em nosso banco de dados.
           </CardDescription>
         </CardHeader>
-        {/* delete content */}
+        {/* delete user content */}
         <CardContent>
-          <UserDeleteButton />
+          <UserDeleteButton userId={userId} />
         </CardContent>
       </Card>
     </div>

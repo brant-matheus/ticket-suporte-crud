@@ -19,7 +19,10 @@ const Logout = () => {
       await authInstance.get(`user`);
       localStorage.clear();
       router.push("/");
-    } catch (error) {}
+    } catch (error) {
+      localStorage.clear();
+      router.push("/");
+    }
   }
   return (
     <DropdownMenu>
