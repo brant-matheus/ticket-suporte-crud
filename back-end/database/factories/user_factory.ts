@@ -7,7 +7,7 @@ export const UserFactory = factory
       email: `${faker.person.firstName().toLocaleLowerCase()}${faker.person.lastName().toLocaleLowerCase()}@sagatechbrasil.com`,
       fullName: `${faker.person.firstName().toLocaleLowerCase()} ${faker.person.lastName().toLocaleLowerCase()}`,
       password: 'Testing@123',
-      isAdmin: false,
+      isAdmin: true,
     }
   })
   .build()

@@ -11,13 +11,7 @@ import {
 } from "@/components/ui/card";
 import UserSettingsForm from "../forms/user-settings-form";
 import UserDeleteButton from "../buttons/user-delete-button";
-import { authInstance } from "@/app/axios-config";
 const UserSettings = () => {
-  async function getProfileInfo() {
-    try {
-      await authInstance.get("");
-    } catch (error) {}
-  }
   var userId: any;
   try {
     userId = localStorage.getItem("userId");

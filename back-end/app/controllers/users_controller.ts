@@ -51,6 +51,7 @@ export default class UsersController {
     // check if the params sent is valid
     const user = await User.findOrFail(params.id) //error 500
     // update update at
+
     const updatedAt = { updatedAt: DateTime.local() } //update updateAt
     // check if the request is profile edit or user managment edit
     const { isProfile } = request.only(['isProfile'])
@@ -73,7 +74,7 @@ export default class UsersController {
         for (let key in data) {
           // avoid typescript error
           const keyProperty = key as keyof typeof data
-          if (data[keyProperty].length === 0) {
+          if (data[keyProperty] === null) {
             data[keyProperty] = user[keyProperty]
           }
         }
