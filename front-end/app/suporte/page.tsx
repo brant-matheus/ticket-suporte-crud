@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect } from "react";
+import React from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import { authInstance } from "../axios-config";
 const page = () => {

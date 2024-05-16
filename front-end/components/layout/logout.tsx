@@ -16,7 +16,8 @@ const Logout = () => {
   const router = useRouter();
   async function logout() {
     try {
-      await authInstance.get(`user`);
+      await authInstance.get(`auth`);
+      console.log("request done");
       localStorage.clear();
       router.push("/");
     } catch (error) {

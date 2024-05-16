@@ -1,7 +1,11 @@
 import React from "react";
-
+import GuestSideBar from "@/components/layout/guest-side-bar";
 const page = () => {
-  return <div>guest</div>;
+  return (
+    <>
+      <GuestSideBar />
+    </>
+  );
 };
 
 export default page;

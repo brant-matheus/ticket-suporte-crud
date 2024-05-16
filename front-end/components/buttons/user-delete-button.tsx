@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import UserSettingsForm from "../forms/user-settings-form";
+import UserSettingsForm from "../forms/general-user-settings-form";
 import DeleteUserForm from "../forms/delete-user-settings-form";
 import { number, string } from "zod";
 interface UserSettings {

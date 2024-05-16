@@ -71,7 +71,6 @@ const AdminSideBar = ({ onPage }: onPage) => {
                 tooltiptrigger: our icon
                 tooltipcontent: page's name
             */}
-
         {/* fixed all left, from bottom to top.
                     sm: responsive design,
                     w-14: side bar 56px width

@@ -16,22 +16,12 @@ import {
 import { authInstance } from "@/app/axios-config";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 interface props {
-  closeDialog: any;
   userId: number;
-  
 }
 
-const PasswordFormEdit = ({ closeDialog, userId }: props) => {
+const PasswordFormEdit = ({ userId }: props) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
 
@@ -62,7 +52,6 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
       await authInstance.put(`user/${userId}`, passwordForm, {
         params: { isProfile: false },
       });
-      closeDialog();
       toast({
         variant: "sucess",
         title: "senha editado com sucesso",
@@ -80,54 +69,54 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
     }
   }
   return (
-    <Card>
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(passwordRedefine)}
-            className="grid gap-4"
-          >
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nova senha</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="nova senha"
-                    ></Input>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="passwordConfirmation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirmar nova senha</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="confirmar nova senha"
-                    ></Input>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={boolEditButton}>
-              Salvar
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(passwordRedefine)}
+        className="grid gap-4"
+      >
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nova senha</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="nova senha"
+                ></Input>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="passwordConfirmation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirmar nova senha</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="confirmar nova senha"
+                ></Input>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          disabled={boolEditButton}
+          className="flex content-center w-24"
+        >
+          Salvar
+        </Button>
+      </form>
+    </Form>
   );
 };
 

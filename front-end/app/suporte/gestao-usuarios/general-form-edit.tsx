@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -59,22 +60,17 @@ const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
       .toLowerCase(),
     isAdmin: z.enum(["0", "1"]),
   });
+  var zero = isAdmin.toString();
   const form = useForm<z.infer<typeof editSchema>>({
     resolver: zodResolver(editSchema),
     defaultValues: {
       fullName: `${fullName}`,
       email: `${email}`,
+      // the problem might be here
       isAdmin: isAdmin.toString(),
     },
   });
   async function userEdit(editForm: z.infer<typeof editSchema>) {
-    // convert key value
-    if (editForm["isAdmin"] === "0") {
-      editForm["isAdmin"] = 0;
-    } else {
-      editForm["isAdmin"] = 1;
-    }
-
     setBoolEditButton(true);
     try {
       await authInstance.put(`user/${userId}`, editForm, {
@@ -153,7 +149,7 @@ const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
 
                   <FormControl>
                     <RadioGroup
-                      onChange={field.onChange}
+                      onValueChange={field.onChange}
                       defaultValue={field.value}
                       className="flex flex-col space-y-1"
                     >

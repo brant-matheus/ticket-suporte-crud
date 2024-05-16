@@ -172,12 +172,13 @@ const RegisterModal = ({ closeDialog }: props) => {
 
                 <FormControl>
                   <RadioGroup
-                    onChange={field.onChange}
+                    onValueChange={field.onChange}
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
+                        SDA232sdsds@
                         <RadioGroupItem value="0"></RadioGroupItem>
                       </FormControl>
                       <FormLabel className="">Cliente</FormLabel>

@@ -9,7 +9,6 @@ import {
 } from '#validators/user'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
-import { ObjectType } from 'typescript'
 
 export default class UsersController {
   async index({ request }: HttpContext) {
@@ -51,7 +50,6 @@ export default class UsersController {
     // check if the params sent is valid
     const user = await User.findOrFail(params.id) //error 500
     // update update at
-
     const updatedAt = { updatedAt: DateTime.local() } //update updateAt
     // check if the request is profile edit or user managment edit
     const { isProfile } = request.only(['isProfile'])
@@ -74,7 +72,7 @@ export default class UsersController {
         for (let key in data) {
           // avoid typescript error
           const keyProperty = key as keyof typeof data
-          if (data[keyProperty] === null) {
+          if (data[keyProperty] === null || data[keyProperty] === 'null') {
             data[keyProperty] = user[keyProperty]
           }
         }
@@ -94,6 +92,7 @@ export default class UsersController {
         // validate input
         const data = request.only(['email', 'fullName', 'isAdmin'])
         const payload = await PutUserValidator.validate(data) //error 400
+        console.log(payload)
         // save modification, payload data to be edit original data, update update at
         await user.merge(Object.assign(payload, updatedAt)).save()
       }
