@@ -1,4 +1,8 @@
 "use client";
+import {
+  PasswordRedefinitionValidator,
+  PasswordRedefinitionInfer,
+} from "@/app/zod-validator";
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,28 +29,15 @@ const PasswordFormEdit = ({ userId }: props) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
 
-  const editSchema = z
-    .object({
-      password: z
-        .string()
-        .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
-          message:
-            "8 digitos, caracter especial, letras maisculas e minusculas",
-        }),
-      passwordConfirmation: z.string(),
-    })
-    .refine((data) => data.password === data.passwordConfirmation, {
-      message: "As senhas devem ser a mesma",
-      path: ["passwordConfirmation"], // path of error
-    });
-  const form = useForm<z.infer<typeof editSchema>>({
-    resolver: zodResolver(editSchema),
+  const form = useForm<PasswordRedefinitionInfer>({
+    resolver: zodResolver(PasswordRedefinitionValidator),
     defaultValues: {
       password: "",
       passwordConfirmation: "",
     },
   });
-  async function passwordRedefine(passwordForm: z.infer<typeof editSchema>) {
+
+  async function passwordRedefine(passwordForm: PasswordRedefinitionInfer) {
     setBoolEditButton(true);
     try {
       await authInstance.put(`user/${userId}`, passwordForm, {

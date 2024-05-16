@@ -1,4 +1,8 @@
 "use client";
+import {
+  InternalRegisterValidator,
+  InternalRegisterInfer,
+} from "@/app/zod-validator";
 import React, { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,39 +28,9 @@ interface props {
 const RegisterModal = ({ closeDialog }: props) => {
   const { toast } = useToast();
   const [loginButton, setLoginButton] = useState(false);
-  const formSchema = z
-    .object({
-      // a to z, A to Z, acentos, remove start and end space, lowercase
-      fullName: z
-        .string()
-        .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
-          message: "apenas letras, com ou sem acentos!",
-        })
-        .trim()
-        .min(5)
-        .toLowerCase(),
-      email: z
-        .string()
-        .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
-          message: "deve conter nome e dominio, exemplo: email@email.com",
-        })
-        .trim()
-        .toLowerCase(),
-      password: z
-        .string()
-        .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
-          message:
-            "8 digitos, caracter especial, letras maisculas e minusculas",
-        }),
-      passwordConfirmation: z.string(),
-      isAdmin: z.enum(["0", "1"]),
-    })
-    .refine((data) => data.password === data.passwordConfirmation, {
-      message: "As senhas devem ser a mesma",
-      path: ["passwordConfirmation"], // path of error
-    });
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+
+  const form = useForm<InternalRegisterInfer>({
+    resolver: zodResolver(InternalRegisterValidator),
     defaultValues: {
       fullName: "",
       email: "",
@@ -66,9 +40,8 @@ const RegisterModal = ({ closeDialog }: props) => {
     },
   });
 
-  async function modalRegister(dataForm: z.infer<typeof formSchema>) {
+  async function modalRegister(dataForm: InternalRegisterInfer) {
     setLoginButton(true);
-    console.log(dataForm);
     try {
       await authInstance.post("user", dataForm);
       closeDialog();

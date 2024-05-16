@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import RegisterModal from "../forms/register-modal";
+import RegisterModal from "./register-modal";
 const CreateUserButton = () => {
   const [open, setOpen] = useState(false);
   function closeDialog() {
