@@ -1,4 +1,5 @@
 "use client";
+import { GeneralUsersValidator, GeneralUsersInfer } from "@/app/zod-validator";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -51,24 +52,9 @@ const GeneralFormEdit = ({
 }: props) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
-  const editSchema = z.object({
-    fullName: z
-      .string()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
-        message: "Nome deve conter apenas letras, com ou sem acentos!",
-      }),
-    email: z
-      .string()
-      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
-        message: "Email deve conter nome e dominio, exemplo: nome@dominio.com",
-      })
-      .trim()
-      .toLowerCase(),
-    isAdmin: z.enum(["0", "1"]),
-  });
-  var zero = isAdmin.toString();
-  const form = useForm<z.infer<typeof editSchema>>({
-    resolver: zodResolver(editSchema),
+
+  const form = useForm<GeneralUsersInfer>({
+    resolver: zodResolver(GeneralUsersValidator),
     defaultValues: {
       fullName: `${fullName}`,
       email: `${email}`,
@@ -76,7 +62,7 @@ const GeneralFormEdit = ({
       isAdmin: isAdmin.toString(),
     },
   });
-  async function userEdit(editForm: z.infer<typeof editSchema>) {
+  async function userEdit(editForm: GeneralUsersInfer) {
     setBoolEditButton(true);
     try {
       await authInstance.put(`user/${userId}`, editForm, {

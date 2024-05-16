@@ -96,7 +96,7 @@ export const InternalRegisterValidator = z
 export type InternalRegisterInfer = z.infer<typeof InternalRegisterValidator>;
 
 // general users edit
-export const UsersEditValidator = z.object({
+export const GeneralUsersValidator = z.object({
   fullName: z.string().regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
     message: "Nome deve conter apenas letras, com ou sem acentos!",
   }),
@@ -110,7 +110,7 @@ export const UsersEditValidator = z.object({
   isAdmin: z.enum(["0", "1"]),
 });
 
-export type UsersEditInfer = z.infer<typeof UsersEditValidator>;
+export type GeneralUsersInfer = z.infer<typeof GeneralUsersValidator>;
 
 // user general
 export const GeneralUserValidation = z.object({
