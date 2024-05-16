@@ -1,4 +1,5 @@
 "use client";
+import { GeneralUserValidation, GeneralUserInfer } from "@/app/zod-validator";
 import React, { useState } from "react";
 import {
   Form,
@@ -22,39 +23,18 @@ interface UserSettings {
   userId: string;
 }
 
-const UserSettingsForm = ({ userId }: UserSettings) => {
+const GeneralUserForm = ({ userId }: UserSettings) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
-  const editSchema = z.object({
-    fullName: z
-      .string()
-      .toLowerCase()
-      .trim()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
-        message: "Nome deve conter apenas letras, com ou sem acentos!",
-      })
-      .optional()
-      .or(z.literal("")),
 
-    email: z
-      .string()
-      .toLowerCase()
-      .trim()
-      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
-        message: "deve conter nome e dominio, exemplo: email@email.com",
-      })
-      .optional()
-      .or(z.literal("")),
-  });
-
-  const form = useForm<z.infer<typeof editSchema>>({
-    resolver: zodResolver(editSchema),
+  const form = useForm<GeneralUserInfer>({
+    resolver: zodResolver(GeneralUserValidation),
     defaultValues: {
       fullName: "",
       email: "",
     },
   });
-  async function editUser(editForm: z.infer<typeof editSchema>) {
+  async function editUser(editForm: GeneralUserInfer) {
     const isEmpty = Object.values(editForm).every(
       (x) => x === null || x === ""
     );
@@ -149,4 +129,4 @@ const UserSettingsForm = ({ userId }: UserSettings) => {
   );
 };
 
-export default UserSettingsForm;
+export default GeneralUserForm;

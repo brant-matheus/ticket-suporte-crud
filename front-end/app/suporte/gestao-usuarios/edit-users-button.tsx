@@ -10,9 +10,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import FormEdit from "./general-form-edit";
+import GeneralFormEdit from "./general-form-edit";
 import { Button } from "@/components/ui/button";
-import PasswordFormEdit from "./password-from-edit";
+import PasswordFormEdit from "@/components/forms/password-from-edit";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 interface props {
   fullName: string;
   email: string;
@@ -38,7 +46,7 @@ const EditButton = ({ fullName, email, isAdmin, userId }: props) => {
             <TabsTrigger value="password">Redefinir senha</TabsTrigger>
           </TabsList>
           <TabsContent value="general">
-            <FormEdit
+            <GeneralFormEdit
               fullName={fullName}
               email={email}
               isAdmin={isAdmin}
@@ -47,7 +55,11 @@ const EditButton = ({ fullName, email, isAdmin, userId }: props) => {
             />
           </TabsContent>
           <TabsContent value="password">
-            <PasswordFormEdit closeDialog={closeDialog} userId={userId} />
+            <Card>
+              <CardContent>
+                <PasswordFormEdit closeDialog={closeDialog} userId={userId} />
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </DialogContent>

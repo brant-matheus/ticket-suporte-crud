@@ -1,7 +1,7 @@
 import { TData, columns } from "./columns";
 import { DataTable } from "@/components/table/data-table";
 import AdminSideBar from "@/components/layout/admin-side-bar";
-import CreateUserButton from "./create-user-button";
+import CreateUserButton from "./create-users-button";
 export default async function DemoPage() {
   return (
     <>

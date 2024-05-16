@@ -42,7 +42,13 @@ interface props {
   closeDialog: any; //function
   userId: number;
 }
-const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
+const GeneralFormEdit = ({
+  fullName,
+  email,
+  isAdmin,
+  closeDialog,
+  userId,
+}: props) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
   const editSchema = z.object({
@@ -180,4 +186,4 @@ const FormEdit = ({ fullName, email, isAdmin, closeDialog, userId }: props) => {
   );
 };
 
-export default FormEdit;
+export default GeneralFormEdit;

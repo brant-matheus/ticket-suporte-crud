@@ -9,9 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import UserSettingsForm from "../forms/general-user-settings-form";
+import GeneralUserForm from "./general-user-settings-form";
 import UserDeleteButton from "../buttons/user-delete-button";
-import PasswordFormEdit from "../forms/redifine-password";
+import PasswordFormEdit from "../forms/password-from-edit";
 // import PasswordFormEdit from "../forms/redifine-password copy";
 const UserSettings = () => {
   var userId: any;
@@ -41,7 +41,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* geral content */}
         <CardContent>
-          <UserSettingsForm userId={userId} />
+          <GeneralUserForm userId={userId} />
         </CardContent>
         <Separator />
 
@@ -54,7 +54,10 @@ const UserSettings = () => {
         </CardHeader>
         {/* password content */}
         <CardContent>
-          <PasswordFormEdit userId={userId} />
+          <PasswordFormEdit
+            closeDialog={null}
+            userId={userId}
+          ></PasswordFormEdit>
         </CardContent>
         <Separator />
 

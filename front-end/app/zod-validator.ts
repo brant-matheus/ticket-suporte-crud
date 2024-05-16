@@ -2,6 +2,8 @@ import { z } from "zod";
 // password redefinition
 // external register
 // internal register
+// general users edit
+// user general
 
 // password redefinition
 export const PasswordRedefinitionValidator = z
@@ -93,4 +95,44 @@ export const InternalRegisterValidator = z
 
 export type InternalRegisterInfer = z.infer<typeof InternalRegisterValidator>;
 
-//
+// general users edit
+export const UsersEditValidator = z.object({
+  fullName: z.string().regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
+    message: "Nome deve conter apenas letras, com ou sem acentos!",
+  }),
+  email: z
+    .string()
+    .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
+      message: "Email deve conter nome e dominio, exemplo: nome@dominio.com",
+    })
+    .trim()
+    .toLowerCase(),
+  isAdmin: z.enum(["0", "1"]),
+});
+
+export type UsersEditInfer = z.infer<typeof UsersEditValidator>;
+
+// user general
+export const GeneralUserValidation = z.object({
+  fullName: z
+    .string()
+    .toLowerCase()
+    .trim()
+    .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
+      message: "Nome deve conter apenas letras, com ou sem acentos!",
+    })
+    .optional()
+    .or(z.literal("")),
+
+  email: z
+    .string()
+    .toLowerCase()
+    .trim()
+    .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
+      message: "deve conter nome e dominio, exemplo: email@email.com",
+    })
+    .optional()
+    .or(z.literal("")),
+});
+
+export type GeneralUserInfer = z.infer<typeof GeneralUserValidation>;

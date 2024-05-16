@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
-import EditButton from "./edit-button";
+import EditButton from "./edit-users-button";
 import { ArrowUpDown, MoreHorizontal, Eye, Ghost } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DateTime } from "luxon";

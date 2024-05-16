@@ -22,10 +22,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 
 interface props {
+  closeDialog: any;
   userId: number;
 }
 
-const PasswordFormEdit = ({ userId }: props) => {
+const PasswordFormEdit = ({ closeDialog, userId }: props) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
 
@@ -36,13 +37,15 @@ const PasswordFormEdit = ({ userId }: props) => {
       passwordConfirmation: "",
     },
   });
-
   async function passwordRedefine(passwordForm: PasswordRedefinitionInfer) {
     setBoolEditButton(true);
     try {
       await authInstance.put(`user/${userId}`, passwordForm, {
         params: { isProfile: false },
       });
+      if (typeof closeDialog === "function") {
+        closeDialog();
+      }
       setBoolEditButton(false);
       form.reset();
       toast({
