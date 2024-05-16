@@ -52,6 +52,8 @@ const PasswordFormEdit = ({ userId }: props) => {
       await authInstance.put(`user/${userId}`, passwordForm, {
         params: { isProfile: false },
       });
+      setBoolEditButton(false);
+      form.reset();
       toast({
         variant: "sucess",
         title: "senha editado com sucesso",

@@ -178,7 +178,6 @@ const RegisterModal = ({ closeDialog }: props) => {
                   >
                     <FormItem className="flex items-center space-x-2 space-y-0">
                       <FormControl>
-                        SDA232sdsds@
                         <RadioGroupItem value="0"></RadioGroupItem>
                       </FormControl>
                       <FormLabel className="">Cliente</FormLabel>

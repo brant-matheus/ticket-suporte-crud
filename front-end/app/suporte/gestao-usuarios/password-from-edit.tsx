@@ -28,7 +28,6 @@ import {
 interface props {
   closeDialog: any;
   userId: number;
-  
 }
 
 const PasswordFormEdit = ({ closeDialog, userId }: props) => {
