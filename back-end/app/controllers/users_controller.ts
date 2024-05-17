@@ -30,7 +30,7 @@ export default class UsersController {
     }
 
     //next auth
-    if (auth.isAuthenticated && auth.user?.isAdmin) {
+    if (auth.user?.isAdmin) {
       // validate input
       const payload = await request.validateUsing(InternalUserValidator) //status 400 error
       // create user
@@ -106,12 +106,12 @@ export default class UsersController {
     const parameter = params.id
     const userId = auth.user?.id! as number
     // admin deleting users
-    if (auth.isAuthenticated && auth.user?.isAdmin) {
+    if (auth.user?.isAdmin) {
       // return { params: params, typeofparams: typeof params.id }
       const user = await User.findOrFail(parameter) //status 404 error, not found
       await user.delete()
     } //guest deleting itself.
-    else if (auth.isAuthenticated && !auth.user?.isAdmin && parseInt(parameter) === auth.user?.id) {
+    else if (!auth.user?.isAdmin && parseInt(parameter) === auth.user?.id) {
       await db.from('auth_access_tokens').where('tokenable_id', userId).delete()
       await db.from('users').where('id', userId).delete()
     }

@@ -30,7 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { authInstance } from "@/app/axios-config";
-import { DataTablePagination } from "./data-table-paginatio";
+import { DataTablePagination } from "./data-table-pagination";
 import { Button } from "../ui/button";
 import { ColumnVisiablity } from "./column-visibility";
 import CreateUserButton from "../../app/suporte/gestao-usuarios/create-users-button";
