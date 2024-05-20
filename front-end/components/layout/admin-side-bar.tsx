@@ -181,7 +181,7 @@ const AdminSideBar = ({ onPage }: onPage) => {
             </Tooltip>
             {/* user logout */}
             <Tooltip>
-              <Logout></Logout>
+              <Logout/>
             </Tooltip>
           </TooltipProvider>
         </nav>

@@ -43,6 +43,7 @@ interface loginForm {
 interface AuthContextType {
   authData: AuthData | null;
   userLogin: (loginForm: loginForm) => Promise<any>;
+  userLogout: () => void;
 }
 // children type
 interface AuthProviderProps {
@@ -82,6 +83,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return "fail";
     }
   }
+  async function userLogout() {
+    try {
+      // request to delete all tokens in auth token acess for the user id
+      await authInstance.get(`auth`);
+      localStorage.clear();
+      router.push("/");
+    } catch (error) {
+      localStorage.clear();
+      router.push("/");
+    }
+  }
   useEffect(() => {
     const token = `Bearer ${localStorage.getItem("token")}`;
     const userId = localStorage.getItem("userId");
@@ -91,7 +103,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   }, []);
   return (
-    <AuthContext.Provider value={{ authData, userLogin }}>
+    <AuthContext.Provider value={{ authData, userLogin, userLogout }}>
       {loading ? (
         <span className="loading loading-infinity loading-xs"></span>
       ) : (

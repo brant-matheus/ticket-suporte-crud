@@ -11,20 +11,12 @@ import { Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { authInstance } from "@/app/axios-config";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/authentication-context";
 
 const Logout = () => {
   const router = useRouter();
-  async function logout() {
-    try {
-      await authInstance.get(`auth`);
-      console.log("request done");
-      localStorage.clear();
-      router.push("/");
-    } catch (error) {
-      localStorage.clear();
-      router.push("/");
-    }
-  }
+  const { userLogout } = useAuth();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,7 +24,10 @@ const Logout = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          <DropdownMenuLabel className="cursor-pointer" onClick={logout}>
+          <DropdownMenuLabel
+            className="cursor-pointer"
+            onClick={async () => userLogout()}
+          >
             Logout
           </DropdownMenuLabel>
         </DropdownMenuItem>
