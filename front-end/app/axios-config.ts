@@ -7,20 +7,6 @@ export const instance = axios.create({
   baseURL: API_URL,
 });
 
-var token;
-var userId;
-try {
-  token = `Bearer ${localStorage.getItem("token")}`;
-  userId = localStorage.getItem("userId");
-} catch (error) {
-  token = null;
-  userId = null;
-}
-
 export const authInstance = axios.create({
   baseURL: API_URL,
-  headers: {
-    Authorization: token,
-    userId: userId,
-  },
 });

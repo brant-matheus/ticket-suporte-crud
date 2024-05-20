@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { instance } from "@/app/axios-config";
+import { useAuth } from "./authentication-context";
 /* 
 'use client' client server, not server side.
 'useState', disable login button after submit.
@@ -31,6 +32,7 @@ Link, redirect after click
 */
 
 export default function Login() {
+  const { userLogin } = useAuth();
   //loginError sets after request fails
   const [loginError, setLoginError] = useState("");
   //disable/enable login button after submit
@@ -60,17 +62,8 @@ export default function Login() {
 
   async function login(loginForm: z.infer<typeof formSchema>) {
     setLoginButton(true);
-    try {
-      const { data } = await instance.post("auth", loginForm);
-      localStorage.setItem("userId", data.id);
-      localStorage.setItem("token", data.token.token);
-
-      if (data.isAdmin) {
-        router.push("/suporte");
-      } else {
-        router.push("/guest");
-      }
-    } catch (error) {
+    const status = await userLogin(loginForm);
+    if (status === "fail") {
       setLoginButton(false);
       setLoginError("*Error no login, confira suas credenciais");
       form.resetField("password");

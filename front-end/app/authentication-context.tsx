@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const token = `Bearer ${localStorage.getItem("token")}`;
     const userId = localStorage.getItem("userId");
 
-    authInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    authInstance.defaults.headers.common["Authorization"] = token;
     authInstance.defaults.params = { userId: userId };
     setLoading(false);
   }, []);

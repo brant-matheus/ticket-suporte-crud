@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "./authentication-context";
 
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -29,8 +30,11 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
-        <Toaster />
+        <AuthProvider>
+          {children}
+
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );
