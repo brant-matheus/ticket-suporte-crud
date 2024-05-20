@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { instance } from "@/app/axios-config";
 import { useAuth } from "./authentication-context";
+import { ModeToggle } from "@/components/ui/theme-toggle";
 /* 
 'use client' client server, not server side.
 'useState', disable login button after submit.
@@ -72,77 +73,81 @@ export default function Login() {
 
   return (
     // center our item, h and v.
-    <div className="flex justify-center items-center h-screen">
-      {/*our shadow box, w size large*/}
-      <Card className="w-full max-w-lg">
-        {/* card title font size 2xl*/}
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Login</CardTitle>
-        </CardHeader>
-        {/* what goes inside our shadow box */}
-        <CardContent>
-          {/* shadcn ui Form, {...form} const form which has useForm. */}
-          <Form {...form}>
-            {/* html form, submit inputs registered by control*/}
-            <form onSubmit={form.handleSubmit(login)} className="grid gap-4">
-              <FormField
-                // make sure we can acess the expected type. (fullName, email...)
-                control={form.control}
-                // ctrl+space should auto complete the name, default values
-                name="email"
-                //field name to validate the form field input and save it for email
-                render={({ field }) => (
-                  //a single field
-                  <FormItem>
-                    {/* what is shown to user */}
-                    <FormLabel>email</FormLabel>
-                    {/* register, validate then save the input, linked to dataType in ...field*/}
-                    <FormControl>
-                      <Input placeholder="seu email" {...field} />
-                    </FormControl>
-                    {/* zod message */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                // make sure we can acess the expected type. (fullName, email...)
-                control={form.control}
-                // ctrl+space should auto complete the name, default values
-                name="password"
-                //field name to validate the form field input and save it for email
-                render={({ field }) => (
-                  //a single field
-                  <FormItem>
-                    {/* what is shown to user */}
-                    <FormLabel>Senha</FormLabel>
-                    {/* register, validate then save the input, linked to dataType in ...field*/}
-                    <FormControl>
-                      <Input
-                        placeholder="sua senha"
-                        type="password"
-                        {...field}
-                      />
-                    </FormControl>
-                    {/* zod message */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button className="w-full" type="submit" disabled={loginButton}>
-                Login
-              </Button>
-              <p className="text-[red]">{loginError}</p>
-              <p>
-                Não possui conta ?{" "}
-                <Link href="/cadastro" className="text-[blue]">
-                  Criar sua conta
-                </Link>{" "}
-              </p>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+    <div>
+      <div className="flex justify-center items-center h-screen ">
+        {/*our shadow box, w size large*/}
+        <Card className="w-full max-w-lg">
+          {/* card title font size 2xl*/}
+          <CardHeader>
+            <ModeToggle />
+
+            <CardTitle className="text-2xl text-center">Login</CardTitle>
+          </CardHeader>
+          {/* what goes inside our shadow box */}
+          <CardContent>
+            {/* shadcn ui Form, {...form} const form which has useForm. */}
+            <Form {...form}>
+              {/* html form, submit inputs registered by control*/}
+              <form onSubmit={form.handleSubmit(login)} className="grid gap-4">
+                <FormField
+                  // make sure we can acess the expected type. (fullName, email...)
+                  control={form.control}
+                  // ctrl+space should auto complete the name, default values
+                  name="email"
+                  //field name to validate the form field input and save it for email
+                  render={({ field }) => (
+                    //a single field
+                    <FormItem>
+                      {/* what is shown to user */}
+                      <FormLabel>email</FormLabel>
+                      {/* register, validate then save the input, linked to dataType in ...field*/}
+                      <FormControl>
+                        <Input placeholder="seu email" {...field} />
+                      </FormControl>
+                      {/* zod message */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  // make sure we can acess the expected type. (fullName, email...)
+                  control={form.control}
+                  // ctrl+space should auto complete the name, default values
+                  name="password"
+                  //field name to validate the form field input and save it for email
+                  render={({ field }) => (
+                    //a single field
+                    <FormItem>
+                      {/* what is shown to user */}
+                      <FormLabel>Senha</FormLabel>
+                      {/* register, validate then save the input, linked to dataType in ...field*/}
+                      <FormControl>
+                        <Input
+                          placeholder="sua senha"
+                          type="password"
+                          {...field}
+                        />
+                      </FormControl>
+                      {/* zod message */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button className="w-full" type="submit" disabled={loginButton}>
+                  Login
+                </Button>
+                <p className="text-[red]">{loginError}</p>
+                <p>
+                  Não possui conta ?{" "}
+                  <Link href="/cadastro" className="text-blue-500">
+                    Criar sua conta
+                  </Link>{" "}
+                </p>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

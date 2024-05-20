@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "./authentication-context";
-
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 
@@ -30,11 +30,17 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <AuthProvider>
-          {children}
-
-          <Toaster />
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

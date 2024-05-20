@@ -35,6 +35,7 @@ import Logout from "./logout";
 import { authInstance } from "@/app/axios-config";
 import { useState } from "react";
 import { useAuth } from "@/app/authentication-context";
+import { ModeToggle } from "../ui/theme-toggle";
 /* 
 1. icons: Home: ticket visualization; Settings: User settings; Filecog: defacul ticket form; UserCog: users managment
 2. tooltip: hoover the name of page when mouse click on icon
@@ -71,6 +72,9 @@ const AdminSideBar = ({ onPage }: onPage) => {
             */}
         <nav className="flex flex-col items-center gap-y-6 px-2 sm:py-5">
           <TooltipProvider>
+            <Tooltip>
+              <ModeToggle />
+            </Tooltip>
             {/* todos os  tickets - home*/}
             <Tooltip>
               <TooltipTrigger asChild>
