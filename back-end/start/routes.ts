@@ -12,7 +12,6 @@ router
       .use(['index'], middleware.admin())
 
     router.get('auth', [AuthController, 'logout'])
-    router.get('auth/:id', [AuthController, 'adminAuth'])
   })
   .middleware(middleware.auth())
 

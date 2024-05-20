@@ -20,10 +20,4 @@ export default class AuthController {
     //delete from table, where column id equals user id
     await db.from('auth_access_tokens').where('tokenable_id', userId).delete()
   }
-
-  async adminAuth({ auth, params }: HttpContext) {
-    if (auth.user?.isAdmin) {
-      return true
-    }
-  }
 }

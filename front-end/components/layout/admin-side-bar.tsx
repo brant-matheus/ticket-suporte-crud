@@ -34,7 +34,7 @@ import { useRouter } from "next/navigation";
 import Logout from "./logout";
 import { authInstance } from "@/app/axios-config";
 import { useState } from "react";
-
+import { useAuth } from "@/app/authentication-context";
 /* 
 1. icons: Home: ticket visualization; Settings: User settings; Filecog: defacul ticket form; UserCog: users managment
 2. tooltip: hoover the name of page when mouse click on icon
@@ -47,19 +47,6 @@ interface onPage {
 
 const AdminSideBar = ({ onPage }: onPage) => {
   const router = useRouter();
-  // async function adminAuth() {
-  //   try {
-  //     await authInstance.get("auth/1");
-  //   } catch (error) {
-  //     if (error.response.status === 401) {
-  //       router.push("/");
-  //       localStorage.clear();
-  //     }
-  //   }
-  // }
-  // useEffect(() => {
-  //   adminAuth();
-  // }, []);
 
   return (
     <div>
@@ -181,7 +168,7 @@ const AdminSideBar = ({ onPage }: onPage) => {
             </Tooltip>
             {/* user logout */}
             <Tooltip>
-              <Logout/>
+              <Logout />
             </Tooltip>
           </TooltipProvider>
         </nav>
