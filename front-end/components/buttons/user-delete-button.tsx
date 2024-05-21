@@ -18,8 +18,6 @@ interface UserSettings {
   userId: string;
 }
 const CreateUserButton = ({ userId }: UserSettings) => {
-  const [open, setOpen] = useState(false);
-
   return (
     <div>
       <Dialog>

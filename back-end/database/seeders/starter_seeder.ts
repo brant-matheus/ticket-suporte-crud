@@ -9,14 +9,14 @@ export default class extends BaseSeeder {
   async run() {
     // Write your database queries inside the run method
     // await UserFactory.createMany(100)
-    // await User.create({
-    //   fullName: 'matheus',
-    //   email: 'matheus@saga.com',
-    //   isAdmin: true,
-    //   password: 'Testing@123',
-    // })
-    // await TicketCategory.create({ name: 'teste', color: 'teste', responsibleId: 1 })
-    // await TicketPriority.create({ name: 'teste', color: 'teste', responsibleId: 1 })
-    // await TicketStatus.create({ name: 'teste', color: 'teste', responsibleId: 1 })
+    await User.create({
+      fullName: 'matheus',
+      email: 'matheus@saga.com',
+      isAdmin: true,
+      password: 'Testing@123',
+    })
+    await TicketCategory.create({ name: 'teste', color: 'teste', responsibleId: 1 })
+    await TicketPriority.create({ name: 'teste', color: 'teste', responsibleId: 1 })
+    await TicketStatus.create({ name: 'teste', color: 'teste', responsibleId: 1 })
   }
 }

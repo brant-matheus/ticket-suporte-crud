@@ -40,6 +40,7 @@ interface DataTableProps<TData, TValue> {
   filterColumn: string;
   showFilter: boolean;
   component: any;
+  fromTable: string;
 }
 export type MetaProps = {
   total: number;
@@ -55,6 +56,7 @@ export type MetaProps = {
 
 export function DataTable<TData, TValue>({
   columns,
+  fromTable,
   route,
   showFilter,
   filterColumn,
@@ -77,6 +79,7 @@ export function DataTable<TData, TValue>({
         params: {
           page: pagination.pageIndex + 1, //first page {front: 0, back: 1}
           pageSize: pagination.pageSize,
+          fromTable: fromTable,
         },
       });
       if ((request.status ?? status) === 200) {
