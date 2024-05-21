@@ -21,7 +21,7 @@ export type TData = {
   updatedAt: string;
 };
 
-export const categoriesColumns: ColumnDef<TData>[] = [
+export const columns: ColumnDef<TData>[] = [
   {
     accessorKey: "id",
     header: "id",
@@ -79,11 +79,11 @@ export const categoriesColumns: ColumnDef<TData>[] = [
             </TooltipTrigger>
             <TooltipContent>
               <div className="">
-                <p>usuário criado em: {createdAt}</p>
+                <p>categoria criado em: {createdAt}</p>
                 {updateAt === createdAt ? (
-                  <p>usuário ainda não foi editado</p>
+                  <p>categoria ainda não foi editado</p>
                 ) : (
-                  <p>usuário editado em: {updateAt}</p>
+                  <p>categoria editado em: {updateAt}</p>
                 )}
               </div>
             </TooltipContent>
@@ -101,9 +101,10 @@ export const categoriesColumns: ColumnDef<TData>[] = [
         <>
           <div className="flex space-x-2">
             <DeleteDialog
-              route="ticket-config"
-              title="Categoria"
+              route="ticket-configs"
+              title="item"
               params={category.id}
+              paramsQuery="categories"
             />
           </div>
         </>

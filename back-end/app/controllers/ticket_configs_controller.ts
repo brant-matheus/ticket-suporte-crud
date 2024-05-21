@@ -24,5 +24,22 @@ export default class TicketConfigsController {
 
   async update({ params, request }: HttpContext) {}
 
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params, request }: HttpContext) {
+    const { paramsQuery } = request.only(['paramsQuery'])
+    switch (paramsQuery) {
+      case 'categories':
+        const category = await TicketCategory.findOrFail(params.id)
+        // can't get here
+        return await category.delete()
+      case 'statuses':
+        const status = await TicketStatus.findOrFail(params.id)
+        return await status.delete()
+      case 'priorities':
+        const priority = await TicketPriority.findOrFail(params.id)
+        return await priority.delete()
+
+      default:
+        break
+    }
+  }
 }
