@@ -1,6 +1,6 @@
 "use client";
 
-import ModificationEye from "@/components/utils/modification-eye";
+import ModificationEye from "@/components/utils/modification-datetime-eye";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import { ArrowUpDown, MoreHorizontal, Eye, Ghost } from "lucide-react";
