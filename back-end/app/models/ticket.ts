@@ -23,8 +23,6 @@ export default class Ticket extends BaseModel {
   @column()
   declare statusId: number
 
-
-
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

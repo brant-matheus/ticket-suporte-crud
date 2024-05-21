@@ -10,21 +10,20 @@ export default class extends BaseSchema {
       table.string('content').notNullable()
 
       table
-      .integer('responsible_id')
-      .notNullable()
-      .unsigned()
-      .references('id')
-      .inTable('users')
-      .onDelete('CASCADE')
+        .integer('responsible_id')
+        .notNullable()
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
 
       table
-      .integer('ticket_id')
-      .notNullable()
-      .unsigned()
-      .references('id')
-      .inTable('tickets')
-      .onDelete('CASCADE')
-
+        .integer('ticket_id')
+        .notNullable()
+        .unsigned()
+        .references('id')
+        .inTable('tickets')
+        .onDelete('CASCADE')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

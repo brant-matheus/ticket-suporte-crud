@@ -6,7 +6,8 @@ export default class TicketPriority extends BaseModel {
   declare id: number
   @column()
   declare name: string
-
+  @column()
+  declare responsibleId: number
   @column()
   declare color: string
   @column.dateTime({ autoCreate: true })

@@ -9,6 +9,9 @@ export default class TicketCategory extends BaseModel {
   declare name: string
 
   @column()
+  declare responsibleId: number
+
+  @column()
   declare color: string
 
   @column.dateTime({ autoCreate: true })

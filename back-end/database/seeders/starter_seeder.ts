@@ -15,8 +15,8 @@ export default class extends BaseSeeder {
     //   isAdmin: true,
     //   password: 'Testing@123',
     // })
-    // await TicketCategory.create({ name: 'teste', color: 'teste' })
-    // await TicketPriority.create({ name: 'teste', color: 'teste' })
-    // await TicketStatus.create({ name: 'teste', color: 'teste' })
+    // await TicketCategory.create({ name: 'teste', color: 'teste', responsibleId: 1 })
+    // await TicketPriority.create({ name: 'teste', color: 'teste', responsibleId: 1 })
+    // await TicketStatus.create({ name: 'teste', color: 'teste', responsibleId: 1 })
   }
 }
