@@ -1,10 +1,14 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class CategoriesDefault extends BaseModel {
+export default class TicketPriority extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare name: string
 
+  @column()
+  declare color: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
