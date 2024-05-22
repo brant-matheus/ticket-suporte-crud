@@ -1,3 +1,4 @@
+import Ticket from '#models/ticket'
 import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
 import TicketStatus from '#models/ticket_status'
@@ -25,8 +26,15 @@ export default class TicketConfigsController {
   async update({ params, request }: HttpContext) {}
 
   async destroy({ params, request }: HttpContext) {
-    const { paramsQuery } = request.only(['paramsQuery'])
-    switch (paramsQuery) {
+    const { fromTable, tableId } = request.only(['fromTable', 'tableId'])
+
+    // it can't delete category, status or priority if a ticket is already using them.
+    const ticket = await Ticket.findBy(tableId, params.id)
+    if (ticket?.$isPersisted) {
+      throw new Error()
+    }
+
+    switch (fromTable) {
       case 'categories':
         const category = await TicketCategory.findOrFail(params.id)
         // can't get here

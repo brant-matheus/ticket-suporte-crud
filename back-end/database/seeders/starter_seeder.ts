@@ -11,6 +11,7 @@ import {
   TicketPrioriesFactory,
   TicketStatusesFactory,
 } from '#database/factories/ticket_configs_factory'
+import Ticket from '#models/ticket'
 
 export default class extends BaseSeeder {
   color = faker.color
@@ -22,10 +23,18 @@ export default class extends BaseSeeder {
       isAdmin: true,
       password: 'Testing@123',
     })
-    // await UserFactory.createMany(100)
+    await UserFactory.createMany(1)
 
     await TicketCategory.createMany(TicketCategoryFactory)
     await TicketPriority.createMany(TicketPrioriesFactory)
     await TicketStatus.createMany(TicketStatusesFactory)
+    await Ticket.create({
+      categoryId: 1,
+      createdById: 2,
+      description: 'loren epsiun',
+      priorityId: 1,
+      statusId: 1,
+      subject: 'loren epsium',
+    })
   }
 }

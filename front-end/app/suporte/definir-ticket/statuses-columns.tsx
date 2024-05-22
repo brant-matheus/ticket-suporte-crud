@@ -23,21 +23,14 @@ export const statusesColumns: ColumnDef<TData>[] = [
     accessorKey: "nome",
     header: "nome",
     cell: ({ row }) => {
-      const status = row.original;
+      const item = row.original;
 
-      return <p>{status.name}</p>;
+      const color = { color: item.color };
+
+      return <p style={color}>{item.name}</p>;
     },
   },
-  {
-    accessorKey: "cor",
-    header: "cor",
-    cell: ({ row }) => {
-      const status = row.original;
-      const color = `text-[${status.color}]`;
 
-      return <p className={color}>{status.color}</p>;
-    },
-  },
   {
     accessorKey: "criado por",
     // remove this, use it on email
@@ -73,9 +66,10 @@ export const statusesColumns: ColumnDef<TData>[] = [
           <div className="flex space-x-2">
             <DeleteDialog
               route="ticket-configs"
-              title="item"
+              title="status"
               params={status.id}
-              paramsQuery="statuses"
+              fromTable="statuses"
+              tableId="status_id"
             />
           </div>
         </>

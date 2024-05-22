@@ -13,6 +13,7 @@ export default async function DemoPage() {
           route="user"
           showFilter={true}
           component={<CreateUserButton />}
+          fromTable=""
         />
       </div>
     </>

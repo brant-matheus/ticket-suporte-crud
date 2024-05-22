@@ -23,10 +23,11 @@ export const categoriesColumns: ColumnDef<TData>[] = [
     accessorKey: "nome",
     header: "nome",
     cell: ({ row }) => {
-      const category = row.original;
-      const color = { color: category.color };
+      const item = row.original;
 
-      return <p style={color}>{category.name}</p>;
+      const color = { color: item.color };
+
+      return <p style={color}>{item.name}</p>;
     },
   },
 
@@ -65,9 +66,10 @@ export const categoriesColumns: ColumnDef<TData>[] = [
           <div className="flex space-x-2">
             <DeleteDialog
               route="ticket-configs"
-              title="item"
+              title="categoria"
               params={category.id}
-              paramsQuery="categories"
+              fromTable="categories"
+              tableId="category_id"
             />
           </div>
         </>

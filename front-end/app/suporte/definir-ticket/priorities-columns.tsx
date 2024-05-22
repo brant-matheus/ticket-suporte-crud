@@ -23,21 +23,14 @@ export const prioritiesColumns: ColumnDef<TData>[] = [
     accessorKey: "nome",
     header: "nome",
     cell: ({ row }) => {
-      const priority = row.original;
+      const item = row.original;
+    
+      const color = { color: item.color };
 
-      return <p>{priority.name}</p>;
+      return <p style={color}>{item.name}</p>;
     },
   },
-  {
-    accessorKey: "cor",
-    header: "cor",
-    cell: ({ row }) => {
-      const priority = row.original;
-      const color = `text-[${priority.color}]`;
 
-      return <p className={color}>{priority.color}</p>;
-    },
-  },
   {
     accessorKey: "criado por",
     // remove this, use it on email
@@ -73,9 +66,10 @@ export const prioritiesColumns: ColumnDef<TData>[] = [
           <div className="flex space-x-2">
             <DeleteDialog
               route="ticket-configs"
-              title="item"
+              title="prioridades"
               params={priority.id}
-              paramsQuery="priorities"
+              fromTable="priorities"
+              tableId="priority_id"
             />
           </div>
         </>
