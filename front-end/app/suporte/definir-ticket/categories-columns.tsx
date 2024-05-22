@@ -24,20 +24,12 @@ export const categoriesColumns: ColumnDef<TData>[] = [
     header: "nome",
     cell: ({ row }) => {
       const category = row.original;
+      const color = { color: category.color };
 
-      return <p>{category.name}</p>;
+      return <p style={color}>{category.name}</p>;
     },
   },
-  {
-    accessorKey: "cor",
-    header: "cor",
-    cell: ({ row }) => {
-      const category = row.original;
-      const color = `text-[${category.color}]`;
 
-      return <p className={color}>{category.color}</p>;
-    },
-  },
   {
     accessorKey: "criado por",
     // remove this, use it on email

@@ -6,22 +6,26 @@ import User from '#models/user'
 import { faker } from '@faker-js/faker'
 
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
+import {
+  TicketCategoryFactory,
+  TicketPrioriesFactory,
+  TicketStatusesFactory,
+} from '#database/factories/ticket_configs_factory'
 
 export default class extends BaseSeeder {
   color = faker.color
   async run() {
     // Write your database queries inside the run method
-    // await UserFactory.createMany(100)
-    // await User.create({
-    //   fullName: 'matheus',
-    //   email: 'matheus@saga.com',
-    //   isAdmin: true,
-    //   password: 'Testing@123',
-    // })
-    await TicketCategory.create({
-      name: this.color.rgb(),
-      color: this.color.human(),
-      responsibleId: 1,
+    await User.create({
+      fullName: 'matheus',
+      email: 'matheus@saga.com',
+      isAdmin: true,
+      password: 'Testing@123',
     })
+    // await UserFactory.createMany(100)
+
+    await TicketCategory.createMany(TicketCategoryFactory)
+    await TicketPriority.createMany(TicketPrioriesFactory)
+    await TicketStatus.createMany(TicketStatusesFactory)
   }
 }
