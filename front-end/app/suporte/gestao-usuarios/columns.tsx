@@ -99,7 +99,13 @@ export const columns: ColumnDef<TData>[] = [
       return (
         <>
           <div className="flex space-x-2">
-            <DeleteDialog route="user" title="Usuário" params={user.id} />
+            <DeleteDialog
+              route="user"
+              title="Usuário"
+              params={user.id}
+              fromTable=""
+              tableId=""
+            />
             <EditButton
               fullName={user.fullName}
               email={user.email}

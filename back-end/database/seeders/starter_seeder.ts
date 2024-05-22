@@ -23,7 +23,7 @@ export default class extends BaseSeeder {
       isAdmin: true,
       password: 'Testing@123',
     })
-    await UserFactory.createMany(1)
+    await UserFactory.createMany(2)
 
     await TicketCategory.createMany(TicketCategoryFactory)
     await TicketPriority.createMany(TicketPrioriesFactory)
