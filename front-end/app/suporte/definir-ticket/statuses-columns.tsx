@@ -14,7 +14,7 @@ export type TData = {
   createdAt: string;
   updatedAt: string;
 };
-export const categoriesColumns: ColumnDef<TData>[] = [
+export const statusesColumns: ColumnDef<TData>[] = [
   {
     accessorKey: "id",
     header: "id",
@@ -23,19 +23,19 @@ export const categoriesColumns: ColumnDef<TData>[] = [
     accessorKey: "nome",
     header: "nome",
     cell: ({ row }) => {
-      const category = row.original;
+      const status = row.original;
 
-      return <p>{category.name}</p>;
+      return <p>{status.name}</p>;
     },
   },
   {
     accessorKey: "cor",
     header: "cor",
     cell: ({ row }) => {
-      const category = row.original;
-      const color = `text-[${category.color}]`;
+      const status = row.original;
+      const color = `text-[${status.color}]`;
 
-      return <p className={color}>{category.color}</p>;
+      return <p className={color}>{status.color}</p>;
     },
   },
   {
@@ -43,22 +43,22 @@ export const categoriesColumns: ColumnDef<TData>[] = [
     // remove this, use it on email
     header: "criador por",
     cell: ({ row }) => {
-      const category = row.original;
+      const status = row.original;
 
-      return <p>{category.responsibleId}</p>;
+      return <p>{status.responsibleId}</p>;
     },
   },
   {
     accessorKey: "modificado",
     header: "modificado",
     cell: ({ row }) => {
-      const category = row.original;
+      const status = row.original;
       //user create at date time
       return (
         <ModificationEye
-          createdAtProps={category.createdAt}
-          updatedAtProps={category.updatedAt}
-          title="categoria"
+          createdAtProps={status.createdAt}
+          updatedAtProps={status.updatedAt}
+          title="status"
         />
       );
     },
@@ -67,15 +67,15 @@ export const categoriesColumns: ColumnDef<TData>[] = [
     id: "ações",
     header: "ações",
     cell: ({ row }) => {
-      const category = row.original;
+      const status = row.original;
       return (
         <>
           <div className="flex space-x-2">
             <DeleteDialog
               route="ticket-configs"
               title="item"
-              params={category.id}
-              paramsQuery="categories"
+              params={status.id}
+              paramsQuery="statuses"
             />
           </div>
         </>

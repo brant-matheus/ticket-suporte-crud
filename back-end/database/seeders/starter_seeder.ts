@@ -3,9 +3,12 @@ import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
 import TicketStatus from '#models/ticket_status'
 import User from '#models/user'
+import { faker } from '@faker-js/faker'
+
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
+  color = faker.color
   async run() {
     // Write your database queries inside the run method
     // await UserFactory.createMany(100)
@@ -15,8 +18,10 @@ export default class extends BaseSeeder {
     //   isAdmin: true,
     //   password: 'Testing@123',
     // })
-    // await TicketCategory.create({ name: 'categoria', color: 'red', responsibleId: 1 })
-    await TicketPriority.create({ name: 'prioritya', color: 'blue', responsibleId: 1 })
-    // await TicketStatus.create({ name: 'statuses', color: 'green', responsibleId: 1 })
+    await TicketCategory.create({
+      name: this.color.rgb(),
+      color: this.color.human(),
+      responsibleId: 1,
+    })
   }
 }

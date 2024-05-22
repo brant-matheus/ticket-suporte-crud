@@ -1,7 +1,9 @@
 import React from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import { DataTable } from "@/components/table/data-table";
-import { columns, TData } from "./categories-columns";
+import { categoriesColumns, TData } from "./categories-columns";
+import { prioritiesColumns } from "./priorities-columns";
+import { statusesColumns } from "./statuses-columns";
 import {
   Card,
   CardContent,
@@ -26,7 +28,7 @@ const page = () => {
           <Card>
             <CardContent>
               <DataTable
-                columns={columns}
+                columns={categoriesColumns}
                 component={null}
                 showFilter={false}
                 filterColumn=""
@@ -40,7 +42,7 @@ const page = () => {
           <Card>
             <CardContent>
               <DataTable
-                columns={columns}
+                columns={prioritiesColumns}
                 component={null}
                 showFilter={false}
                 filterColumn=""
@@ -54,7 +56,7 @@ const page = () => {
           <Card>
             <CardContent>
               <DataTable
-                columns={columns}
+                columns={statusesColumns}
                 component={null}
                 showFilter={false}
                 filterColumn=""
