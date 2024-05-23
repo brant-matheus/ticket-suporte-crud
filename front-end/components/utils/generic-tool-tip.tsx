@@ -24,7 +24,11 @@ export default function GenericToolTip({
     <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant={variant} onClick={() => router.push(path)}>
+          <Button
+            variant={variant}
+            onClick={() => router.push(path)}
+            className="rounded-full"
+          >
             {icon}
           </Button>
         </TooltipTrigger>

@@ -9,9 +9,7 @@ interface EditButtonProps {
 const EditButton = ({ action }: EditButtonProps) => {
   return (
     <>
-      <Button onClick={() => action()}>
-        <PencilLine className="h-5 w-5 text-green-600" />
-      </Button>
+      <PencilLine className="h-5 w-5 text-green-600" onClick={() => action()} />
     </>
   );
 };
