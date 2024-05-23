@@ -12,7 +12,7 @@ export default class TicketConfigsController {
         case 'categories':
           return await TicketCategory.query().preload('responsible').paginate(page, pageSize)
         case 'statuses':
-          return await TicketStatus.query().paginate(page, pageSize)
+          return await TicketStatus.query().preload('responsible').paginate(page, pageSize)
         case 'priorities':
           return await TicketPriority.query().preload('responsible').paginate(page, pageSize)
         default:

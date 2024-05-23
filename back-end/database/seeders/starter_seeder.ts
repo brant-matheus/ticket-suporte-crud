@@ -29,11 +29,11 @@ export default class extends BaseSeeder {
     await TicketPriority.createMany(TicketPrioriesFactory)
     await TicketStatus.createMany(TicketStatusesFactory)
     await Ticket.create({
-      categoryId: 1,
+      ticketCategoryId: 1,
       createdById: 2,
       description: 'loren epsiun',
-      priorityId: 1,
-      statusId: 1,
+      ticketPriorityId: 1,
+      ticketStatusId: 1,
       subject: 'loren epsium',
     })
   }

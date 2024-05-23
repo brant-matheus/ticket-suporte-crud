@@ -1,6 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import User from '#models/user'
+import TicketCategory from '#models/ticket_category'
+import TicketPriority from '#models/ticket_priority'
+import TicketStatus from '#models/ticket_status'
 export default class Ticket extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
@@ -28,4 +32,18 @@ export default class Ticket extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @belongsTo(() => User, {
+    foreignKey: 'createdById',
+  })
+  declare user: BelongsTo<typeof User>
+
+  @belongsTo(() => TicketCategory)
+  declare ticketCategory: BelongsTo<typeof TicketCategory>
+
+  @belongsTo(() => TicketPriority)
+  declare ticketPriority: BelongsTo<typeof TicketPriority>
+
+  @belongsTo(() => TicketStatus)
+  declare TicketStatus: BelongsTo<typeof TicketStatus>
 }

@@ -3,6 +3,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 import AuthController from '#controllers/auth_controller'
 import TicketConfigsController from '#controllers/ticket_configs_controller'
+import TicketsController from '#controllers/tickets_controller'
 // internal, auth.
 router
   .group(() => {
@@ -27,3 +28,5 @@ router.post('auth', [AuthController, 'login'])
 //guest register by guest
 
 router.post('externalUser', [UsersController, 'store'])
+
+router.resource('ticket', TicketsController).except(['create', 'edit', 'show'])
