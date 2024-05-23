@@ -7,20 +7,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Settings } from "lucide-react";
-import { Button } from "../ui/button";
-import { authInstance } from "@/app/axios-config";
-import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 import { useAuth } from "@/app/authentication-context";
 
 const Logout = () => {
-  const router = useRouter();
   const { userLogout } = useAuth();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Settings className="cursor-pointer" />
+        <LogOut className="cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
@@ -28,7 +24,7 @@ const Logout = () => {
             className="cursor-pointer"
             onClick={async () => userLogout()}
           >
-            Logout
+            Sair da conta
           </DropdownMenuLabel>
         </DropdownMenuItem>
       </DropdownMenuContent>

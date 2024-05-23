@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         authInstance.defaults.params = { userId: data.user.id };
         // redirecting
         if (data.user.isAdmin) {
-          router.push("/suporte");
+          router.push("/admin");
         } else {
           router.push("/guest");
         }

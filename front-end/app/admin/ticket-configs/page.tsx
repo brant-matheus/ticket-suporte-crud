@@ -24,7 +24,7 @@ const page = () => {
   return (
     <>
       <Child ref={modalRef} />
-      <AdminSideBar onPage="set-ticket" />
+      <AdminSideBar />
       <Tabs defaultValue="categories" className="w-11/12 mt-4 ml-20 space-y-4">
         <TabsList>
           <TabsTrigger value="categories">Categoria</TabsTrigger>

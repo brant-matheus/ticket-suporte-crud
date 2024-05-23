@@ -25,7 +25,7 @@ export default function DemoPage() {
   return (
     <>
       {/* not generic */}
-      <AdminSideBar onPage="users-managment" />
+      <AdminSideBar />
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <RegisterModal closeDialog={closeDialog} />

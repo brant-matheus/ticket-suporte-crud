@@ -31,8 +31,12 @@ instance, axios instance
 useRouter, redirect
 Link, redirect after click
 */
+import { usePathname } from "next/navigation";
 
 export default function Login() {
+  const pathname = usePathname();
+
+  console.log(pathname);
   const { userLogin } = useAuth();
   //loginError sets after request fails
   const [loginError, setLoginError] = useState("");

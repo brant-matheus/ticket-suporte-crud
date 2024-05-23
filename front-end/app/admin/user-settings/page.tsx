@@ -1,10 +1,11 @@
 import React from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
-import { authInstance } from "../axios-config";
+import UserSettings from "@/components/user-settings/user-settings";
 const page = () => {
   return (
     <>
-      <AdminSideBar onPage="home" />
+      <AdminSideBar />
+      <UserSettings />
     </>
   );
 };
