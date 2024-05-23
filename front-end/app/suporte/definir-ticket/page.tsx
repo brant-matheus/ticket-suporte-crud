@@ -1,9 +1,11 @@
-import React from "react";
+"use client";
+import React, { useRef, useState } from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import { DataTable } from "@/components/table/data-table";
 import { categoriesColumns, TData } from "./categories-columns";
 import { prioritiesColumns } from "./priorities-columns";
 import { statusesColumns } from "./statuses-columns";
+import { ModalHandles, Child } from "@/components/utils/modal";
 import {
   Card,
   CardContent,
@@ -12,11 +14,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import GeneralFormEdit from "../users-managment/general-form-edit";
+import { Button } from "@/components/ui/button";
 const page = () => {
+  const modalRef = useRef<ModalHandles>(null);
+
   return (
     <>
+      <Child ref={modalRef} />
       <AdminSideBar onPage="set-ticket" />
       <Tabs defaultValue="categories" className="w-11/12 mt-4 ml-20 space-y-4">
         <TabsList>
@@ -28,7 +35,9 @@ const page = () => {
           <Card>
             <CardContent>
               <DataTable
-                columns={categoriesColumns}
+                columns={categoriesColumns(() =>
+                  modalRef.current?.handleOpen("acerto")
+                )}
                 component={null}
                 showFilter={false}
                 filterColumn=""

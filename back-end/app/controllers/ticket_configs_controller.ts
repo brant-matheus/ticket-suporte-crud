@@ -10,11 +10,11 @@ export default class TicketConfigsController {
       const { fromTable, page, pageSize } = request.only(['fromTable', 'page', 'pageSize'])
       switch (fromTable) {
         case 'categories':
-          return await TicketCategory.query().paginate(page, pageSize)
+          return await TicketCategory.query().preload('responsible').paginate(page, pageSize)
         case 'statuses':
           return await TicketStatus.query().paginate(page, pageSize)
         case 'priorities':
-          return await TicketPriority.query().paginate(page, pageSize)
+          return await TicketPriority.query().preload('responsible').paginate(page, pageSize)
         default:
           break
       }

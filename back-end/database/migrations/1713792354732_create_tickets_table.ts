@@ -20,7 +20,7 @@ export default class extends BaseSchema {
       table.string('description').notNullable()
 
       table
-        .integer('category_id')
+        .integer('ticket_category_id')
         .notNullable()
         .unsigned()
         .references('id')
@@ -28,7 +28,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
 
       table
-        .integer('priority_id')
+        .integer('ticket_priority_id')
         .notNullable()
         .unsigned()
         .references('id')
@@ -36,7 +36,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
 
       table
-        .integer('status_id')
+        .integer('ticket_status_id')
         .notNullable()
         .unsigned()
         .references('id')

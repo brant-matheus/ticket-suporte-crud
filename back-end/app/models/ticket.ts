@@ -15,13 +15,13 @@ export default class Ticket extends BaseModel {
   declare description: string
 
   @column()
-  declare categoryId: number
+  declare ticketCategoryId: number
 
   @column()
-  declare priorityId: number
+  declare ticketPriorityId: number
 
   @column()
-  declare statusId: number
+  declare ticketStatusId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

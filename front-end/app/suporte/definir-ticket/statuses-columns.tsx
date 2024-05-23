@@ -6,11 +6,20 @@ import DeleteDialog from "@/components/buttons/delete-dialog";
 import { ArrowUpDown, MoreHorizontal, Eye, Ghost } from "lucide-react";
 import { Button } from "@/components/ui/button";
 // This type is used to define the shape of our data.
+
+interface responsibleId {
+  id: number;
+  fullName: string;
+  email: string;
+  isAdmin: number;
+  createdAt: string;
+  updatedAt: string;
+}
 export type TData = {
   id: number;
   name: string;
   color: string;
-  responsibleId: number;
+  responsible: responsibleId;
   createdAt: string;
   updatedAt: string;
 };
@@ -37,8 +46,8 @@ export const statusesColumns: ColumnDef<TData>[] = [
     header: "criador por",
     cell: ({ row }) => {
       const status = row.original;
-
-      return <p>{status.responsibleId}</p>;
+      console.log(status.responsible);
+      return <p>{status.color}</p>;
     },
   },
   {

@@ -9,11 +9,10 @@ export default class Comment extends BaseModel {
   declare content: string
 
   @column()
-  declare responsible: number
+  declare responsibleId: number
 
   @column()
   declare ticketId: number
-
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

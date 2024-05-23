@@ -9,7 +9,7 @@ export default class Operation extends BaseModel {
   declare description: string
 
   @column()
-  declare responsible: number
+  declare responsibleId: number
 
   @column()
   declare ticketId: number
