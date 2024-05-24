@@ -11,26 +11,34 @@ import {
 import Logout from "./logout";
 import GenericToolTip from "../utils/generic-tool-tip";
 
-export default function GuestAdminSideBar() {
+export default function AdminSideBar() {
   const pathName = usePathname();
   const router = useRouter();
 
   const links = [
-    { icon: <Home />, path: "/admin", tooltipContent: "Meus tickets" },
+    {
+      icon: <Home />,
+      path: "/admin",
+      tooltipContent: "Meus tickets",
+      key: 1,
+    },
     {
       icon: <UserCog />,
       path: "/admin/users-managment",
       tooltipContent: "Gestão de usuários",
+      key: 2,
     },
     {
       icon: <FileCog />,
       path: "/admin/ticket-configs",
       tooltipContent: "Configuração de ticket",
+      key: 3,
     },
     {
       icon: <Cog />,
       path: "/admin/user-settings",
       tooltipContent: "Configuração de usuário",
+      key: 4,
     },
   ];
   return (
@@ -44,6 +52,7 @@ export default function GuestAdminSideBar() {
                 icon={link.icon}
                 path={link.path}
                 variant="default"
+                key={link.key}
               />
             ) : (
               <GenericToolTip
@@ -51,6 +60,7 @@ export default function GuestAdminSideBar() {
                 icon={link.icon}
                 path={link.path}
                 variant="ghost"
+                key={link.key}
               />
             )
           )}
