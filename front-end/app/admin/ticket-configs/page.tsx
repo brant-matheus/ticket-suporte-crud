@@ -2,17 +2,13 @@
 import React, { useRef, useState } from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import { DataTable } from "@/components/table/data-table";
-// import { categoriesColumns, TData } from "./categories-columns";
-import { ModalHandles, Child } from "@/components/utils/modal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ticketConfigsColumns, TData } from "./columns";
+import CreateButton from "@/components/buttons/create-button";
 const page = () => {
-  const modalRef = useRef<ModalHandles>(null);
-
   return (
     <>
-      <Child ref={modalRef} />
       <AdminSideBar />
       <Tabs defaultValue="categories" className="w-11/12 mt-4 ml-20 space-y-4">
         <TabsList>
@@ -27,8 +23,9 @@ const page = () => {
                 columns={ticketConfigsColumns({
                   title: "categoria",
                   fromTableWhere: "ticket_category_id",
+                  fromTable: "categories",
                 })}
-                component={null}
+                component={<CreateButton action={() => {}} title="categoria" />}
                 filterColumn=""
                 fromTable="categories"
                 route="ticket-configs"
@@ -43,6 +40,7 @@ const page = () => {
               <DataTable
                 columns={ticketConfigsColumns({
                   title: "prioridade",
+                  fromTable: "priorities",
                   fromTableWhere: "ticket_priority_id",
                 })}
                 component={null}
@@ -61,6 +59,7 @@ const page = () => {
                 columns={ticketConfigsColumns({
                   title: "status",
                   fromTableWhere: "ticket_status_id",
+                  fromTable: "statuses",
                 })}
                 component={null}
                 filterColumn=""

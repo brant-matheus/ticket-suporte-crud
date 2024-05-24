@@ -120,7 +120,7 @@ export function DataTable<TData, TValue>({
       {showFilter ? (
         <div className="flex items-center py-2 space-x-4">
           <Input
-            placeholder="Filter emails..."
+            placeholder="Pesquisar email..."
             value={
               (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
             }
@@ -130,11 +130,12 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
           <ColumnVisiablity table={table} />
-          {/* component */}
           {component}
         </div>
       ) : (
-        <div className="flex items-center py-4 ">
+        <div className="flex items-center py-2 space-x-4">
+          {component}
+
           <ColumnVisiablity table={table} />
         </div>
       )}

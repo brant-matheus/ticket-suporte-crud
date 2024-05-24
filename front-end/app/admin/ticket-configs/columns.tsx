@@ -5,9 +5,13 @@
 // action
 
 "use client";
+import { ModalHandles, TicketConfigForm } from "./edit-ticket-configs-form";
+
 import { ColumnDef } from "@tanstack/react-table";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import DeleteDialog from "@/components/buttons/delete-dialog";
+import EditButton from "@/components/buttons/edit-button";
+import { useRef } from "react";
 interface responsible {
   id: number;
   fullName: string;
@@ -28,11 +32,13 @@ export type TData = {
 interface TicketConfigsProps {
   title: string;
   fromTableWhere: string;
+  fromTable: string;
 }
 
 export function ticketConfigsColumns({
   title,
   fromTableWhere,
+  fromTable,
 }: TicketConfigsProps): ColumnDef<TData>[] {
   return [
     { accessorKey: "id", header: "id" },
@@ -75,8 +81,12 @@ export function ticketConfigsColumns({
       header: "ação",
       cell: ({ row }) => {
         const item = row.original;
+        const modalRef = useRef<ModalHandles>(null);
+
         return (
-          <>
+          <div className="flex space-x-2">
+            <TicketConfigForm ref={modalRef} />
+
             <DeleteDialog
               fromTableWhere={fromTableWhere}
               params={item.id}
@@ -84,7 +94,17 @@ export function ticketConfigsColumns({
               title={title}
               key={item.id}
             />
-          </>
+            <EditButton
+              action={() =>
+                modalRef.current?.handleOpen(
+                  item.name,
+                  title,
+                  item.id,
+                  fromTable
+                )
+              }
+            />
+          </div>
         );
       },
     },
