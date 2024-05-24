@@ -2,6 +2,7 @@ import Ticket from '#models/ticket'
 import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
 import TicketStatus from '#models/ticket_status'
+import { DateTime } from 'luxon'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TicketConfigsController {
@@ -23,7 +24,26 @@ export default class TicketConfigsController {
 
   async store({ request }: HttpContext) {}
 
-  async update({ params, request }: HttpContext) {}
+  async update({ params, request }: HttpContext) {
+    const { fromTable, item } = request.only(['fromTable', 'item'])
+    const updateAt = { updatedAt: DateTime.local() }
+    const payload = Object.assign({ name: item }, updateAt)
+    switch (fromTable) {
+      case 'categories':
+        const category = await TicketCategory.findOrFail(params.id)
+        // can't get here
+        return await category.merge(payload).save()
+      case 'statuses':
+        const status = await TicketStatus.findOrFail(params.id)
+        return await status.merge(payload).save()
+      case 'priorities':
+        const priority = await TicketPriority.findOrFail(params.id)
+        return await priority.merge(payload).save()
+
+      default:
+        break
+    }
+  }
 
   async destroy({ params, request }: HttpContext) {
     const { fromTableWhere } = request.only(['fromTableWhere'])
