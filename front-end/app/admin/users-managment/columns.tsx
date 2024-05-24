@@ -81,8 +81,7 @@ export const columns: ColumnDef<TData>[] = [
               route="user"
               title="Usuário"
               params={user.id}
-              fromTable=""
-              tableId=""
+              fromTableWhere=""
             />
             <EditButton
               fullName={user.fullName}

@@ -64,6 +64,7 @@ export default function AdminSideBar() {
               />
             )
           )}
+          {/* logout icon - method */}
           <Logout />
         </nav>
       </aside>

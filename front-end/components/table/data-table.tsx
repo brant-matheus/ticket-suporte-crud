@@ -33,7 +33,6 @@ import { authInstance } from "@/app/axios-config";
 import { DataTablePagination } from "./data-table-pagination";
 import { Button } from "../ui/button";
 import { ColumnVisiablity } from "./column-visibility";
-import CreateUserButton from "../../app/admin/users-managment/create-users-button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   route: string;

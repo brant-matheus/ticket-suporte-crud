@@ -2,22 +2,11 @@
 import React, { useRef, useState } from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import { DataTable } from "@/components/table/data-table";
-import { categoriesColumns, TData } from "./categories-columns";
-import { prioritiesColumns } from "./priorities-columns";
-import { statusesColumns } from "./statuses-columns";
+// import { categoriesColumns, TData } from "./categories-columns";
 import { ModalHandles, Child } from "@/components/utils/modal";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import GeneralFormEdit from "../users-managment/general-form-edit";
-import { Button } from "@/components/ui/button";
+import { ticketConfigsColumns, TData } from "./columns";
 const page = () => {
   const modalRef = useRef<ModalHandles>(null);
 
@@ -27,7 +16,7 @@ const page = () => {
       <AdminSideBar />
       <Tabs defaultValue="categories" className="w-11/12 mt-4 ml-20 space-y-4">
         <TabsList>
-          <TabsTrigger value="categories">Categoria</TabsTrigger>
+          <TabsTrigger value="categories">Categorias</TabsTrigger>
           <TabsTrigger value="priorities">Prioridades</TabsTrigger>
           <TabsTrigger value="statuses">Status</TabsTrigger>
         </TabsList>
@@ -35,14 +24,15 @@ const page = () => {
           <Card>
             <CardContent>
               <DataTable
-                columns={categoriesColumns(() =>
-                  modalRef.current?.handleOpen("acerto")
-                )}
+                columns={ticketConfigsColumns({
+                  title: "categoria",
+                  fromTableWhere: "ticket_category_id",
+                })}
                 component={null}
-                showFilter={false}
                 filterColumn=""
                 fromTable="categories"
                 route="ticket-configs"
+                showFilter={false}
               />
             </CardContent>
           </Card>
@@ -51,12 +41,15 @@ const page = () => {
           <Card>
             <CardContent>
               <DataTable
-                columns={prioritiesColumns}
+                columns={ticketConfigsColumns({
+                  title: "prioridade",
+                  fromTableWhere: "ticket_priority_id",
+                })}
                 component={null}
-                showFilter={false}
                 filterColumn=""
                 fromTable="priorities"
                 route="ticket-configs"
+                showFilter={false}
               />
             </CardContent>
           </Card>
@@ -65,12 +58,15 @@ const page = () => {
           <Card>
             <CardContent>
               <DataTable
-                columns={statusesColumns}
+                columns={ticketConfigsColumns({
+                  title: "status",
+                  fromTableWhere: "ticket_status_id",
+                })}
                 component={null}
-                showFilter={false}
                 filterColumn=""
                 fromTable="statuses"
                 route="ticket-configs"
+                showFilter={false}
               />
             </CardContent>
           </Card>
