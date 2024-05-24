@@ -26,23 +26,24 @@ export default class TicketConfigsController {
   async update({ params, request }: HttpContext) {}
 
   async destroy({ params, request }: HttpContext) {
-    const { fromTable, tableId } = request.only(['fromTable', 'tableId'])
+    const { fromTableWhere } = request.only(['fromTableWhere'])
 
     // it can't delete category, status or priority if a ticket is already using them.
-    const ticket = await Ticket.findBy(tableId, params.id)
+    const ticket = await Ticket.findBy(fromTableWhere, params.id)
+    // if category, status or priority exists in ticket, throw new error
     if (ticket?.$isPersisted) {
       throw new Error()
     }
-
-    switch (fromTable) {
-      case 'categories':
+    //
+    switch (fromTableWhere) {
+      case 'ticket_category_id':
         const category = await TicketCategory.findOrFail(params.id)
         // can't get here
         return await category.delete()
-      case 'statuses':
+      case 'ticket_status_id':
         const status = await TicketStatus.findOrFail(params.id)
         return await status.delete()
-      case 'priorities':
+      case 'ticket_priority_id':
         const priority = await TicketPriority.findOrFail(params.id)
         return await priority.delete()
 

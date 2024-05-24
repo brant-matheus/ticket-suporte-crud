@@ -19,19 +19,17 @@ interface props {
   route: string;
   params: number;
   title: string;
-  fromTable: string;
-  tableId: string;
+  fromTableWhere: string;
 }
 
-const DeleteDialog = ({ route, params, title, fromTable, tableId }: props) => {
+const DeleteDialog = ({ route, params, title, fromTableWhere }: props) => {
   const { toast } = useToast();
 
   async function deleteUser() {
     try {
       await authInstance.delete(`${route}/${params}`, {
         params: {
-          fromTable: fromTable,
-          tableId: tableId,
+          fromTableWhere: fromTableWhere,
         },
       });
       toast({
