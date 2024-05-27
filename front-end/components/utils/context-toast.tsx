@@ -2,10 +2,9 @@
 import React, { createContext, useContext, ReactNode } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
-// type of what is expected by the function
-interface ToastProps {
-  variant: "default" | "destructive" | "sucess" | null | undefined;
-  title: string;
+interface ToastFailProps {
+  title: any;
+  action: "criar" | "editar" | "deletar";
   description: string;
 }
 
@@ -16,9 +15,8 @@ interface ToastProviderProps {
 
 // values the createContext will have
 interface ContextProps {
-  ToastSuccess: (props: ToastProps) => void;
-  ToastFail: (props: ToastProps) => void;
-  ToastDefault: (props: ToastProps) => void;
+  ToastSuccess: () => void;
+  ToastFail: (props: ToastFailProps) => void;
 }
 
 const ToastContext = createContext<ContextProps | null>(null);
@@ -27,32 +25,24 @@ const ToastContext = createContext<ContextProps | null>(null);
 export const ToastProvider = ({ children }: ToastProviderProps) => {
   const { toast } = useToast();
 
-  const ToastSuccess = ({ variant, title, description }: ToastProps) => {
+  const ToastSuccess = () => {
     toast({
-      variant,
-      title,
-      description,
+      variant: "sucess",
+      title: `Sucesso`,
+      description: "Recarregue a página para visualizar a alteração.",
     });
   };
 
-  const ToastFail = ({ variant, title, description }: ToastProps) => {
+  const ToastFail = ({ title, action, description }: ToastFailProps) => {
     toast({
-      variant,
-      title,
-      description,
-    });
-  };
-
-  const ToastDefault = ({ variant, title, description }: ToastProps) => {
-    toast({
-      variant,
-      title,
-      description,
+      variant: "destructive",
+      title: `Error ao ${action} ${title}`,
+      description: description,
     });
   };
 
   return (
-    <ToastContext.Provider value={{ ToastSuccess, ToastFail, ToastDefault }}>
+    <ToastContext.Provider value={{ ToastSuccess, ToastFail }}>
       {children}
     </ToastContext.Provider>
   );

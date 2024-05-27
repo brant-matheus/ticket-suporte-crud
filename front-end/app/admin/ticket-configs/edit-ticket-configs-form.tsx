@@ -16,6 +16,7 @@ import {
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { authInstance } from "@/app/axios-config";
+import { useToastContext } from "@/components/utils/context-toast";
 
 export interface ModalHandles {
   handleOpen: Function;
@@ -24,22 +25,24 @@ interface FormProps {
   item: string;
 }
 
+interface HandleProps {
+  ticketConfigName: string;
+  title: string;
+  params: number;
+  fromTable: string;
+}
+
 export const TicketConfigForm = forwardRef((props, ref) => {
+  const { ToastSuccess, ToastFail } = useToastContext();
   const [buttonBool, setButtonBool] = useState(false);
+  const [stateProps, setStateProps] = useState<HandleProps>();
   const [open, setOpen] = useState(false);
-  const [itemName, setItemName] = useState("");
-  const [title, setTitle] = useState("");
-  const [params, setParams] = useState<number>();
-  const [fromTable, setFromTable] = useState<string>();
   const handleOpen = () => {
     setOpen(true);
   };
   useImperativeHandle(ref, () => ({
-    handleOpen(name: string, title: string, params: number, fromTable: string) {
-      setItemName(name);
-      setTitle(title);
-      setParams(params);
-      setFromTable(fromTable);
+    handleOpen(props: HandleProps) {
+      setStateProps(props);
       handleOpen();
     },
   }));
@@ -48,19 +51,25 @@ export const TicketConfigForm = forwardRef((props, ref) => {
     setButtonBool(true);
     try {
       const { status } = await authInstance.put(
-        `ticket-configs/${params}`,
+        `ticket-configs/${stateProps?.params}`,
         item,
         {
           params: {
-            fromTable: fromTable,
+            fromTable: stateProps?.fromTable,
           },
         }
-        // toast sucess
       );
+
+      ToastSuccess();
+
       setOpen(false);
     } catch (error) {
       setButtonBool(false);
-      // toast fail
+      ToastFail({
+        title: stateProps?.title,
+        action: "editar",
+        description: "Nome em branco ou nome já existente.",
+      });
     }
   }
   return (
@@ -74,12 +83,13 @@ export const TicketConfigForm = forwardRef((props, ref) => {
                 name="item"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Editar {title}</FormLabel>
+                    <FormLabel>Editar {stateProps?.title}</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} placeholder="Digite novo nome..." />
                     </FormControl>
                     <FormDescription>
-                      Preencha para editar {title} "{itemName}"
+                      Preencha para editar {stateProps?.title} "
+                      {stateProps?.ticketConfigName}"
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

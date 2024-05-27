@@ -96,12 +96,13 @@ export function ticketConfigsColumns({
             />
             <EditButton
               action={() =>
-                modalRef.current?.handleOpen(
-                  item.name,
-                  title,
-                  item.id,
-                  fromTable
-                )
+                modalRef.current?.handleOpen({
+                  ticketConfigName: item.name,
+
+                  title: title,
+                  params: item.id,
+                  fromTable: fromTable,
+                })
               }
             />
           </div>
