@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { instance } from "@/app/axios-config";
 import { useAuth } from "./authentication-context";
 import { ModeToggle } from "@/components/ui/theme-toggle";
 /* 
@@ -32,11 +31,11 @@ useRouter, redirect
 Link, redirect after click
 */
 import { usePathname } from "next/navigation";
+import { useToastContext } from "@/components/utils/context-toast";
 
 export default function Login() {
   const pathname = usePathname();
 
-  console.log(pathname);
   const { userLogin } = useAuth();
   //loginError sets after request fails
   const [loginError, setLoginError] = useState("");

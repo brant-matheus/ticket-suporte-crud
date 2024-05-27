@@ -6,6 +6,7 @@ import { AuthProvider } from "./authentication-context";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { ToastProvider } from "@/components/utils/context-toast";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -37,8 +38,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {children}
-            <Toaster />
+            <ToastProvider>
+              {" "}
+              {children}
+              <Toaster />
+            </ToastProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
