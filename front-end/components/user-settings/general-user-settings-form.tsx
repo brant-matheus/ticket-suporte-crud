@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
+import { useToastContext } from "../utils/context-toast";
 
 interface UserSettings {
   userId: string;
@@ -25,8 +26,7 @@ interface UserSettings {
 
 const GeneralUserForm = ({ userId }: UserSettings) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
-  const { toast } = useToast();
-
+  const { ToastFail, ToastSuccess } = useToastContext();
   const form = useForm<GeneralUserInfer>({
     resolver: zodResolver(GeneralUserValidation),
     defaultValues: {
@@ -39,11 +39,8 @@ const GeneralUserForm = ({ userId }: UserSettings) => {
       (x) => x === null || x === ""
     );
     if (isEmpty) {
-      toast({
-        variant: "default",
-        title: "Inválido",
-        description: "Nenhum campo preenchido.",
-      });
+      ToastFail({ description: "Nenhum campo preenchido" });
+
       return true;
     }
     // get all typed/validated inputs
@@ -55,19 +52,13 @@ const GeneralUserForm = ({ userId }: UserSettings) => {
         { params: { isProfile: true } }
       );
       form.reset();
-      toast({
-        variant: "sucess",
-        title: "Sucesso",
-        description: "Informações editadas com sucesso",
-      });
+      ToastSuccess();
       setBoolEditButton(false);
     } catch (error) {
-      setBoolEditButton(false);
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "Erro ao editar usuário, tente novamente",
+      ToastFail({
+        description: "Email já existe em nosso banco de dados, tente outro.",
       });
+      setBoolEditButton(false);
     }
   }
 

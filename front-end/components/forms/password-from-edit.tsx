@@ -20,6 +20,7 @@ import {
 import { authInstance } from "@/app/axios-config";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
+import { useToastContext } from "../utils/context-toast";
 
 interface props {
   closeDialog: any;
@@ -29,6 +30,7 @@ interface props {
 const PasswordFormEdit = ({ closeDialog, userId }: props) => {
   const [boolEditButton, setBoolEditButton] = useState(false);
   const { toast } = useToast();
+  const { ToastFail, ToastSuccess } = useToastContext();
 
   const form = useForm<PasswordRedefinitionInfer>({
     resolver: zodResolver(PasswordRedefinitionValidator),
@@ -48,20 +50,10 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
       }
       setBoolEditButton(false);
       form.reset();
-      toast({
-        variant: "sucess",
-        title: "senha editado com sucesso",
-        description:
-          "a senha foi editado com sucesso, envie a senha alterada para o usuário.",
-      });
+      ToastSuccess();
     } catch (error) {
       setBoolEditButton(false);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description:
-          "Error ao tentar alterar a senha, atualize a página e tente novamente.",
-      });
+      ToastFail({ description: "Error ao redefinir a senha" });
     }
   }
   return (

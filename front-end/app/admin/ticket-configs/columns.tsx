@@ -96,7 +96,7 @@ export function ticketConfigsColumns({
             />
             <EditButton
               action={() =>
-                modalRef.current?.handleOpen({
+                modalRef.current?.handleClick({
                   ticketConfigName: item.name,
 
                   title: title,

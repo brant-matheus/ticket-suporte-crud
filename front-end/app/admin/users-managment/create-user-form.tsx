@@ -21,11 +21,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PlusCircle } from "lucide-react";
+import { useToastContext } from "@/components/utils/context-toast";
 export interface ModalHandles {
   handleOpen: Function;
 }
 
 export const CreateUserForm = forwardRef((props, ref) => {
+  const { ToastFail, ToastSuccess } = useToastContext();
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -56,10 +59,13 @@ export const CreateUserForm = forwardRef((props, ref) => {
       setLoginButton(false);
       setOpen(false);
       form.reset();
+      ToastSuccess();
     } catch (error) {
       setLoginButton(false);
       form.resetField("email");
-      setEmailError("*Email existente.");
+      ToastFail({
+        description: "email já existe em nosso banco de dados, tente outro.",
+      });
     }
   }
   return (
@@ -80,7 +86,7 @@ export const CreateUserForm = forwardRef((props, ref) => {
                   <FormItem>
                     <FormLabel>Nome completo</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="seu nome completo"></Input>
+                      <Input {...field} placeholder="nome completo"></Input>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -93,7 +99,7 @@ export const CreateUserForm = forwardRef((props, ref) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="seu email"></Input>
+                      <Input {...field} placeholder="email"></Input>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -109,7 +115,7 @@ export const CreateUserForm = forwardRef((props, ref) => {
                       <Input
                         {...field}
                         type="password"
-                        placeholder="sua senha"
+                        placeholder="senha"
                       ></Input>
                     </FormControl>
                     <FormMessage />
@@ -169,7 +175,6 @@ export const CreateUserForm = forwardRef((props, ref) => {
                 <PlusCircle className="h-4 w-4" />
                 <div className="text-[15px]">Cadastrar</div>
               </Button>
-              {<p className="text-red-700">{emailError}</p>}
             </form>
           </Form>
         </DialogContent>

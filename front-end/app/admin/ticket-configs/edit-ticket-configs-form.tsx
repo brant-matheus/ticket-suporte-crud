@@ -41,12 +41,14 @@ export const TicketConfigForm = forwardRef((props, ref) => {
     setOpen(true);
   };
   useImperativeHandle(ref, () => ({
-    handleOpen(props: HandleProps) {
+    handleClick(props: HandleProps) {
       setStateProps(props);
       handleOpen();
     },
   }));
-  const form = useForm<FormProps>({ defaultValues: { item: "" } });
+  const form = useForm<FormProps>({
+    defaultValues: { item: "" },
+  });
   async function editTicketConfig(item: FormProps) {
     setButtonBool(true);
     try {
@@ -66,8 +68,6 @@ export const TicketConfigForm = forwardRef((props, ref) => {
     } catch (error) {
       setButtonBool(false);
       ToastFail({
-        title: stateProps?.title,
-        action: "editar",
         description: "Nome em branco ou nome já existente.",
       });
     }
@@ -77,7 +77,10 @@ export const TicketConfigForm = forwardRef((props, ref) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(editTicketConfig)}>
+            <form
+              onSubmit={form.handleSubmit(editTicketConfig)}
+              className="grid gap-4"
+            >
               <FormField
                 control={form.control}
                 name="item"

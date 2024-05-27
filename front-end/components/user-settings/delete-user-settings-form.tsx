@@ -17,10 +17,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
 import { useRouter } from "next/navigation";
+import { useToastContext } from "../utils/context-toast";
 interface deleteUserPops {
   userId?: string;
 }
 const UserDeleteForm = ({ userId }: deleteUserPops) => {
+  const { ToastFail } = useToastContext();
+
   const [boolDeleteButton, setBoolDeleteButton] = useState(false);
   const router = useRouter();
   const deleteSchema = z.object({
@@ -45,6 +48,9 @@ const UserDeleteForm = ({ userId }: deleteUserPops) => {
         localStorage.clear();
       }
     } catch (error) {
+      ToastFail({
+        description: "Error ao tentar deletar sua conta",
+      });
       setBoolDeleteButton(false);
     }
   }

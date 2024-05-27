@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
-import EditButton from "./edit-users-button";
 import { ArrowUpDown, MoreHorizontal, Eye, Ghost } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DateTime } from "luxon";
@@ -13,6 +12,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
+import { EditUserForm, EditModalHandles } from "./edit-user-form";
+import { useRef } from "react";
+import EditButton from "@/components/buttons/edit-button";
+
 // This type is used to define the shape of our data.
 export type TData = {
   id: number;
@@ -74,8 +77,11 @@ export const columns: ColumnDef<TData>[] = [
     header: "ações",
     cell: ({ row }) => {
       const user = row.original;
+      const modalRef = useRef<EditModalHandles>(null);
       return (
         <>
+          {" "}
+          <EditUserForm ref={modalRef} />
           <div className="flex space-x-2">
             <DeleteDialog
               route="user"
@@ -84,10 +90,14 @@ export const columns: ColumnDef<TData>[] = [
               fromTableWhere=""
             />
             <EditButton
-              fullName={user.fullName}
-              email={user.email}
-              isAdmin={user.isAdmin}
-              userId={user.id}
+              action={() =>
+                modalRef.current?.handleClick({
+                  fullName: user.fullName,
+                  email: user.email,
+                  isAdmin: user.isAdmin,
+                  userId: user.id,
+                })
+              }
             />
           </div>
         </>

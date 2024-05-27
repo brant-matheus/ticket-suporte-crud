@@ -3,8 +3,6 @@ import React, { createContext, useContext, ReactNode } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface ToastFailProps {
-  title: any;
-  action: "criar" | "editar" | "deletar";
   description: string;
 }
 
@@ -33,11 +31,11 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
     });
   };
 
-  const ToastFail = ({ title, action, description }: ToastFailProps) => {
+  const ToastFail = ({ description }: ToastFailProps) => {
     toast({
-      variant: "destructive",
-      title: `Error ao ${action} ${title}`,
       description: description,
+      variant: "destructive",
+      title: "Error",
     });
   };
 
