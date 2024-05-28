@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { GuestNavBar } from "@/components/layout/guest-side-bar";
 import {
   Card,
@@ -33,8 +33,30 @@ import {
 import { Button } from "@/components/ui/button";
 import { StoreTicketValidation, StoreTicketInfer } from "@/app/zod-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { authInstance } from "@/app/axios-config";
 
+interface TicketProps {
+  name: string;
+  color: string;
+  id: number;
+}
+
+interface DataProps {
+  categories: TicketProps[];
+  priorities: TicketProps[];
+}
 const page = () => {
+  const [data, setData] = useState<DataProps>();
+  const getData = useCallback(async () => {
+    try {
+      const { data } = await authInstance.get("ticket-configs");
+      setData(data);
+    } catch (error) {}
+  }, []);
+  useEffect(() => {
+    getData();
+  }, []);
+
   const lengthLimit: number = 500;
   const [caracters, setCaracters] = useState(0);
   const form = useForm<StoreTicketInfer>({
@@ -91,13 +113,69 @@ const page = () => {
                       </FormLabel>
                       <FormControl>
                         <Textarea
+                          // don't use register, do something else, like not using register and set value with set
                           {...form.register("description")}
                           onChange={(e) => {
                             setCaracters(e.target.value.length);
                           }}
                           maxLength={lengthLimit}
+                          spellCheck="false"
                         />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Categoria</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a categoria do ticket" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {data?.categories.map((category) => (
+                            <SelectItem value={category.name} key={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="priority"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Prioridade</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a prioridade do ticket" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {data?.priorities.map((priority) => (
+                            <SelectItem value={priority.name} key={priority.id}>
+                              {priority.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -113,3 +191,9 @@ const page = () => {
 };
 
 export default page;
+
+// {categoriesArray.map((category) => (
+//   <SelectItem value={category.name}>
+//     {category.name}
+//   </SelectItem>
+// ))}

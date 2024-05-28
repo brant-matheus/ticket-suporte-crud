@@ -140,11 +140,19 @@ export type GeneralUserInfer = z.infer<typeof GeneralUserValidation>;
 
 // store ticket
 
-export const StoreTicketValidation = z.object({
-  subject: z.string(),
-  description: z.string(),
-  category: z.string(),
-  priority: z.string(),
-});
+export const StoreTicketValidation = z
+  .object({
+    subject: z
+      .string()
+      .min(3, { message: "minimo 3 caracteres" })
+      .max(25, { message: "maximo 25 caracteres" }),
+    description: z
+      .string()
+      .min(50, { message: "minimo 50 caracteres" })
+      .max(500, { message: "maximo 500 caracteres" }),
+    category: z.string().min(1, { message: "Selecione uma categoria" }),
+    priority: z.string().min(1, { message: "Selecione uma prioridade" }),
+  })
+  .required();
 
 export type StoreTicketInfer = z.infer<typeof StoreTicketValidation>;

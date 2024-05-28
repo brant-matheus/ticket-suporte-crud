@@ -4,6 +4,8 @@ import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
 import TicketStatus from '#models/ticket_status'
 import { DateTime } from 'luxon'
+import db from '@adonisjs/lucid/services/db'
+
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TicketConfigsController {
@@ -20,6 +22,11 @@ export default class TicketConfigsController {
         default:
           break
       }
+    } else {
+      const categories = await db.from('ticket_categories').select('name', 'color', 'id')
+      const priorities = await db.from('ticket_priorities').select('name', 'color', 'id')
+
+      return { categories, priorities }
     }
   }
 
