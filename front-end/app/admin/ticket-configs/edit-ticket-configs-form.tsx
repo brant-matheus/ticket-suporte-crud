@@ -19,7 +19,7 @@ import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "@/components/utils/context-toast";
 
 export interface ModalHandles {
-  handleOpen: Function;
+  handleClick: Function;
 }
 interface FormProps {
   item: string;

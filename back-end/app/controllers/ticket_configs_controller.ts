@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import Ticket from '#models/ticket'
 import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
@@ -22,7 +23,35 @@ export default class TicketConfigsController {
     }
   }
 
-  async store({ request }: HttpContext) {}
+  async store({ request, auth }: HttpContext) {
+    const userId = auth.user?.id
+    const { fromTable, item } = request.only(['fromTable', 'item'])
+    const randomColor = faker.color.rgb()
+    switch (fromTable) {
+      case 'categories':
+        return await TicketCategory.create({
+          name: item,
+          color: randomColor,
+          responsibleId: userId,
+        })
+
+      case 'priorities':
+        return await TicketPriority.create({
+          name: item,
+          color: randomColor,
+          responsibleId: userId,
+        })
+
+      case 'statuses':
+        return await TicketStatus.create({
+          name: item,
+          color: randomColor,
+          responsibleId: userId,
+        })
+      default:
+        break
+    }
+  }
 
   async update({ params, request }: HttpContext) {
     const { fromTable, item } = request.only(['fromTable', 'item'])

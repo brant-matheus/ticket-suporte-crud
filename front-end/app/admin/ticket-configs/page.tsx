@@ -6,9 +6,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ticketConfigsColumns, TData } from "./columns";
 import CreateButton from "@/components/buttons/create-button";
+import {
+  CreateTicketConfigsForm,
+  HandleClickType,
+} from "./create-ticket-configs-form";
 const page = () => {
+  const formRef = useRef<HandleClickType>(null);
   return (
     <>
+      <CreateTicketConfigsForm ref={formRef} />
       <AdminSideBar />
       <Tabs defaultValue="categories" className="w-11/12 mt-4 ml-20 space-y-4">
         <TabsList>
@@ -25,7 +31,17 @@ const page = () => {
                   fromTableWhere: "ticket_category_id",
                   fromTable: "categories",
                 })}
-                component={<CreateButton action={() => {}} title="categoria" />}
+                component={
+                  <CreateButton
+                    action={() =>
+                      formRef.current?.handleClick({
+                        title: "categoria",
+                        fromTable: "categories",
+                      })
+                    }
+                    title="categoria"
+                  />
+                }
                 filterColumn=""
                 fromTable="categories"
                 route="ticket-configs"
@@ -43,7 +59,17 @@ const page = () => {
                   fromTable: "priorities",
                   fromTableWhere: "ticket_priority_id",
                 })}
-                component={null}
+                component={
+                  <CreateButton
+                    action={() =>
+                      formRef.current?.handleClick({
+                        title: "prioridade",
+                        fromTable: "priorities",
+                      })
+                    }
+                    title="prioridade"
+                  />
+                }
                 filterColumn=""
                 fromTable="priorities"
                 route="ticket-configs"
@@ -61,7 +87,17 @@ const page = () => {
                   fromTableWhere: "ticket_status_id",
                   fromTable: "statuses",
                 })}
-                component={null}
+                component={
+                  <CreateButton
+                    action={() =>
+                      formRef.current?.handleClick({
+                        title: "status",
+                        fromTable: "statuses",
+                      })
+                    }
+                    title="status"
+                  />
+                }
                 filterColumn=""
                 fromTable="statuses"
                 route="ticket-configs"
