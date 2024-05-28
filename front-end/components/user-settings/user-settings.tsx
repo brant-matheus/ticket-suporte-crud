@@ -25,7 +25,7 @@ const UserSettings = () => {
 
   return (
     <div className="container flex justify-center ">
-      <Card className="w-11/12">
+      <Card className="w-11/12 ">
         <CardHeader>
           <CardTitle>Configuração de usuário</CardTitle>
           <CardDescription>

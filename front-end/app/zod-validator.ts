@@ -4,6 +4,7 @@ import { z } from "zod";
 // internal register
 // general users edit
 // user general
+// store ticket
 
 // password redefinition
 export const PasswordRedefinitionValidator = z
@@ -136,3 +137,14 @@ export const GeneralUserValidation = z.object({
 });
 
 export type GeneralUserInfer = z.infer<typeof GeneralUserValidation>;
+
+// store ticket
+
+export const StoreTicketValidation = z.object({
+  subject: z.string(),
+  description: z.string(),
+  category: z.string(),
+  priority: z.string(),
+});
+
+export type StoreTicketInfer = z.infer<typeof StoreTicketValidation>;
