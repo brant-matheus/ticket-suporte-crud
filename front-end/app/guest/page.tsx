@@ -1,9 +1,9 @@
-import HomePage from "@/components/layout/guest-side-bar";
 import React from "react";
+import { GuestNavBar } from "@/components/layout/guest-side-bar";
 const page = () => {
   return (
     <>
-      <HomePage currentPage="/" />
+      <GuestNavBar />
     </>
   );
 };

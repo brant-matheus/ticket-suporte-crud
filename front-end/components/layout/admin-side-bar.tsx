@@ -19,25 +19,25 @@ export default function AdminSideBar() {
     {
       icon: <Home />,
       path: "/admin",
-      tooltipContent: "Meus tickets",
+      toolTipContent: "Meus tickets",
       key: 1,
     },
     {
       icon: <UserCog />,
       path: "/admin/users-managment",
-      tooltipContent: "Gestão de usuários",
+      toolTipContent: "Gestão de usuários",
       key: 2,
     },
     {
       icon: <FileCog />,
       path: "/admin/ticket-configs",
-      tooltipContent: "Configuração de ticket",
+      toolTipContent: "Configuração de ticket",
       key: 3,
     },
     {
       icon: <Cog />,
       path: "/admin/user-settings",
-      tooltipContent: "Configuração de usuário",
+      toolTipContent: "Configuração de usuário",
       key: 4,
     },
   ];
@@ -48,7 +48,7 @@ export default function AdminSideBar() {
           {links.map((link) =>
             pathName === link.path ? (
               <GenericToolTip
-                content={link.tooltipContent}
+                content={link.toolTipContent}
                 icon={link.icon}
                 path={link.path}
                 variant="default"
@@ -56,7 +56,7 @@ export default function AdminSideBar() {
               />
             ) : (
               <GenericToolTip
-                content={link.tooltipContent}
+                content={link.toolTipContent}
                 icon={link.icon}
                 path={link.path}
                 variant="ghost"

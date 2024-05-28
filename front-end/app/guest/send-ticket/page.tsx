@@ -1,7 +1,12 @@
 import React from "react";
+import { GuestNavBar } from "@/components/layout/guest-side-bar";
 
 const page = () => {
-  return <div>guest</div>;
+  return (
+    <>
+      <GuestNavBar />
+    </>
+  );
 };
 
 export default page;
