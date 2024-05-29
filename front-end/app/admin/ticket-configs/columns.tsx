@@ -6,12 +6,14 @@
 
 "use client";
 import { ModalHandles, TicketConfigForm } from "./edit-ticket-configs-form";
-
+import DisabledDeleteButton from "@/components/buttons/disabled-delete-button";
 import { ColumnDef } from "@tanstack/react-table";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import EditButton from "@/components/buttons/edit-button";
 import { useRef } from "react";
+import { Delete, Trash2 } from "lucide-react";
+import DisabledEditButton from "@/components/buttons/disabled-edit-button";
 interface responsible {
   id: number;
   fullName: string;
@@ -86,25 +88,33 @@ export function ticketConfigsColumns({
         return (
           <div className="flex space-x-2">
             <TicketConfigForm ref={modalRef} />
+            {item.name === "pendente" ? (
+              <>
+                <DisabledDeleteButton />
+                <DisabledEditButton />
+              </>
+            ) : (
+              <>
+                <DeleteDialog
+                  fromTableWhere={fromTableWhere}
+                  params={item.id}
+                  route="ticket-configs"
+                  title={title}
+                  key={item.id}
+                />
+                <EditButton
+                  action={() =>
+                    modalRef.current?.handleClick({
+                      ticketConfigName: item.name,
 
-            <DeleteDialog
-              fromTableWhere={fromTableWhere}
-              params={item.id}
-              route="ticket-configs"
-              title={title}
-              key={item.id}
-            />
-            <EditButton
-              action={() =>
-                modalRef.current?.handleClick({
-                  ticketConfigName: item.name,
-
-                  title: title,
-                  params: item.id,
-                  fromTable: fromTable,
-                })
-              }
-            />
+                      title: title,
+                      params: item.id,
+                      fromTable: fromTable,
+                    })
+                  }
+                />
+              </>
+            )}
           </div>
         );
       },

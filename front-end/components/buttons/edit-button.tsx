@@ -1,6 +1,4 @@
-"EditButton";
 import React from "react";
-import { Button } from "../ui/button";
 import { PencilLine } from "lucide-react";
 
 interface EditButtonProps {

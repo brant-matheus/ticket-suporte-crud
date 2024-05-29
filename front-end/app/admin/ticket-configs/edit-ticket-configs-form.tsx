@@ -13,7 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "@/components/utils/context-toast";
@@ -33,17 +38,20 @@ interface HandleProps {
 }
 
 export const TicketConfigForm = forwardRef((props, ref) => {
+  const [editStatusBool, setEditStatusBool] = useState(false);
   const { ToastSuccess, ToastFail } = useToastContext();
   const [buttonBool, setButtonBool] = useState(false);
   const [stateProps, setStateProps] = useState<HandleProps>();
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => {
     setOpen(true);
   };
+
   useImperativeHandle(ref, () => ({
     handleClick(props: HandleProps) {
-      setStateProps(props);
       handleOpen();
+      setStateProps(props);
     },
   }));
   const form = useForm<FormProps>({
@@ -72,6 +80,7 @@ export const TicketConfigForm = forwardRef((props, ref) => {
       });
     }
   }
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -88,7 +97,11 @@ export const TicketConfigForm = forwardRef((props, ref) => {
                   <FormItem>
                     <FormLabel>Editar {stateProps?.title}</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Digite novo nome..." />
+                      <Input
+                        {...field}
+                        placeholder="Digite novo nome..."
+                        disabled={editStatusBool}
+                      />
                     </FormControl>
                     <FormDescription>
                       Preencha para editar {stateProps?.title} "

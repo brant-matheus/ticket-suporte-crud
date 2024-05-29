@@ -33,6 +33,9 @@ export default class Ticket extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
+  @column()
+  declare finishedAt: DateTime
+
   @belongsTo(() => User, {
     foreignKey: 'createdById',
   })

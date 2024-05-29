@@ -20,7 +20,10 @@ router
       .except(['create', 'edit', 'show'])
       .use(['destroy', 'store', 'update'], middleware.admin()) //only admins MUST DO those actions.
 
-    router.resource('ticket', TicketsController).except(['create', 'edit', 'show'])
+    router
+      .resource('ticket', TicketsController)
+      .except(['create', 'edit', 'show'])
+      .use(['store', 'destroy'], middleware.guest())
   })
   .middleware(middleware.auth())
 

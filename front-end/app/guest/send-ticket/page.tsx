@@ -80,7 +80,7 @@ const page = () => {
             <CardTitle>Envie seu ticket</CardTitle>
             <CardDescription>
               O assunto deve conter uma descrição breve do ticket, a descrição
-              deve conter um relato rico em informações.
+              deve conter um relato detalhado.
             </CardDescription>
           </CardHeader>
           <CardContent className="w-11/12">
@@ -116,13 +116,14 @@ const page = () => {
                           // don't use register, do something else, like not using register and set value with set
                           onChange={(e) => {
                             setCaracters(e.target.value.length);
-                            if (e.target.value.length > 50){
-                              form.setValue("description", e.target.value, {shouldValidate: true})
-
-                            }
-                            else{
-                              form.setValue("description", e.target.value, {shouldValidate: false})
-
+                            if (e.target.value.length >= 50) {
+                              form.setValue("description", e.target.value, {
+                                shouldValidate: true,
+                              });
+                            } else {
+                              form.setValue("description", e.target.value, {
+                                shouldValidate: false,
+                              });
                             }
                           }}
                           maxLength={lengthLimit}
@@ -133,7 +134,7 @@ const page = () => {
                     </FormItem>
                   )}
                 />
- 
+
                 <FormField
                   control={form.control}
                   name="category"
