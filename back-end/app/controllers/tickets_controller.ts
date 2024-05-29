@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Ticket from '#models/ticket'
 import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
+import { DateTime } from 'luxon'
 
 export default class TicketsController {
   /**
@@ -14,10 +15,15 @@ export default class TicketsController {
         .preload('user')
         .preload('ticketCategory')
         .preload('ticketPriority')
-        .preload('TicketStatus')
+        .preload('ticketStatus')
         .paginate(page, pageSize)
     } else {
-      return await Ticket.findManyBy('createdById', auth.user?.id)
+      return await Ticket.query()
+        .where('created_by_id', auth.user?.id as number)
+        .preload('ticketCategory')
+        .preload('ticketPriority')
+        .preload('ticketStatus')
+        .paginate(page, pageSize)
     }
   }
 

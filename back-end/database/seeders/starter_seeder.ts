@@ -36,5 +36,13 @@ export default class extends BaseSeeder {
       ticketStatusId: 2,
       subject: 'loren epsium',
     })
+    await Ticket.create({
+      ticketCategoryId: 1,
+      createdById: 3,
+      description: 'loren epsiun',
+      ticketPriorityId: 1,
+      ticketStatusId: 2,
+      subject: 'loren epsium',
+    })
   }
 }

@@ -34,7 +34,7 @@ export default class Ticket extends BaseModel {
   declare updatedAt: DateTime
 
   @column()
-  declare finishedAt: DateTime | null
+  declare finishedAt: DateTime
 
   @belongsTo(() => User, {
     foreignKey: 'createdById',
@@ -48,5 +48,5 @@ export default class Ticket extends BaseModel {
   declare ticketPriority: BelongsTo<typeof TicketPriority>
 
   @belongsTo(() => TicketStatus)
-  declare TicketStatus: BelongsTo<typeof TicketStatus>
+  declare ticketStatus: BelongsTo<typeof TicketStatus>
 }

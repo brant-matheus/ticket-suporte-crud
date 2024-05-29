@@ -38,10 +38,10 @@ const ModificationEye = ({ createdAtProps, updatedAtProps, title }: props) => {
               {title} criado em: {createdAt}
             </p>
             {updateAt === createdAt ? (
-              <p>{title} ainda não foi editado</p>
+              <p>{title} ainda não foi modificado</p>
             ) : (
               <p>
-                {title} editado em: {updateAt}
+                {title} modificado em: {updateAt}
               </p>
             )}
           </div>
