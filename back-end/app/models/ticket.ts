@@ -34,7 +34,7 @@ export default class Ticket extends BaseModel {
   declare updatedAt: DateTime
 
   @column()
-  declare finishedAt: DateTime
+  declare finishedAt: DateTime | null
 
   @belongsTo(() => User, {
     foreignKey: 'createdById',

@@ -33,7 +33,7 @@ export default class extends BaseSeeder {
       createdById: 2,
       description: 'loren epsiun',
       ticketPriorityId: 1,
-      ticketStatusId: 1,
+      ticketStatusId: 2,
       subject: 'loren epsium',
     })
   }
