@@ -114,9 +114,16 @@ const page = () => {
                       <FormControl>
                         <Textarea
                           // don't use register, do something else, like not using register and set value with set
-                          {...form.register("description")}
                           onChange={(e) => {
                             setCaracters(e.target.value.length);
+                            if (e.target.value.length > 50){
+                              form.setValue("description", e.target.value, {shouldValidate: true})
+
+                            }
+                            else{
+                              form.setValue("description", e.target.value, {shouldValidate: false})
+
+                            }
                           }}
                           maxLength={lengthLimit}
                           spellCheck="false"
@@ -126,6 +133,7 @@ const page = () => {
                     </FormItem>
                   )}
                 />
+ 
                 <FormField
                   control={form.control}
                   name="category"
