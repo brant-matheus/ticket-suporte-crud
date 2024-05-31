@@ -12,6 +12,7 @@ import {
   TicketStatusesFactory,
 } from '#database/factories/ticket_configs_factory'
 import Ticket from '#models/ticket'
+import Operation from '#models/operation'
 
 export default class extends BaseSeeder {
   color = faker.color
@@ -39,10 +40,17 @@ export default class extends BaseSeeder {
     await Ticket.create({
       ticketCategoryId: 1,
       createdById: 3,
-      description: 'loren epsiun',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptat ',
       ticketPriorityId: 1,
-      ticketStatusId: 2,
+      ticketStatusId: 1,
       subject: 'loren epsium',
+    })
+
+    await Operation.create({
+      description: 'meditor requerido, 3 dias uteis para entrega',
+      responsibleId: 1,
+      ticketId: 1,
     })
   }
 }

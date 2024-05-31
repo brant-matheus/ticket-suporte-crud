@@ -19,7 +19,7 @@ export default function AdminSideBar() {
     {
       icon: <Home />,
       path: "/admin",
-      toolTipContent: "Meus tickets",
+      toolTipContent: "Todos os tickets",
       key: 1,
     },
     {

@@ -2,7 +2,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Ticket from '#models/ticket'
 import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
-import { DateTime } from 'luxon'
 
 export default class TicketsController {
   /**
@@ -44,7 +43,6 @@ export default class TicketsController {
       description: description,
       ticketPriorityId: priorityId,
       ticketStatusId: 1,
-      finishedAt: null,
     })
   }
 

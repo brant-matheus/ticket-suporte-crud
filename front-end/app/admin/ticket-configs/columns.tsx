@@ -14,6 +14,7 @@ import EditButton from "@/components/buttons/edit-button";
 import { useRef } from "react";
 import { Delete, Trash2 } from "lucide-react";
 import DisabledEditButton from "@/components/buttons/disabled-edit-button";
+import { Button } from "@/components/ui/button";
 interface responsible {
   id: number;
   fullName: string;
@@ -51,7 +52,11 @@ export function ticketConfigsColumns({
         const item = row.original;
         const color = { color: item.color };
 
-        return <p style={color}>{item.name}</p>;
+        return (
+          <p style={color}>
+            <Button variant="ghost">{item.name}</Button>
+          </p>
+        );
       },
     },
     {

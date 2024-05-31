@@ -97,7 +97,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "finishedAt",
-    header: "C em",
+    header: "Concluido em",
     cell: ({ row }) => {
       const item = row.original;
       const date = DateTime.fromISO(item.finishedAt, {

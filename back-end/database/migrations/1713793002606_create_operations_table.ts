@@ -7,23 +7,23 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.string('description').notNullable()
+      table.string('description', 100).notNullable()
 
       table
-      .integer('responsible_id')
-      .notNullable()
-      .unsigned()
-      .references('id')
-      .inTable('users')
-      .onDelete('CASCADE')
+        .integer('responsible_id')
+        .notNullable()
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
 
       table
-      .integer('ticket_id')
-      .notNullable()
-      .unsigned()
-      .references('id')
-      .inTable('tickets')
-      .onDelete('CASCADE')
+        .integer('ticket_id')
+        .notNullable()
+        .unsigned()
+        .references('id')
+        .inTable('tickets')
+        .onDelete('CASCADE')
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

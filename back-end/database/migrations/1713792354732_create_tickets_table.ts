@@ -17,7 +17,7 @@ export default class extends BaseSchema {
 
       table.string('subject').notNullable()
 
-      table.string('description').notNullable()
+      table.string('description', 500).notNullable()
 
       table
         .integer('ticket_category_id')
@@ -45,7 +45,7 @@ export default class extends BaseSchema {
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
-      table.timestamp('finished_at').nullable()
+      table.boolean('finished_at').defaultTo(false)
     })
   }
 
