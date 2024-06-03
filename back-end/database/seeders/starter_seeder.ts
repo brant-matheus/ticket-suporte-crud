@@ -54,5 +54,10 @@ export default class extends BaseSeeder {
       responsibleId: 1,
       ticketId: 1,
     })
+    await Operation.create({
+      description: 'meditor requerido, 3 dias uteis para entrega',
+      responsibleId: 1,
+      ticketId: 1,
+    })
   }
 }

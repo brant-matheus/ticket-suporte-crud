@@ -30,6 +30,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 interface User {
   id: number;
@@ -190,7 +191,26 @@ export const columns: ColumnDef<Ticket>[] = [
                 </div>
               </div>
               <Separator />
-              <p>operações: </p>
+              <p>
+                {item.ticketStatusId === 1 ? (
+                  "Nenhuma operação criada"
+                ) : (
+                  <div className="flex justify-center">
+                    <Button
+                      variant="link"
+                      onClick={() =>
+                        window.open(
+                          `/admin/operation-visualization/${item.id}`,
+                          "_blank",
+                          "noopener,noreferrer"
+                        )
+                      }
+                    >
+                      Visualizar operações
+                    </Button>
+                  </div>
+                )}
+              </p>
             </DialogContent>
           </Dialog>
         </>
