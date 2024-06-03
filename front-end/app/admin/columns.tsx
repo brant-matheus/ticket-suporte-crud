@@ -102,6 +102,17 @@ export const columns: ColumnDef<Ticket>[] = [
       return <p style={color}>{item.ticketStatus.name}</p>;
     },
   },
+  {
+    accessorKey: "finishedAt",
+    header: "Concluido em",
+    cell: ({ row }) => {
+      const item = row.original;
+      const updatedDate = DateTime.fromISO(item.updatedAt, {
+        locale: "pt-BR",
+      }).toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
+      return <p>{item.finishedAt ? updatedDate : "não concluido"}</p>;
+    },
+  },
 
   {
     accessorKey: "user.email",

@@ -13,6 +13,7 @@ import {
 } from '#database/factories/ticket_configs_factory'
 import Ticket from '#models/ticket'
 import Operation from '#models/operation'
+import { DateTime } from 'luxon'
 
 export default class extends BaseSeeder {
   color = faker.color
@@ -45,6 +46,7 @@ export default class extends BaseSeeder {
       ticketPriorityId: 1,
       ticketStatusId: 1,
       subject: 'loren epsium',
+      finishedAt: true,
     })
 
     await Operation.create({
