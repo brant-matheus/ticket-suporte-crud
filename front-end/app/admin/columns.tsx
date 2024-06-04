@@ -175,10 +175,13 @@ export const columns: ColumnDef<Ticket>[] = [
       const [isOpen, setIsOpen] = useState(false);
       const [showCreateButton, setShowCreateButton] = useState(true);
       const [showCreateContent, setShowCreateContent] = useState(false);
+      const modalRef = useRef<ModalProps>();
 
       return (
         <>
-          <Dialog>
+          <CreateTicketOperation ref={modalRef} />
+
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost">
                 <MessagesSquare className="h-5 w-5 cursor-pointer" />
@@ -215,6 +218,17 @@ export const columns: ColumnDef<Ticket>[] = [
                     </Button>
                   </div>
                 )}
+                <div className="flex justify-center">
+                  <Button
+                    variant="link"
+                    onClick={() => {
+                      setIsOpen(false);
+                      modalRef.current?.handleClick({ ticketId: item.id });
+                    }}
+                  >
+                    Cadastrar nova operação
+                  </Button>
+                </div>
               </p>
             </DialogContent>
           </Dialog>
