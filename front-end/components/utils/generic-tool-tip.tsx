@@ -11,7 +11,7 @@ interface ToolTipProps {
   path: string;
   icon: any;
   content?: string;
-  variant: any;
+  variant: "ghost" | "default";
 }
 export default function GenericToolTip({
   path,

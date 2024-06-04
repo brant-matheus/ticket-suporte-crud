@@ -45,25 +45,15 @@ export default function AdminSideBar() {
     <>
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-y-6 px-2 sm:py-5">
-          {links.map((link) =>
-            pathName === link.path ? (
-              <GenericToolTip
-                content={link.toolTipContent}
-                icon={link.icon}
-                path={link.path}
-                variant="default"
-                key={link.key}
-              />
-            ) : (
-              <GenericToolTip
-                content={link.toolTipContent}
-                icon={link.icon}
-                path={link.path}
-                variant="ghost"
-                key={link.key}
-              />
-            )
-          )}
+          {links.map((link) => (
+            <GenericToolTip
+              content={link.toolTipContent}
+              icon={link.icon}
+              path={link.path}
+              variant={pathName === link.path ? "default" : "ghost"}
+              key={link.key}
+            />
+          ))}
           {/* logout icon - method */}
           <Logout />
         </nav>
