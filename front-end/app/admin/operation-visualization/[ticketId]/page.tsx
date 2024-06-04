@@ -9,6 +9,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,9 +17,10 @@ import { useParams } from "next/navigation";
 import { CollapsibleDemo } from "./collapse-operation";
 import { authInstance } from "@/app/axios-config";
 import { Button } from "@/components/ui/button";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, PlusCircle } from "lucide-react";
 import { formatIso } from "@/components/utils/formatIso";
 import Link from "next/link";
+import ActionCreateButton from "@/components/buttons/action-create-button";
 interface TicketConfig {
   id: number;
   name: string;
@@ -98,15 +100,13 @@ export default function Page() {
       <CardHeader>
         <CardTitle>Operações</CardTitle>
         <CardDescription>
-          Visualize de forma detalhada operações criadas para o ticket ou
-          <Button
-            variant="link"
-            className="w-auto"
-            onClick={() =>
-              window.open(`/admin/`, "_blank", "noopener,noreferrer")
-            }
-          >
-            <p className="text-sm">Crie nova operação</p>
+          Visualize de forma detalhada operações criadas para o ticket ou crie
+          uma nova operação.
+        </CardDescription>
+        <CardDescription>
+          <Button variant="default" className="gap-1">
+            <PlusCircle className="w-4 h-4" />{" "}
+            <p className="text-sm">Criar nova operação</p>
           </Button>
         </CardDescription>
       </CardHeader>

@@ -26,11 +26,16 @@ import {
   DialogTitle,
   DialogHeader,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import ActionCreateButton from "@/components/buttons/action-create-button";
+import {
+  ModalProps,
+  CreateTicketOperation,
+} from "@/components/utils/create-operation-form";
 
 interface User {
   id: number;
@@ -213,6 +218,22 @@ export const columns: ColumnDef<Ticket>[] = [
               </p>
             </DialogContent>
           </Dialog>
+        </>
+      );
+    },
+  },
+  {
+    id: "action",
+    header: "ações",
+    cell: ({ row }) => {
+      const item = row.original;
+      const modalRef = useRef<ModalProps>();
+      return (
+        <>
+          <CreateTicketOperation ref={modalRef} />
+          <ActionCreateButton
+            action={() => modalRef.current?.handleClick({ ticketId: item.id })}
+          />
         </>
       );
     },
