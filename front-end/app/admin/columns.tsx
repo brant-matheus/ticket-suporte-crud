@@ -1,5 +1,6 @@
 "use client";
 
+import { EditModalProps, EditTicketForm } from "./edit-ticket-form";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
@@ -219,6 +220,7 @@ export const columns: ColumnDef<Ticket>[] = [
               <div className="flex justify-center">
                 <Button
                   variant="link"
+                  size="sm"
                   onClick={() => {
                     setIsOpen(false);
                     modalRef.current?.handleClick({ ticketId: item.id });
@@ -239,8 +241,10 @@ export const columns: ColumnDef<Ticket>[] = [
     cell: ({ row }) => {
       const item = row.original;
       const modalRef = useRef<ModalProps>();
+      const editRef = useRef<EditModalProps>();
       return (
         <>
+          <EditTicketForm ref={editRef} />
           <CreateTicketOperation ref={modalRef} />
           <div className="flex items-center gap-x-1">
             <ActionCreateButton
@@ -248,7 +252,7 @@ export const columns: ColumnDef<Ticket>[] = [
                 modalRef.current?.handleClick({ ticketId: item.id })
               }
             />
-            <EditButton action={() => {}} />
+            <EditButton action={() => editRef.current?.handleClick()} />
             <CommentaryOperationButton action={() => {}} />
           </div>
         </>
