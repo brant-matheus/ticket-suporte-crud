@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -21,6 +21,11 @@ import { ChevronsUpDown, PlusCircle } from "lucide-react";
 import { formatIso } from "@/components/utils/formatIso";
 import Link from "next/link";
 import ActionCreateButton from "@/components/buttons/action-create-button";
+import {
+  ModalProps,
+  CreateTicketOperation,
+} from "@/components/utils/create-operation-form";
+import CreateButton from "@/components/buttons/create-button";
 interface TicketConfig {
   id: number;
   name: string;
@@ -92,11 +97,15 @@ export default function Page() {
       key: 8,
     },
   ];
+  const modalRef = useRef<ModalProps>();
+
   useEffect(() => {
     getOperation();
   }, []);
   return (
     <Card>
+      <CreateTicketOperation ref={modalRef} />
+
       <CardHeader>
         <CardTitle>Operações</CardTitle>
         <CardDescription>
@@ -104,10 +113,12 @@ export default function Page() {
           uma nova operação.
         </CardDescription>
         <CardDescription>
-          <Button variant="default" className="gap-1">
-            <PlusCircle className="w-4 h-4" />{" "}
-            <p className="text-sm">Criar nova operação</p>
-          </Button>
+          <CreateButton
+            action={() =>
+              modalRef.current?.handleClick({ ticketId: params.ticketId })
+            }
+            title="operação"
+          />
         </CardDescription>
       </CardHeader>
       <CardContent>
