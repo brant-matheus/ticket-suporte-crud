@@ -34,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { StoreTicketValidation, StoreTicketInfer } from "@/app/zod-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authInstance } from "@/app/axios-config";
+import { useToastContext } from "@/components/utils/context-toast";
 
 interface TicketProps {
   name: string;
@@ -46,6 +47,8 @@ interface DataProps {
   priorities: TicketProps[];
 }
 const page = () => {
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const { ToastFail, ToastSuccess } = useToastContext();
   const [data, setData] = useState<DataProps>();
   const getData = useCallback(async () => {
     try {
@@ -69,7 +72,16 @@ const page = () => {
     },
   });
   async function storeTicket(ticket: StoreTicketInfer) {
-    console.log(ticket);
+    setIsButtonEnabled(true);
+    try {
+      const { data, request } = await authInstance.post("ticket", ticket);
+      ToastSuccess();
+      setIsButtonEnabled(false);
+    } catch (error) {
+      setIsButtonEnabled(false);
+
+      ToastFail({ description: "" });
+    }
   }
   return (
     <>
@@ -189,7 +201,7 @@ const page = () => {
                     </FormItem>
                   )}
                 />
-                <Button>Enviar</Button>
+                <Button disabled={isButtonEnabled}>Enviar</Button>
               </form>
             </Form>
           </CardContent>

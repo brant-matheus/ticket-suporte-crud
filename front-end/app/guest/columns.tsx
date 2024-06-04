@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import { DateTime } from "luxon";
+import { formatIso } from "@/components/utils/formatIso";
 
 interface TicketCategory {
   id: number;
@@ -76,7 +77,7 @@ export const columns: ColumnDef<Ticket>[] = [
       const item = row.original;
       const color = { color: item.ticketStatus.color };
 
-      return <p style={color}>{item.ticketPriority.name}</p>;
+      return <p style={color}>{item.ticketStatus.name}</p>;
     },
   },
   {
@@ -100,11 +101,28 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "Concluido em",
     cell: ({ row }) => {
       const item = row.original;
-      const date = DateTime.fromISO(item.finishedAt, {
-        locale: "pt-BR",
-      }).toFormat("dd-MM-yyyy HH:mm");
       return (
-        <>{item.finishedAt === null ? <p>Não conclusivo</p> : <p>{date}</p>}</>
+        <>
+          {item.finishedAt ? formatIso(item.finishedAt) : <p>Não conclusivo</p>}
+        </>
+      );
+    },
+  },
+  {
+    id: "action",
+    header: "ações",
+    cell: ({ row }) => {
+      const item = row.original;
+      return (
+        <>
+          <DeleteDialog
+            route="ticket"
+            title="ticket"
+            params={item.id}
+            fromTableWhere="
+        "
+          />
+        </>
       );
     },
   },

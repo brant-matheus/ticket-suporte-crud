@@ -25,8 +25,8 @@ export default class TicketConfigsController {
     } else {
       const categories = await db.from('ticket_categories').select('name', 'color', 'id')
       const priorities = await db.from('ticket_priorities').select('name', 'color', 'id')
-
-      return { categories, priorities }
+      const statuses = await db.from('ticket_stasuses').select('name', 'color', 'id')
+      return { categories, priorities, statuses }
     }
   }
 

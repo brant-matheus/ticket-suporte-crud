@@ -6,7 +6,7 @@ export default function ActionCreateButton({ action }: ActionButtonProps) {
   return (
     <PlusCircle
       onClick={() => action()}
-      className="w-4 h-4 cursor-pointer text-blue-500"
+      className="w-5 h-5 cursor-pointer text-blue-500"
     />
   );
 }

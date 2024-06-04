@@ -15,6 +15,8 @@ import {
   CircleUserRound,
   LucideAArrowDown,
   MessagesSquare,
+  Send,
+  ArrowUpFromLine,
 } from "lucide-react";
 import { string } from "zod";
 import { Button } from "@/components/ui/button";
@@ -36,6 +38,9 @@ import {
   ModalProps,
   CreateTicketOperation,
 } from "@/components/utils/create-operation-form";
+import EditButton from "@/components/buttons/edit-button";
+import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
+import { formatIso } from "@/components/utils/formatIso";
 
 interface User {
   id: number;
@@ -113,10 +118,10 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "Concluido em",
     cell: ({ row }) => {
       const item = row.original;
-      const updatedDate = DateTime.fromISO(item.updatedAt, {
-        locale: "pt-BR",
-      }).toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS);
-      return <p>{item.finishedAt ? updatedDate : "não concluido"}</p>;
+
+      return (
+        <p>{item.finishedAt ? formatIso(item.updatedAt) : "não concluido"}</p>
+      );
     },
   },
 
@@ -126,12 +131,6 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "criado por",
     cell: ({ row }) => {
       const item = row.original;
-      const createdDate = DateTime.fromISO(item.user.createdAt, {
-        locale: "pt-BR",
-      }).toLocaleString(DateTime.DATE_FULL);
-      const updatedDate = DateTime.fromISO(item.user.updatedAt, {
-        locale: "pt-BR",
-      }).toLocaleString(DateTime.DATE_FULL);
 
       return (
         <>
@@ -143,7 +142,7 @@ export const columns: ColumnDef<Ticket>[] = [
               <TooltipContent>
                 <p> id do usuário: {item.user.id}</p>
                 <p>nome completo: {item.user.fullName}</p>
-                <p>usuário criado em: {createdDate}</p>
+                <p>usuário criado em: {formatIso(item.createdAt)}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -199,37 +198,35 @@ export const columns: ColumnDef<Ticket>[] = [
                 </div>
               </div>
               <Separator />
-              <p>
-                {item.ticketStatusId === 1 ? (
-                  "Nenhuma operação criada"
-                ) : (
-                  <div className="flex justify-center">
-                    <Button
-                      variant="link"
-                      onClick={() =>
-                        window.open(
-                          `/admin/operation-visualization/${item.id}`,
-                          "_blank",
-                          "noopener,noreferrer"
-                        )
-                      }
-                    >
-                      Visualizar operações
-                    </Button>
-                  </div>
-                )}
+              {item.ticketStatusId === 1 ? (
+                "Nenhuma operação criada"
+              ) : (
                 <div className="flex justify-center">
                   <Button
                     variant="link"
-                    onClick={() => {
-                      setIsOpen(false);
-                      modalRef.current?.handleClick({ ticketId: item.id });
-                    }}
+                    onClick={() =>
+                      window.open(
+                        `/admin/operation-visualization/${item.id}`,
+                        "_blank",
+                        "noopener,noreferrer"
+                      )
+                    }
                   >
-                    Cadastrar nova operação
+                    Visualizar operações
                   </Button>
                 </div>
-              </p>
+              )}
+              <div className="flex justify-center">
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setIsOpen(false);
+                    modalRef.current?.handleClick({ ticketId: item.id });
+                  }}
+                >
+                  Cadastrar nova operação
+                </Button>
+              </div>
             </DialogContent>
           </Dialog>
         </>
@@ -245,9 +242,15 @@ export const columns: ColumnDef<Ticket>[] = [
       return (
         <>
           <CreateTicketOperation ref={modalRef} />
-          <ActionCreateButton
-            action={() => modalRef.current?.handleClick({ ticketId: item.id })}
-          />
+          <div className="flex items-center gap-x-1">
+            <ActionCreateButton
+              action={() =>
+                modalRef.current?.handleClick({ ticketId: item.id })
+              }
+            />
+            <EditButton action={() => {}} />
+            <CommentaryOperationButton action={() => {}} />
+          </div>
         </>
       );
     },
