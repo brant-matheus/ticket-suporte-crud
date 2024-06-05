@@ -77,7 +77,7 @@ interface Ticket {
 }
 
 export const columns: ColumnDef<Ticket>[] = [
-  { accessorKey: "id", header: "id do ticket" },
+  { accessorKey: "id", header: "id do ticket", id: "id do ticket" },
   {
     accessorKey: "ticketCategory",
     header: "Categoria",
@@ -90,6 +90,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "ticketPriority",
+    id: "prioridade",
     header: "Prioridade",
     cell: ({ row }) => {
       const item = row.original;
@@ -104,6 +105,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "ticketStatus",
+    id: "status",
     header: "status",
     cell: ({ row }) => {
       const item = row.original;
@@ -114,6 +116,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "finishedAt",
+    id: "concluido em",
     header: "Concluido em",
     cell: ({ row }) => {
       const item = row.original;
@@ -126,7 +129,6 @@ export const columns: ColumnDef<Ticket>[] = [
 
   {
     accessorKey: "user.email",
-    id: "user",
     header: "criado por",
     cell: ({ row }) => {
       const item = row.original;
@@ -151,6 +153,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "modificated",
+    id: "criado-modificado",
     header: "criado-modificado",
     cell: ({ row }) => {
       const item = row.original;
@@ -167,6 +170,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "content",
+    id: "conteúdo",
     header: "conteúdo",
     cell: ({ row }) => {
       const item = row.original;
@@ -234,7 +238,7 @@ export const columns: ColumnDef<Ticket>[] = [
     },
   },
   {
-    id: "action",
+    id: "ações",
     header: "ações",
     cell: ({ row }) => {
       const item = row.original;
