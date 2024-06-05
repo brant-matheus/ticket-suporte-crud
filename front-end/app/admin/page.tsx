@@ -14,7 +14,7 @@ const page = () => {
           showFilter={true}
           route="ticket"
           columns={columns}
-          filterColumn="user"
+          filterColumn="criado por"
           fromTable=""
         />
       </div>

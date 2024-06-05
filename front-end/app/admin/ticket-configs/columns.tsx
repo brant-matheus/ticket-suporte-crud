@@ -47,7 +47,8 @@ export function ticketConfigsColumns({
     { accessorKey: "id", header: "id" },
     {
       accessorKey: "name",
-      header: "name",
+      id: "nome",
+      header: "nome",
       cell: ({ row }) => {
         const item = row.original;
         const color = { color: item.color };
@@ -60,15 +61,12 @@ export function ticketConfigsColumns({
       },
     },
     {
-      accessorKey: "responsible",
+      accessorKey: "responsible.email",
+      id: "criado por",
       header: "criado por",
-      cell: ({ row }) => {
-        const item = row.original;
-        return <>{item.responsible.email}</>;
-      },
     },
     {
-      accessorKey: "modification",
+      id: "modificado",
       header: "modificado",
       cell: ({ row }) => {
         const item = row.original;
@@ -84,8 +82,8 @@ export function ticketConfigsColumns({
       },
     },
     {
-      id: "action",
-      header: "ação",
+      id: "ações",
+      header: "ações",
       cell: ({ row }) => {
         const item = row.original;
         const modalRef = useRef<ModalHandles>(null);

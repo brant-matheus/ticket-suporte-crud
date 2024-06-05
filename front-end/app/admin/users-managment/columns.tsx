@@ -23,20 +23,17 @@ export const columns: ColumnDef<TData>[] = [
     header: "id do usuário",
   },
   {
-    accessorKey: "nome",
+    accessorKey: "fullName",
     header: "nome completo",
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return <p>{user.fullName}</p>;
-    },
+    id: "nome",
   },
   {
     accessorKey: "email",
     header: "email",
   },
   {
-    accessorKey: "permissão",
+    accessorKey: "isAdmin",
+    id: "permissão",
     // remove this, use it on email
     header: "permissão",
     cell: ({ row }) => {
@@ -50,7 +47,7 @@ export const columns: ColumnDef<TData>[] = [
     },
   },
   {
-    accessorKey: "modificado",
+    id: "modificado",
     header: "modificado",
     cell: ({ row }) => {
       const user = row.original;

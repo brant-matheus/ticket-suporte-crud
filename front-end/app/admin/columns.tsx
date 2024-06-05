@@ -129,6 +129,7 @@ export const columns: ColumnDef<Ticket>[] = [
 
   {
     accessorKey: "user.email",
+    id: "criado por",
     header: "criado por",
     cell: ({ row }) => {
       const item = row.original;
