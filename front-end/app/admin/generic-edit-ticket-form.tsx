@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface DataProps {
   name: string;
@@ -25,8 +26,9 @@ interface DataProps {
 }
 interface FormProps {
   data: any[];
+  title: string;
 }
-export function GenericEditTicketForm({ data }: FormProps) {
+export function GenericEditTicketForm({ data, title }: FormProps) {
   const FormSchema = z.object({
     ticketConfigItem: z.string().min(1, { message: "Selecione uma categoria" }),
     description: z.string().min(25, {
@@ -52,14 +54,14 @@ export function GenericEditTicketForm({ data }: FormProps) {
             name="ticketConfigItem"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Prioridade</FormLabel>
+                <FormLabel>{title}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione a prioridade" />
+                      <SelectValue placeholder={`Selecione ${title}`} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -82,7 +84,7 @@ export function GenericEditTicketForm({ data }: FormProps) {
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Digite uma descrição" />
+                  <Textarea {...field} placeholder="Digite uma descrição" />
                 </FormControl>
 
                 <FormMessage />

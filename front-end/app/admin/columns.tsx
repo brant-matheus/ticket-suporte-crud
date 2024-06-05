@@ -35,13 +35,11 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import ActionCreateButton from "@/components/buttons/action-create-button";
-import {
-  ModalProps,
-  CreateTicketOperation,
-} from "@/components/utils/create-operation-form";
+
 import EditButton from "@/components/buttons/edit-button";
 import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
 import { formatIso } from "@/components/utils/formatIso";
+import { CreateTicketOperation, ModalProps } from "./create-operation-form";
 
 interface User {
   id: number;

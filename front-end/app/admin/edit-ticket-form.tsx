@@ -82,14 +82,14 @@ export const EditTicketForm = forwardRef((props, ref) => {
             <TabsContent value="priority">
               <Card>
                 <CardContent>
-                  <GenericEditTicketForm data={priority} />
+                  <GenericEditTicketForm data={priority} title="prioridade" />
                 </CardContent>
               </Card>
             </TabsContent>
             <TabsContent value="status">
               <Card>
                 <CardContent>
-                  <GenericEditTicketForm data={status} />
+                  <GenericEditTicketForm data={status} title="status" />
                 </CardContent>
               </Card>
             </TabsContent>

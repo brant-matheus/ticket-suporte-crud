@@ -21,11 +21,9 @@ import { ChevronsUpDown, PlusCircle } from "lucide-react";
 import { formatIso } from "@/components/utils/formatIso";
 import Link from "next/link";
 import ActionCreateButton from "@/components/buttons/action-create-button";
-import {
-  ModalProps,
-  CreateTicketOperation,
-} from "@/components/utils/create-operation-form";
+
 import CreateButton from "@/components/buttons/create-button";
+import { CreateTicketOperation, ModalProps } from "../../create-operation-form";
 interface TicketConfig {
   id: number;
   name: string;
