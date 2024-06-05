@@ -39,11 +39,21 @@ interface loginForm {
   email: string;
   password: string;
 }
+
+// register
+interface RegisterForm {
+  email: string;
+  fullName: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
 // values our createContext has
 interface AuthContextType {
   authData: AuthData | null;
   userLogin: (loginForm: loginForm) => Promise<any>;
   userLogout: () => void;
+  userRegister: (registerForm: RegisterForm) => Promise<any>;
 }
 // children type
 interface AuthProviderProps {
@@ -55,6 +65,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [authData, setAuthData] = useState<AuthData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+
+  async function userRegister(registerForm: RegisterForm) {
+    try {
+      const { data, status, request } = await instance.post(
+        "/external-register",
+        registerForm
+      );
+      if (request.status ?? status === 200) {
+        setAuthData(data);
+        localStorage.setItem("token", data.token.token);
+        localStorage.setItem("userId", data.user.id);
+        // update axios authInstace with the token and userId
+        // token
+        authInstance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${data.token.token}`;
+        //user id
+        authInstance.defaults.params = { userId: data.user.id };
+
+        router.push("/guest");
+      }
+    } catch (error) {
+      return "fail";
+    }
+  }
 
   async function userLogin(loginForm: loginForm) {
     try {
@@ -103,7 +138,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   }, []);
   return (
-    <AuthContext.Provider value={{ authData, userLogin, userLogout }}>
+    <AuthContext.Provider
+      value={{ authData, userLogin, userLogout, userRegister }}
+    >
       {loading ? (
         <span className="loading loading-infinity loading-xs"></span>
       ) : (

@@ -255,7 +255,9 @@ export const columns: ColumnDef<Ticket>[] = [
                 modalRef.current?.handleClick({ ticketId: item.id })
               }
             />
-            <EditButton action={() => editRef.current?.handleClick()} />
+            <EditButton
+              action={() => editRef.current?.handleClick({ ticketId: item.id })}
+            />
             <CommentaryOperationButton action={() => {}} />
           </div>
         </>

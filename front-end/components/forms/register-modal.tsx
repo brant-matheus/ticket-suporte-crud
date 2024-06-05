@@ -21,12 +21,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
 import { useToast } from "@/components/ui/use-toast";
+import LoaderButton from "../buttons/loader-button";
 interface props {
   closeDialog: any;
 }
 const RegisterModal = ({ closeDialog }: props) => {
   const { toast } = useToast();
-  const [loginButton, setLoginButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<InternalRegisterInfer>({
     resolver: zodResolver(InternalRegisterValidator),
@@ -40,12 +41,12 @@ const RegisterModal = ({ closeDialog }: props) => {
   });
 
   async function modalRegister(dataForm: InternalRegisterInfer) {
-    setLoginButton(true);
+    setIsLoading(true);
     try {
       await authInstance.post("user", dataForm);
       closeDialog();
 
-      setLoginButton(false);
+      setIsLoading(false);
       toast({
         variant: "sucess",
         title: "Usuário criado com sucesso.",
@@ -55,7 +56,7 @@ const RegisterModal = ({ closeDialog }: props) => {
 
       form.reset();
     } catch (error) {
-      setLoginButton(false);
+      setIsLoading(false);
       form.resetField("email");
       toast({
         variant: "destructive",
@@ -165,11 +166,11 @@ const RegisterModal = ({ closeDialog }: props) => {
               </FormItem>
             )}
           ></FormField>
-
-          <Button type="submit" className=" h-10 gap-1" disabled={loginButton}>
-            <PlusCircle className="h-4 w-4" />
-            <div className="text-[15px]">Cadastrar</div>
-          </Button>
+          {isLoading ? (
+            <LoaderButton title={"Processando as informações "} />
+          ) : (
+            <Button>Cadastrar-se</Button>
+          )}
         </form>
       </Form>
     </div>

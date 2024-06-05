@@ -30,7 +30,7 @@ export default class TicketConfigsController {
     }
   }
 
-  async store({ request, auth }: HttpContext) {
+  async store({ request, auth }: HttpContext) { 
     const userId = auth.user?.id
     const { fromTable, item } = request.only(['fromTable', 'item'])
     const randomColor = faker.color.rgb()

@@ -39,4 +39,4 @@ router.post('auth', [AuthController, 'login'])
 
 //guest register by guest
 
-router.post('externalUser', [UsersController, 'store'])
+router.post('external-register', [UsersController, 'store'])

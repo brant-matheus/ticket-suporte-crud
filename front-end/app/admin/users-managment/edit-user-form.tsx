@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
+import LoaderButton from "@/components/buttons/loader-button";
 
 export interface EditModalHandles {
   handleClick: Function;
@@ -46,7 +47,7 @@ export const EditUserForm = forwardRef((props, ref) => {
   }
   const { ToastFail, ToastSuccess } = useToastContext();
 
-  const [boolEditButton, setBoolEditButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const form = useForm<GeneralUsersInfer>({
@@ -54,7 +55,7 @@ export const EditUserForm = forwardRef((props, ref) => {
   });
 
   async function userEdit(editForm: GeneralUsersInfer) {
-    setBoolEditButton(true);
+    setIsLoading(true);
     try {
       await authInstance.put(`user/${stateProps?.userId}`, editForm, {
         params: {
@@ -64,7 +65,7 @@ export const EditUserForm = forwardRef((props, ref) => {
       closeDialog();
       ToastSuccess();
     } catch (error) {
-      setBoolEditButton(false);
+      setIsLoading(false);
       ToastFail({ description: "Email existente!" });
     }
   }
@@ -160,9 +161,11 @@ export const EditUserForm = forwardRef((props, ref) => {
                           </FormItem>
                         )}
                       ></FormField>
-                      <Button type="submit" disabled={boolEditButton}>
-                        Salvar
-                      </Button>
+                      {isLoading ? (
+                        <LoaderButton title={"Salvando edição "} />
+                      ) : (
+                        <Button>Salvar edição</Button>
+                      )}
                     </form>
                   </Form>
                 </CardContent>

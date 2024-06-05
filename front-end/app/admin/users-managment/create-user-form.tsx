@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { PlusCircle } from "lucide-react";
 import { useToastContext } from "@/components/utils/context-toast";
+import LoaderButton from "@/components/buttons/loader-button";
 export interface ModalHandles {
   handleOpen: Function;
 }
@@ -38,7 +39,7 @@ export const CreateUserForm = forwardRef((props, ref) => {
       handleOpen();
     },
   }));
-  const [loginButton, setLoginButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const form = useForm<InternalRegisterInfer>({
     resolver: zodResolver(InternalRegisterValidator),
@@ -52,16 +53,16 @@ export const CreateUserForm = forwardRef((props, ref) => {
   });
 
   async function modalRegister(dataForm: InternalRegisterInfer) {
-    setLoginButton(true);
+    setIsLoading(true);
 
     try {
       await authInstance.post("user", dataForm);
-      setLoginButton(false);
+      setIsLoading(false);
       setOpen(false);
       form.reset();
       ToastSuccess();
     } catch (error) {
-      setLoginButton(false);
+      setIsLoading(false);
       form.resetField("email");
       ToastFail({
         description: "email já existe em nosso banco de dados, tente outro.",
@@ -170,11 +171,14 @@ export const CreateUserForm = forwardRef((props, ref) => {
                   </FormItem>
                 )}
               ></FormField>
-
-              <Button className=" h-10 gap-1" disabled={loginButton}>
-                <PlusCircle className="h-4 w-4" />
-                <div className="text-[15px]">Cadastrar</div>
-              </Button>
+              {isLoading ? (
+                <LoaderButton title={"Cadastrando usuário"} />
+              ) : (
+                <Button className=" h-10 gap-1">
+                  <PlusCircle className="h-4 w-4" />
+                  <p className="text-[15px]">Cadastrar</p>
+                </Button>
+              )}
             </form>
           </Form>
         </DialogContent>

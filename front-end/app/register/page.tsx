@@ -21,13 +21,14 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { instance } from "@/app/axios-config";
+import LoaderButton from "@/components/buttons/loader-button";
+import { useAuth } from "../authentication-context";
 const RegisterExternal = () => {
+  const { userRegister } = useAuth();
   //loginError sets after request fails
   const [loginError, setLoginError] = useState("");
   //disable/enable login button after submit
-  const [loginButton, setLoginButton] = useState(false);
-
-  //define zod schema with validation
+  const [isLoading, setIsLoading] = useState(false);
 
   //redicte user to routes
   const router = useRouter();
@@ -47,14 +48,10 @@ const RegisterExternal = () => {
 
   //loginForm is typed by formSchema. {email: string, password: string}
   async function RegisterForm(externalPostUser: ExternalRegisterInfer) {
-    setLoginButton(true);
-    try {
-      const { data } = await instance.post("/externalUser", externalPostUser);
-      if (data === false) {
-        router.push("guest");
-      }
-    } catch (error) {
-      setLoginButton(false);
+    setIsLoading(true);
+    const status = await userRegister(externalPostUser);
+    if (status === "fail") {
+      setIsLoading(false);
       form.resetField("email");
       setLoginError("*Email já existe no Banco de dados");
     }
@@ -164,9 +161,12 @@ const RegisterExternal = () => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full" type="submit" disabled={loginButton}>
-                Cadastrar
-              </Button>
+              {isLoading ? (
+                <LoaderButton title={"Processando as informações "} />
+              ) : (
+                <Button>Cadastrar-se</Button>
+              )}
+
               <p className="text-[red]">{loginError}</p>
               <p>
                 Já possui conta ?{" "}

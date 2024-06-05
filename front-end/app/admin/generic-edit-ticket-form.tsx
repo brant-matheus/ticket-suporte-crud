@@ -16,9 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { authInstance } from "../axios-config";
+import { useToastContext } from "@/components/utils/context-toast";
+import { Loader2 } from "lucide-react";
+import LoaderButton from "@/components/buttons/loader-button";
+import { useState } from "react";
 
 interface DataProps {
   name: string;
@@ -27,11 +31,22 @@ interface DataProps {
 interface FormProps {
   data: any[];
   title: string;
+  ticketId?: number;
+  fromTable: "ticket_status_id" | "ticket_priority_id";
+  action: Function;
 }
-export function GenericEditTicketForm({ data, title }: FormProps) {
+export function GenericEditTicketForm({
+  data,
+  title,
+  ticketId,
+  fromTable,
+  action,
+}: FormProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { ToastFail, ToastSuccess } = useToastContext();
   const FormSchema = z.object({
     ticketConfigItem: z.string().min(1, { message: "Selecione uma categoria" }),
-    description: z.string().min(25, {
+    description: z.string().min(1, {
       message: "Escreva uma descrição de pelo menos 25 caracteres.",
     }),
   });
@@ -43,7 +58,17 @@ export function GenericEditTicketForm({ data, title }: FormProps) {
     },
   });
   async function editTicket(form: z.infer<typeof FormSchema>) {
-    console.log(form);
+    setIsLoading(true);
+    try {
+      const { data } = await authInstance.put(`/ticket/${ticketId}`, form, {
+        params: { fromTable: fromTable },
+      });
+      action();
+      ToastSuccess();
+    } catch (error) {
+      setIsLoading(false);
+      ToastFail({ description: `error ao editar ${title}` });
+    }
   }
   return (
     <>
@@ -82,7 +107,7 @@ export function GenericEditTicketForm({ data, title }: FormProps) {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Descrição</FormLabel>
+                <FormLabel>Descrição </FormLabel>
                 <FormControl>
                   <Textarea {...field} placeholder="Digite uma descrição" />
                 </FormControl>
@@ -91,7 +116,11 @@ export function GenericEditTicketForm({ data, title }: FormProps) {
               </FormItem>
             )}
           />
-          <Button>Salvar</Button>
+          {isLoading ? (
+            <LoaderButton title={"Salvando edição"} />
+          ) : (
+            <Button>Salvar edição</Button>
+          )}
         </form>
       </Form>
     </>

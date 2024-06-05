@@ -21,6 +21,7 @@ import { authInstance } from "@/app/axios-config";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { useToastContext } from "../utils/context-toast";
+import LoaderButton from "../buttons/loader-button";
 
 interface props {
   closeDialog: any;
@@ -28,8 +29,7 @@ interface props {
 }
 
 const PasswordFormEdit = ({ closeDialog, userId }: props) => {
-  const [boolEditButton, setBoolEditButton] = useState(false);
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
 
   const form = useForm<PasswordRedefinitionInfer>({
@@ -40,7 +40,7 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
     },
   });
   async function passwordRedefine(passwordForm: PasswordRedefinitionInfer) {
-    setBoolEditButton(true);
+    setIsLoading(true);
     try {
       await authInstance.put(`user/${userId}`, passwordForm, {
         params: { isProfile: false },
@@ -48,11 +48,11 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
       if (typeof closeDialog === "function") {
         closeDialog();
       }
-      setBoolEditButton(false);
+      setIsLoading(false);
       form.reset();
       ToastSuccess();
     } catch (error) {
-      setBoolEditButton(false);
+      setIsLoading(false);
       ToastFail({ description: "Error ao redefinir a senha" });
     }
   }
@@ -96,13 +96,11 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          disabled={boolEditButton}
-          className="flex content-center w-24"
-        >
-          Salvar
-        </Button>
+        {isLoading ? (
+          <LoaderButton title={"Salvando a nova senha "} />
+        ) : (
+          <Button>Salvar senha</Button>
+        )}
       </form>
     </Form>
   );

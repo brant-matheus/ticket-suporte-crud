@@ -19,13 +19,14 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "../utils/context-toast";
+import LoaderButton from "../buttons/loader-button";
 
 interface UserSettings {
   userId: string;
 }
 
 const GeneralUserForm = ({ userId }: UserSettings) => {
-  const [boolEditButton, setBoolEditButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
   const form = useForm<GeneralUserInfer>({
     resolver: zodResolver(GeneralUserValidation),
@@ -44,7 +45,7 @@ const GeneralUserForm = ({ userId }: UserSettings) => {
       return true;
     }
     // get all typed/validated inputs
-    setBoolEditButton(true);
+    setIsLoading(true);
     try {
       const { request, status, data } = await authInstance.put(
         `user/${userId}`,
@@ -53,12 +54,12 @@ const GeneralUserForm = ({ userId }: UserSettings) => {
       );
       form.reset();
       ToastSuccess();
-      setBoolEditButton(false);
+      setIsLoading(false);
     } catch (error) {
       ToastFail({
         description: "Email já existe em nosso banco de dados, tente outro.",
       });
-      setBoolEditButton(false);
+      setIsLoading(false);
     }
   }
 
@@ -107,13 +108,11 @@ const GeneralUserForm = ({ userId }: UserSettings) => {
               </FormItem>
             )}
           />
-          <Button
-            className="flex content-center w-24"
-            type="submit"
-            disabled={boolEditButton}
-          >
-            Salvar
-          </Button>
+          {isLoading ? (
+            <LoaderButton title={"Salvando edição"} />
+          ) : (
+            <Button>Salvar edição</Button>
+          )}
         </form>
       </Form>
     </div>

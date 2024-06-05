@@ -32,6 +32,7 @@ Link, redirect after click
 */
 import { usePathname } from "next/navigation";
 import { useToastContext } from "@/components/utils/context-toast";
+import LoaderButton from "@/components/buttons/loader-button";
 
 export default function Login() {
   const pathname = usePathname();
@@ -40,7 +41,7 @@ export default function Login() {
   //loginError sets after request fails
   const [loginError, setLoginError] = useState("");
   //disable/enable login button after submit
-  const [loginButton, setLoginButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   //define zod schema with validation
   const formSchema = z.object({
@@ -65,10 +66,10 @@ export default function Login() {
   });
 
   async function login(loginForm: z.infer<typeof formSchema>) {
-    setLoginButton(true);
+    setIsLoading(true);
     const status = await userLogin(loginForm);
     if (status === "fail") {
-      setLoginButton(false);
+      setIsLoading(false);
       setLoginError("*Error no login, confira suas credenciais");
       form.resetField("password");
     }
@@ -136,13 +137,16 @@ export default function Login() {
                     </FormItem>
                   )}
                 />
-                <Button className="w-full" type="submit" disabled={loginButton}>
-                  Login
-                </Button>
+                {isLoading ? (
+                  <LoaderButton title={"Entrando"} />
+                ) : (
+                  <Button>Entrar</Button>
+                )}
+
                 <p className="text-[red]">{loginError}</p>
                 <p>
                   Não possui conta ?{" "}
-                  <Link href="/cadastro" className="text-blue-500">
+                  <Link href="/register" className="text-blue-500">
                     Criar sua conta
                   </Link>{" "}
                 </p>

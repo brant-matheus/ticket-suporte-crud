@@ -18,13 +18,14 @@ import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
 import { useRouter } from "next/navigation";
 import { useToastContext } from "../utils/context-toast";
+import LoaderButton from "../buttons/loader-button";
 interface deleteUserPops {
   userId?: string;
 }
 const UserDeleteForm = ({ userId }: deleteUserPops) => {
   const { ToastFail } = useToastContext();
 
-  const [boolDeleteButton, setBoolDeleteButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const deleteSchema = z.object({
     confirmation: z
@@ -39,7 +40,7 @@ const UserDeleteForm = ({ userId }: deleteUserPops) => {
     },
   });
   async function deleteUser() {
-    setBoolDeleteButton(true);
+    setIsLoading(true);
     try {
       const { status, request } = await authInstance.delete(`user/${userId}`);
       console.log(status);
@@ -51,7 +52,7 @@ const UserDeleteForm = ({ userId }: deleteUserPops) => {
       ToastFail({
         description: "Error ao tentar deletar sua conta",
       });
-      setBoolDeleteButton(false);
+      setIsLoading(false);
     }
   }
   return (
@@ -83,14 +84,17 @@ const UserDeleteForm = ({ userId }: deleteUserPops) => {
               </FormItem>
             )}
           />
-          <Button
-            variant="destructive"
-            type="submit"
-            className="focus-visible:ring-0"
-            disabled={boolDeleteButton}
-          >
-            Deletar conta
-          </Button>
+          {isLoading ? (
+            <LoaderButton title={"Deletando"} />
+          ) : (
+            <Button
+              variant="destructive"
+              className="focus-visible:ring-0"
+              disabled={isLoading}
+            >
+              Deletar conta
+            </Button>
+          )}
         </form>
       </Form>
     </div>

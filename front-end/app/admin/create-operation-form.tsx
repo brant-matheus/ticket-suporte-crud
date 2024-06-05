@@ -4,10 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogTrigger } from "../../components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "../../components/ui/dialog";
 import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "../../components/utils/context-toast";
 import { Textarea } from "../../components/ui/textarea";
+import LoaderButton from "@/components/buttons/loader-button";
 
 interface OperationProps {
   description: string;
@@ -21,7 +26,7 @@ interface TicketProps {
 }
 export const CreateTicketOperation = forwardRef((props, ref) => {
   const { ToastFail, ToastSuccess } = useToastContext();
-  const [isButtonEnable, setIsButtonEnable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [ticketId, setTicketId] = useState<number | undefined>();
   useImperativeHandle(ref, () => ({
@@ -32,7 +37,7 @@ export const CreateTicketOperation = forwardRef((props, ref) => {
   }));
   const form = useForm<OperationProps>();
   async function storeDescription(description: OperationProps) {
-    setIsButtonEnable(true);
+    setIsLoading(true);
     const data = Object.assign(description, { ticketId: ticketId });
     try {
       const { status, request } = await authInstance.post("operation", data);
@@ -40,7 +45,7 @@ export const CreateTicketOperation = forwardRef((props, ref) => {
       ToastSuccess();
     } catch (error) {
       ToastFail({ description: "Error criar operação" });
-      setIsButtonEnable(false);
+      setIsLoading(false);
     }
   }
 
@@ -57,9 +62,13 @@ export const CreateTicketOperation = forwardRef((props, ref) => {
             <Textarea
               {...form.register("description")}
               placeholder="Digite uma descrição"
+              spellCheck={false}
             />
-
-            <Button disabled={isButtonEnable}>Salvar operação</Button>
+            {isLoading ? (
+              <LoaderButton title={"Criando Operação"} />
+            ) : (
+              <Button>Criar operação</Button>
+            )}
           </form>
         </DialogContent>
       </Dialog>
