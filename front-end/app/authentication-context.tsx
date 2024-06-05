@@ -141,11 +141,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{ authData, userLogin, userLogout, userRegister }}
     >
-      {loading ? (
-        <span className="loading loading-infinity loading-xs"></span>
-      ) : (
-        children
-      )}
+      {loading ? null : children}
     </AuthContext.Provider>
   );
 };

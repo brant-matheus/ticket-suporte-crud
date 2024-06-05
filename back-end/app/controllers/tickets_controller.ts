@@ -56,21 +56,27 @@ export default class TicketsController {
     const ticket = await Ticket.findOrFail(params.id)
     //
     const updatedTime = DateTime.local()
+    if (auth.user?.isAdmin) {
+      switch (fromTable) {
+        case 'ticket_status_id':
+          const statusId = (await TicketStatus.findByOrFail('name', ticketConfigItem)).id
+          await ticket.merge({ ticketStatusId: statusId, updatedAt: updatedTime }).save()
+          break
 
-    switch (fromTable) {
-      case 'ticket_status_id':
-        const statusId = (await TicketStatus.findByOrFail('name', ticketConfigItem)).id
-        await ticket.merge({ ticketStatusId: statusId, updatedAt: updatedTime }).save()
-        break
-
-      case 'ticket_priority_id':
-        const priorityId = (await TicketPriority.findByOrFail('name', ticketConfigItem)).id
-        await ticket.merge({ ticketPriorityId: priorityId, updatedAt: updatedTime }).save()
-        break
-      default:
-        break
+        case 'ticket_priority_id':
+          const priorityId = (await TicketPriority.findByOrFail('name', ticketConfigItem)).id
+          await ticket.merge({ ticketPriorityId: priorityId, updatedAt: updatedTime }).save()
+          break
+        default:
+          break
+      }
+    } else {
+      if (ticket.ticketStatusId !== 1) {
+        throw new Error()
+      } else {
+        ticket.delete()
+      }
     }
-    return request.all()
   }
 
   async destroy({ params }: HttpContext) {
