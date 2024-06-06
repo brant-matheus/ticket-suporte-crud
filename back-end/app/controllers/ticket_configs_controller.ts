@@ -25,12 +25,12 @@ export default class TicketConfigsController {
     } else {
       const categories = await db.from('ticket_categories').select('name', 'color', 'id')
       const priorities = await db.from('ticket_priorities').select('name', 'color', 'id')
-      const statuses = await db.from('ticket_stasuses').select('name', 'color', 'id')
+      const statuses = await db.from('ticket_statuses').select('name', 'color', 'id')
       return { categories, priorities, statuses }
     }
   }
 
-  async store({ request, auth }: HttpContext) { 
+  async store({ request, auth }: HttpContext) {
     const userId = auth.user?.id
     const { fromTable, item } = request.only(['fromTable', 'item'])
     const randomColor = faker.color.rgb()

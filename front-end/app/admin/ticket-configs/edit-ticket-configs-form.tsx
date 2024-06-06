@@ -24,7 +24,7 @@ import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "@/components/utils/context-toast";
 
 export interface ModalHandles {
-  handleClick: Function;
+  handleClick: (props: HandleProps) => void;
 }
 interface FormProps {
   item: string;
@@ -54,9 +54,7 @@ export const TicketConfigForm = forwardRef((props, ref) => {
       setStateProps(props);
     },
   }));
-  const form = useForm<FormProps>({
-    defaultValues: { item: "" },
-  });
+  const form = useForm<FormProps>();
   async function editTicketConfig(item: FormProps) {
     setButtonBool(true);
     try {
@@ -80,7 +78,9 @@ export const TicketConfigForm = forwardRef((props, ref) => {
       });
     }
   }
-
+  useEffect(() => {
+    form.reset();
+  }, [open]);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -91,22 +91,16 @@ export const TicketConfigForm = forwardRef((props, ref) => {
               className="grid gap-4"
             >
               <FormField
+                defaultValue={stateProps?.ticketConfigName}
                 control={form.control}
                 name="item"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Editar {stateProps?.title}</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Digite novo nome..."
-                        disabled={editStatusBool}
-                      />
+                      <Input {...field} placeholder="Digite novo nome..." />
                     </FormControl>
-                    <FormDescription>
-                      Preencha para editar {stateProps?.title} "
-                      {stateProps?.ticketConfigName}"
-                    </FormDescription>
+
                     <FormMessage />
                   </FormItem>
                 )}

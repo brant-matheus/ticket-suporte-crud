@@ -35,6 +35,7 @@ import { StoreTicketValidation, StoreTicketInfer } from "@/app/zod-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "@/components/utils/context-toast";
+import LoaderButton from "@/components/buttons/loader-button";
 
 interface TicketProps {
   name: string;
@@ -47,7 +48,7 @@ interface DataProps {
   priorities: TicketProps[];
 }
 const page = () => {
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
   const [data, setData] = useState<DataProps>();
   const getData = useCallback(async () => {
@@ -72,15 +73,19 @@ const page = () => {
     },
   });
   async function storeTicket(ticket: StoreTicketInfer) {
-    setIsButtonEnabled(true);
+    setIsLoading(true);
     try {
       const { data, request } = await authInstance.post("ticket", ticket);
       ToastSuccess();
-      setIsButtonEnabled(false);
+      setIsLoading(false);
+      form.reset();
     } catch (error) {
-      setIsButtonEnabled(false);
+      setIsLoading(false);
 
-      ToastFail({ description: "" });
+      ToastFail({
+        description:
+          "Error ao enviar o ticket, reinice a página e tente novamente.",
+      });
     }
   }
   return (
@@ -201,7 +206,11 @@ const page = () => {
                     </FormItem>
                   )}
                 />
-                <Button disabled={isButtonEnabled}>Enviar</Button>
+                {isLoading ? (
+                  <LoaderButton title="enviando ticket" />
+                ) : (
+                  <Button>Enviar</Button>
+                )}
               </form>
             </Form>
           </CardContent>
@@ -212,9 +221,3 @@ const page = () => {
 };
 
 export default page;
-
-// {categoriesArray.map((category) => (
-//   <SelectItem value={category.name}>
-//     {category.name}
-//   </SelectItem>
-// ))}
