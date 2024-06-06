@@ -5,6 +5,7 @@ import AuthController from '#controllers/auth_controller'
 import TicketConfigsController from '#controllers/ticket_configs_controller'
 import TicketsController from '#controllers/tickets_controller'
 import OperationsController from '#controllers/operations_controller'
+import CommentsController from '#controllers/comments_controller'
 // internal, auth.
 router
   .group(() => {
@@ -40,3 +41,5 @@ router.post('auth', [AuthController, 'login'])
 //guest register by guest
 
 router.post('external-register', [UsersController, 'store'])
+
+router.resource('comments', CommentsController)

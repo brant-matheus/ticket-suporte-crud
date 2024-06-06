@@ -14,6 +14,7 @@ import {
 import Ticket from '#models/ticket'
 import Operation from '#models/operation'
 import { DateTime } from 'luxon'
+import Comment from '#models/comment'
 
 export default class extends BaseSeeder {
   color = faker.color
@@ -30,5 +31,15 @@ export default class extends BaseSeeder {
     await TicketCategory.createMany(TicketCategoryFactory)
     await TicketPriority.createMany(TicketPrioriesFactory)
     await TicketStatus.createMany(TicketStatusesFactory)
+    await Ticket.create({
+      createdById: 2,
+      subject: 'aaaaaaaaa',
+      ticketCategoryId: 1,
+      ticketStatusId: 1,
+      ticketPriorityId: 1,
+      finishedAt: false,
+      description: 'aaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaa a',
+    })
+    await Comment.create({ content: 'aaaaaaaa', responsibleId: 1, ticketId: 1 })
   }
 }
