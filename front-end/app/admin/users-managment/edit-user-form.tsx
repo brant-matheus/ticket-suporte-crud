@@ -1,5 +1,10 @@
 "use client";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToastContext } from "@/components/utils/context-toast";
@@ -69,7 +74,9 @@ export const EditUserForm = forwardRef((props, ref) => {
       ToastFail({ description: "Email existente!" });
     }
   }
-
+  useEffect(() => {
+    form.reset();
+  }, [open]);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
