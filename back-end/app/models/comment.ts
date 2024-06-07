@@ -1,9 +1,8 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import User from '#models/user'
-import Ticket from '#models/user'
-
+import User from './user.js'
+import Ticket from './ticket.js'
 export default class Comment extends BaseModel {
   @column({ isPrimary: true })
   declare id: number

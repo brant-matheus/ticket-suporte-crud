@@ -15,31 +15,31 @@ import Ticket from '#models/ticket'
 import Operation from '#models/operation'
 import { DateTime } from 'luxon'
 import Comment from '#models/comment'
+import { CommentFactory } from '#database/factories/comment_factory'
 
 export default class extends BaseSeeder {
   color = faker.color
   async run() {
     // Write your database queries inside the run method
-    await User.create({
-      fullName: 'matheus',
-      email: 'matheus@saga.com',
-      isAdmin: true,
-      password: 'Testing@123',
-    })
-    await UserFactory.createMany(100)
-
-    await TicketCategory.createMany(TicketCategoryFactory)
-    await TicketPriority.createMany(TicketPrioriesFactory)
-    await TicketStatus.createMany(TicketStatusesFactory)
-    await Ticket.create({
-      createdById: 2,
-      subject: 'aaaaaaaaa',
-      ticketCategoryId: 1,
-      ticketStatusId: 1,
-      ticketPriorityId: 1,
-      finishedAt: false,
-      description: 'aaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaa a',
-    })
-    await Comment.create({ content: 'aaaaaaaa', responsibleId: 1, ticketId: 1 })
+    // await User.create({
+    //   fullName: 'matheus',
+    //   email: 'matheus@saga.com',
+    //   isAdmin: true,
+    //   password: 'Testing@123',
+    // })
+    // await UserFactory.createMany(100)
+    // await TicketCategory.createMany(TicketCategoryFactory)
+    // await TicketPriority.createMany(TicketPrioriesFactory)
+    // await TicketStatus.createMany(TicketStatusesFactory)
+    // await Ticket.create({
+    //   createdById: 2,
+    //   subject: 'aaaaaaaaa',
+    //   ticketCategoryId: 1,
+    //   ticketStatusId: 1,
+    //   ticketPriorityId: 1,
+    //   finishedAt: false,
+    //   description: 'aaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaa a',
+    // })
+    await CommentFactory.createMany(20)
   }
 }
