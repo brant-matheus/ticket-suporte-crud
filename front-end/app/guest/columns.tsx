@@ -4,6 +4,9 @@ import DeleteDialog from "@/components/buttons/delete-dialog";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import { DateTime } from "luxon";
 import { formatIso } from "@/components/utils/formatIso";
+import EditButton from "@/components/buttons/edit-button";
+import { useRef } from "react";
+import { ModalEditProps, EditTicketGuest } from "./edit-ticket";
 
 interface TicketCategory {
   id: number;
@@ -113,15 +116,21 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "ações",
     cell: ({ row }) => {
       const item = row.original;
+      const modalRef = useRef<ModalEditProps>(null);
       return (
         <>
-          <DeleteDialog
-            route="ticket"
-            title="ticket"
-            params={item.id}
-            fromTableWhere="
+          <div className="flex items-center gap-x-1">
+            <EditTicketGuest ref={modalRef} />
+
+            <DeleteDialog
+              route="ticket"
+              title="ticket"
+              params={item.id}
+              fromTableWhere="
         "
-          />
+            />
+            <EditButton action={() => modalRef.current?.handleCLick()} />
+          </div>
         </>
       );
     },
