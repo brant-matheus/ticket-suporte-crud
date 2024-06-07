@@ -60,7 +60,15 @@ export default class TicketsController {
       switch (fromTable) {
         case 'ticket_status_id':
           const statusId = (await TicketStatus.findByOrFail('name', ticketConfigItem)).id
-          await ticket.merge({ ticketStatusId: statusId, updatedAt: updatedTime }).save()
+          if (statusId === 4) {
+            await ticket
+              .merge({ ticketStatusId: statusId, updatedAt: updatedTime, isConclued: true })
+              .save()
+          } else {
+            await ticket
+              .merge({ ticketStatusId: statusId, updatedAt: updatedTime, isConclued: false })
+              .save()
+          }
           break
 
         case 'ticket_priority_id':

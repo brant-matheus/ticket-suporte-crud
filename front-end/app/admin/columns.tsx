@@ -69,7 +69,7 @@ interface Ticket {
   ticketStatusId: number;
   createdAt: string;
   updatedAt: string;
-  finishedAt: string | null;
+  isConclued: boolean;
   user: User;
   ticketCategory: TicketConfig;
   ticketPriority: TicketConfig;
@@ -115,14 +115,14 @@ export const columns: ColumnDef<Ticket>[] = [
     },
   },
   {
-    accessorKey: "finishedAt",
+    accessorKey: "isConclued",
     id: "concluido em",
     header: "Concluido em",
     cell: ({ row }) => {
       const item = row.original;
-
+      console.log(item.isConclued);
       return (
-        <p>{item.finishedAt ? formatIso(item.updatedAt) : "não concluido"}</p>
+        <p>{item.isConclued ? formatIso(item.updatedAt) : "não concluido"}</p>
       );
     },
   },

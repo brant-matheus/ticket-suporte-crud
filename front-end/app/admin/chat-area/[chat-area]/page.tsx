@@ -71,6 +71,7 @@ export default function ChatArea() {
               {data.map((value) =>
                 value.user.isAdmin ? (
                   <div
+                    key={value.id}
                     className="flex justify-end mr-6 container w-[800px]
                   "
                   >
@@ -84,7 +85,10 @@ export default function ChatArea() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex justify-start  container w-full ">
+                  <div
+                    className="flex justify-start  container w-full "
+                    key={value.id}
+                  >
                     <div className="grind grid-cols-1">
                       <p className="text-red-400">{value.content}</p>
                       <p className="flex justify-start text-zinc-400 italic text-sm">

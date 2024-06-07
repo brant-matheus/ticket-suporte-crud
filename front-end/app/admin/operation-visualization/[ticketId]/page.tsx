@@ -52,7 +52,7 @@ interface Ticket {
   ticketStatusId: number;
   createdAt: string;
   updatedAt: string;
-  finishedAt: number;
+  isConclued: boolean;
   user: User;
   ticketCategory: TicketConfig;
   ticketPriority: TicketConfig;
@@ -91,7 +91,7 @@ export default function Page() {
     { title: "ID do usuário", item: ticket?.user.id, key: 7 },
     {
       title: "Concluido",
-      item: ticket?.finishedAt ? formatIso(ticket.updatedAt) : "Não concluido",
+      item: ticket?.isConclued ? formatIso(ticket.updatedAt) : "Não concluido",
       key: 8,
     },
   ];
