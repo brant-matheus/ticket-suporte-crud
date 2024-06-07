@@ -52,13 +52,19 @@ export default class TicketsController {
   async update({ params, request, auth }: HttpContext) {
     // update either the priority or status
     const { fromTable, ticketConfigItem } = request.only(['fromTable', 'ticketConfigItem'])
-    //
     const ticket = await Ticket.findOrFail(params.id)
     //
     const updatedTime = DateTime.local()
-    if (auth.user?.isAdmin) {
-      switch (fromTable) {
-        case 'ticket_status_id':
+
+    // both admin and guest can modify ticket priority if no logic involve
+    if (fromTable === 'ticket_priority_id') {
+      const priorityId = (await TicketPriority.findByOrFail('name', ticketConfigItem)).id
+      await ticket.merge({ ticketPriorityId: priorityId, updatedAt: updatedTime }).save()
+    } else {
+      if (auth.user?.isAdmin) {
+        // admin should only modify status and priority
+        // status(from any status to 4, set isConclued to true. from 4 to any, or any to !4, set to false)
+        if (fromTable === 'ticket_status_id') {
           const statusId = (await TicketStatus.findByOrFail('name', ticketConfigItem)).id
           if (statusId === 4) {
             await ticket
@@ -69,20 +75,12 @@ export default class TicketsController {
               .merge({ ticketStatusId: statusId, updatedAt: updatedTime, isConclued: false })
               .save()
           }
-          break
-
-        case 'ticket_priority_id':
-          const priorityId = (await TicketPriority.findByOrFail('name', ticketConfigItem)).id
-          await ticket.merge({ ticketPriorityId: priorityId, updatedAt: updatedTime }).save()
-          break
-        default:
-          break
-      }
-    } else {
-      if (ticket.ticketStatusId !== 1) {
-        throw new Error()
+        }
       } else {
-        ticket.delete()
+        if (fromTable === 'ticket_category_id') {
+          const categoryId = (await TicketCategory.findByOrFail('name', ticketConfigItem)).id
+          await ticket.merge({ ticketCategoryId: categoryId, updatedAt: updatedTime }).save()
+        }
       }
     }
   }
