@@ -6,9 +6,11 @@ import { DateTime } from "luxon";
 import { formatIso } from "@/components/utils/formatIso";
 import EditButton from "@/components/buttons/edit-button";
 import { useRef } from "react";
-import { ModalEditProps, EditTicketGuest } from "./edit-ticket";
-
-interface TicketCategory {
+import {
+  ModalEditProps,
+  EditTicketModal,
+} from "@/components/edit-ticket/edit-ticket";
+interface TicketConfig {
   id: number;
   name: string;
   color: string;
@@ -17,20 +19,11 @@ interface TicketCategory {
   updatedAt: string;
 }
 
-interface TicketPriority {
+interface User {
   id: number;
-  name: string;
-  color: string;
-  responsibleId: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface TicketStatus {
-  id: number;
-  name: string;
-  color: string;
-  responsibleId: number;
+  fullName: string;
+  email: string;
+  isAdmin: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,9 +39,10 @@ interface Ticket {
   createdAt: string;
   updatedAt: string;
   isConclued: boolean;
-  ticketCategory: TicketCategory;
-  ticketPriority: TicketPriority;
-  ticketStatus: TicketStatus;
+  ticketCategory: TicketConfig;
+  ticketPriority: TicketConfig;
+  ticketStatus: TicketConfig;
+  user: User;
 }
 
 export const columns: ColumnDef<Ticket>[] = [
@@ -120,7 +114,7 @@ export const columns: ColumnDef<Ticket>[] = [
       return (
         <>
           <div className="flex items-center gap-x-1">
-            <EditTicketGuest ref={modalRef} />
+            <EditTicketModal ref={modalRef} />
 
             <DeleteDialog
               route="ticket"
@@ -129,7 +123,16 @@ export const columns: ColumnDef<Ticket>[] = [
               fromTableWhere="
         "
             />
-            <EditButton action={() => modalRef.current?.handleCLick()} />
+            <EditButton
+              action={() =>
+                modalRef.current?.handleCLick({
+                  title: "categoria",
+                  fromTable: "categories",
+                  isAdmin: item.user.isAdmin,
+                  ticketId: item.id,
+                })
+              }
+            />
           </div>
         </>
       );

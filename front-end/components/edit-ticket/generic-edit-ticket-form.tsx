@@ -28,10 +28,10 @@ interface DataProps {
   id: number;
 }
 interface FormProps {
-  data: any[];
+  data: any[] | undefined;
   title: string;
   ticketId?: number;
-  fromTable: "ticket_status_id" | "ticket_priority_id";
+  fromTable: string;
   action: Function;
 }
 export function GenericEditTicketForm({

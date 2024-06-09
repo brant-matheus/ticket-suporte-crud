@@ -19,6 +19,11 @@ export default class TicketConfigsController {
           return await TicketStatus.query().preload('responsible').paginate(page, pageSize)
         case 'priorities':
           return await TicketPriority.query().preload('responsible').paginate(page, pageSize)
+
+        case 'select':
+          const categories = await db.from('ticket_categories').select('name', 'color', 'id')
+          const priorities = await db.from('ticket_priorities').select('name', 'color', 'id')
+          return { categories, priorities }
         default:
           break
       }

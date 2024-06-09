@@ -1,6 +1,9 @@
 "use client";
 
-import { EditModalProps, EditTicketForm } from "./edit-ticket-form";
+import {
+  ModalEditProps,
+  EditTicketModal,
+} from "@/components/edit-ticket/edit-ticket";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
@@ -83,6 +86,7 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "Categoria",
     cell: ({ row }) => {
       const item = row.original;
+
       const color = { color: item.ticketCategory.color };
 
       return <p style={color}>{item.ticketCategory.name}</p>;
@@ -244,10 +248,10 @@ export const columns: ColumnDef<Ticket>[] = [
     cell: ({ row }) => {
       const item = row.original;
       const modalRef = useRef<ModalProps>();
-      const editRef = useRef<EditModalProps>();
+      const editRef = useRef<ModalEditProps>();
       return (
         <>
-          <EditTicketForm ref={editRef} />
+          <EditTicketModal ref={editRef} />
           <CreateTicketOperation ref={modalRef} />
           <div className="flex items-center gap-x-1">
             <ActionCreateButton
@@ -256,7 +260,14 @@ export const columns: ColumnDef<Ticket>[] = [
               }
             />
             <EditButton
-              action={() => editRef.current?.handleClick({ ticketId: item.id })}
+              action={() =>
+                editRef.current?.handleCLick({
+                  ticketId: item.id,
+                  fromTable: "select",
+                  title: "status",
+                  isAdmin: item.user.isAdmin,
+                })
+              }
             />
             <CommentaryOperationButton action={() => {}} />
           </div>

@@ -22,6 +22,7 @@ export default class TicketsController {
     } else {
       return await Ticket.query()
         .where('created_by_id', auth.user?.id as number)
+        .preload('user')
         .preload('ticketCategory')
         .preload('ticketPriority')
         .preload('ticketStatus')
@@ -57,14 +58,14 @@ export default class TicketsController {
     const updatedTime = DateTime.local()
 
     // both admin and guest can modify ticket priority if no logic involve
-    if (fromTable === 'ticket_priority_id') {
+    if (fromTable === 'priorities') {
       const priorityId = (await TicketPriority.findByOrFail('name', ticketConfigItem)).id
       await ticket.merge({ ticketPriorityId: priorityId, updatedAt: updatedTime }).save()
     } else {
       if (auth.user?.isAdmin) {
         // admin should only modify status and priority
         // status(from any status to 4, set isConclued to true. from 4 to any, or any to !4, set to false)
-        if (fromTable === 'ticket_status_id') {
+        if (fromTable === 'statuses') {
           const statusId = (await TicketStatus.findByOrFail('name', ticketConfigItem)).id
           if (statusId === 4) {
             await ticket
@@ -77,7 +78,7 @@ export default class TicketsController {
           }
         }
       } else {
-        if (fromTable === 'ticket_category_id') {
+        if (fromTable === 'categories') {
           const categoryId = (await TicketCategory.findByOrFail('name', ticketConfigItem)).id
           await ticket.merge({ ticketCategoryId: categoryId, updatedAt: updatedTime }).save()
         }
