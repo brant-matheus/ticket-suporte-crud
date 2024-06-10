@@ -9,6 +9,7 @@ import {
 } from '#validators/user'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
+import { messages } from '@vinejs/vine/defaults'
 
 export default class UsersController {
   async index({ request }: HttpContext) {
@@ -18,13 +19,15 @@ export default class UsersController {
     return await User.query().paginate(page, pageSize)
   }
 
-  async store({ request, auth }: HttpContext) {
+  async store({ request, auth, response }: HttpContext) {
     // check if email already exists in our database.
     const { email } = request.only(['email'])
 
     const user = await User.findBy('email', email)
     // isPersisted true, user exist
+
     if (user?.$isPersisted) {
+      return response.status(400).json({ message: 'user already exists in our database' })
       throw new Error('user already exists in our database') //status 500 error
     }
 

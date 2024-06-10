@@ -38,8 +38,8 @@ router
   .middleware(middleware.auth())
 
 // login
-router.post('auth', [AuthController, 'login'])
+router.post('auth', [AuthController, 'login']).as('login')
 
 //guest register by guest
 
-router.post('external-register', [UsersController, 'store'])
+router.post('external-register', [UsersController, 'store']).as('sign_up')
