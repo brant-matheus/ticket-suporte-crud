@@ -43,6 +43,7 @@ import EditButton from "@/components/buttons/edit-button";
 import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
 import { formatIso } from "@/components/utils/formatIso";
 import { CreateTicketOperation, ModalProps } from "./create-operation-form";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: number;
@@ -269,7 +270,15 @@ export const columns: ColumnDef<Ticket>[] = [
                 })
               }
             />
-            <CommentaryOperationButton action={() => {}} />
+            <CommentaryOperationButton
+              action={() =>
+                window.open(
+                  `/admin/chat-area/${item.id}`,
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+            />
           </div>
         </>
       );
