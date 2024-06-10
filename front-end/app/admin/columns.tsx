@@ -125,7 +125,6 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "Concluido em",
     cell: ({ row }) => {
       const item = row.original;
-      console.log(item.isConclued);
       return (
         <p>{item.isConclued ? formatIso(item.updatedAt) : "não concluido"}</p>
       );

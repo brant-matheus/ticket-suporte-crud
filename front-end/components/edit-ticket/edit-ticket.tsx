@@ -85,11 +85,8 @@ export const EditTicketModal = forwardRef((props, ref) => {
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
-          <Tabs className="w-[400px]">
-            <TabsList
-              defaultValue="priority"
-              className="grid w-full grid-cols-2"
-            >
+          <Tabs>
+            <TabsList defaultValue="priority" className="grid w-96 grid-cols-2">
               <TabsTrigger value="priority">prioridade</TabsTrigger>
               <TabsTrigger value={fromTable}>{title}</TabsTrigger>
             </TabsList>

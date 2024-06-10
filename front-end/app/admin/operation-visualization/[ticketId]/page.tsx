@@ -137,7 +137,7 @@ export default function Page() {
                 {ticketProperties.map((value) => (
                   <div className="flex flex-wrap gap-x-1" key={value.key}>
                     <p className="text-cyan-500">{value.title}:</p>
-                    <p className="">{value.item}</p>
+                    {value.item}
                   </div>
                 ))}
               </CardContent>

@@ -12,7 +12,7 @@ export default class CommentsController {
     await Comment.create({ content: content, responsibleId: auth.user?.id, ticketId: ticketId })
   }
 
-  async update({ params, request }: HttpContext) {}
+  async update() {}
 
-  async destroy({ params }: HttpContext) {}
+  async destroy() {}
 }

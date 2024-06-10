@@ -43,7 +43,6 @@ const UserDeleteForm = ({ userId }: deleteUserPops) => {
     setIsLoading(true);
     try {
       const { status, request } = await authInstance.delete(`user/${userId}`);
-      console.log(status);
       if ((status ?? request.status) === 200) {
         router.push("/");
         localStorage.clear();

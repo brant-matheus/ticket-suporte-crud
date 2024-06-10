@@ -13,6 +13,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { DateTime } from "luxon";
 import { title } from "process";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import DescriptionForm from "./edit-operation-description";
 interface User {
   id: number;
   fullName: string;
@@ -41,7 +43,7 @@ export function CollapsibleDemo(operation: Operation) {
     },
     { title: "ID do responsável", item: operation.responsible.id, key: 2 },
     { title: "Descrição", item: operation.description, key: 3 },
-    { title: "Craido em", item: formatIso(operation.createdAt), key: 4 },
+    { title: "Criado em", item: formatIso(operation.createdAt), key: 4 },
     {
       title: "Editado em",
       item:
@@ -51,6 +53,16 @@ export function CollapsibleDemo(operation: Operation) {
           formatIso(operation.updatedAt)
         ),
       key: 5,
+    },
+    {
+      title: "editar operação",
+      item: (
+        <DescriptionForm
+          commentId={operation.id}
+          description={operation.description}
+        />
+      ),
+      key: 6,
     },
   ];
   const [isOpen, setIsOpen] = useState(false);
@@ -80,13 +92,10 @@ export function CollapsibleDemo(operation: Operation) {
             <CardContent className="pt-1">
               <div className="grid gap-y-1 ">
                 {operationsTitles.map((value) => (
-                  <>
-                    {" "}
-                    <div className="flex flex-wrap gap-x-1">
-                      <p className="text-cyan-500">{value.title}:</p>
-                      <p>{value.item}</p>
-                    </div>
-                  </>
+                  <div key={value.key} className="flex flex-wrap gap-x-1">
+                    <p className="text-cyan-500">{value.title}:</p>
+                    {value.item}
+                  </div>
                 ))}
               </div>
             </CardContent>

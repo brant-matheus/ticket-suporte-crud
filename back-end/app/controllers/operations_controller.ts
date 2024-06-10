@@ -1,7 +1,6 @@
 import Operation from '#models/operation'
 import Ticket from '#models/ticket'
 import type { HttpContext } from '@adonisjs/core/http'
-import { Preloader } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export default class OperationsController {
@@ -31,7 +30,11 @@ export default class OperationsController {
     await ticket.merge({ ticketStatusId: 2, updatedAt: DateTime.local() }).save()
   }
 
-  async update({ params, request }: HttpContext) {}
+  async update({ params, request }: HttpContext) {
+    const { description } = request.only(['description'])
+    const operation = await Operation.findOrFail(params.id)
+    await operation.merge({ description: description, updatedAt: DateTime.local() }).save()
+  }
 
   async destroy({ params }: HttpContext) {}
 }

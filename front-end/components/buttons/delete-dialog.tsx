@@ -38,7 +38,6 @@ const DeleteDialog = ({ route, params, title, fromTableWhere }: props) => {
         description: `${title} deletado permanentemente deletado.`,
       });
     } catch (error) {
-      console.log(error);
       toast({
         variant: "destructive",
         title: "Error",
