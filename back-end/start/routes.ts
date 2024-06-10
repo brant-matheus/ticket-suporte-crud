@@ -32,6 +32,8 @@ router
       .resource('operation', OperationsController)
       .except(['create', 'edit', 'show'])
       .use('*', middleware.admin())
+
+    router.resource('comments', CommentsController)
   })
   .middleware(middleware.auth())
 
@@ -41,5 +43,3 @@ router.post('auth', [AuthController, 'login'])
 //guest register by guest
 
 router.post('external-register', [UsersController, 'store'])
-
-router.resource('comments', CommentsController)

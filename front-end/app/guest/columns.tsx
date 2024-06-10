@@ -10,6 +10,7 @@ import {
   ModalEditProps,
   EditTicketModal,
 } from "@/components/edit-ticket/edit-ticket";
+import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
 interface TicketConfig {
   id: number;
   name: string;
@@ -131,6 +132,15 @@ export const columns: ColumnDef<Ticket>[] = [
                   isAdmin: item.user.isAdmin,
                   ticketId: item.id,
                 })
+              }
+            />
+            <CommentaryOperationButton
+              action={() =>
+                window.open(
+                  `/guest/chat-area/${item.id}`,
+                  "_blank",
+                  "noopener,noreferrer"
+                )
               }
             />
           </div>

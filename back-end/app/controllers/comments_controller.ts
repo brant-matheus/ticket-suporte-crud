@@ -8,8 +8,8 @@ export default class CommentsController {
   }
 
   async store({ request, auth }: HttpContext) {
-    const { content, ticketId } = request.only(['content', 'ticketId'])
-    await Comment.create({ content: content, responsibleId: auth.user?.id, ticketId: ticketId })
+    const { comment, ticketId } = request.only(['comment', 'ticketId'])
+    await Comment.create({ content: comment, responsibleId: auth.user?.id, ticketId: ticketId })
   }
 
   async update() {}
