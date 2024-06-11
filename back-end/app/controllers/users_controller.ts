@@ -28,7 +28,6 @@ export default class UsersController {
 
     if (user?.$isPersisted) {
       return response.status(400).json({ message: 'user already exists in our database' })
-      throw new Error('user already exists in our database') //status 500 error
     }
 
     //next auth
