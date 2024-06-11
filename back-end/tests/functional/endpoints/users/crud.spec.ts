@@ -10,6 +10,7 @@ test.group('Users crud', (group) => {
     const data = {
       fullName: 'saga brasil',
       email: 'saga@brasil.com',
+      isAdmin: false,
     }
     const request = {
       password: 'Testing@123',
