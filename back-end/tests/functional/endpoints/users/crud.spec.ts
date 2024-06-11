@@ -18,8 +18,12 @@ test.group('Users crud', (group) => {
     }
     const response = await client.post(route('sign_up')).json(request)
     response.assertStatus(200)
+
     const user = await User.findByOrFail('email', request.email)
+
     assert.isTrue(await hash.verify(user.password, request.password))
     response.assertJsonStructure({ token: ['token'], user: ['id', 'isAdmin'] })
+    console.log(user.serialize())
+    assert.deepInclude(user.serialize(), data)
   })
 })

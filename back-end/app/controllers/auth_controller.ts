@@ -5,7 +5,7 @@ import db from '@adonisjs/lucid/services/db'
 export default class AuthController {
   async login({ request, response }: HttpContext) {
     const { email, password } = request.only(['email', 'password'])
-    const user = await User.verifyCredentials(email, password) //status 400 error
+    const user = await User.verifyCredentials(email, password)
     const token = await User.accessTokens.create(user)
     return { token: token, user: user }
   }

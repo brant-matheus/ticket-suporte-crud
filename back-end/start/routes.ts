@@ -16,7 +16,7 @@ router
       .use(['index'], middleware.admin())
 
     // logout
-    router.get('auth', [AuthController, 'logout'])
+    router.get('auth', [AuthController, 'logout']).as('sign_out')
     // ticket config
     router
       .resource('ticket-configs', TicketConfigsController)
