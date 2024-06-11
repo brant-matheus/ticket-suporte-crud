@@ -6,7 +6,7 @@ export const UserFactory = factory
     return {
       email: faker.internet.email(),
       fullName: faker.person.fullName(),
-      password: 'password',
+      password: 'Testing@123',
       isAdmin: false,
     }
   })

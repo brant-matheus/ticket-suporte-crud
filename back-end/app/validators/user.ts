@@ -17,7 +17,6 @@ export const ExternalUserValidator = vine.compile(
       .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
       .trim()
       .toLowerCase(),
-    isAdmin: vine.boolean({ strict: false }),
   })
 )
 

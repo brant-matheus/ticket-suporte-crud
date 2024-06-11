@@ -7,15 +7,14 @@ test.group('Login', (group) => {
   test('it should be able to login a user with valid email & password').run(
     async ({ assert, route, client }) => {
       const user = await UserFactory.create()
-      const request = { email: user.email, password: 'password' }
+      const request = { email: user.email, password: 'Testing@123' }
       const response = await client.post(route('login')).json(request)
       response.assertStatus(200)
+      response.assertJsonStructure({
+        token: ['token'],
+        user: ['id', 'isAdmin'],
+      })
       const body = response.body()
-      const returnedUser = await User.find(body.user.id)
-      assert.isNotNull(returnedUser)
-      assert.properties(body, ['token', 'user'])
-      assert.properties(body.token, ['token'])
-      assert.properties(body.user, ['id', 'email', 'isAdmin'])
       assert.equal(body.user.email, request.email)
     }
   )

@@ -7,7 +7,6 @@ export default class AuthController {
     const { email, password } = request.only(['email', 'password'])
     const user = await User.verifyCredentials(email, password) //status 400 error
     const token = await User.accessTokens.create(user)
-    // response.status(201).json('')
     return { token: token, user: user }
   }
   async logout({ auth }: HttpContext) {

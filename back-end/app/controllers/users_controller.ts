@@ -32,22 +32,15 @@ export default class UsersController {
 
     //next auth
     if (auth.user?.isAdmin) {
-      // validate input
       const payload = await request.validateUsing(InternalUserValidator) //status 400 error
-      // create user
       await User.create(payload)
-      // guest creating itself. MUST HAVE BY DEFAULT isAdmin's flag false. merge before validation, to make sure isAdmin is false
     } else {
-      const newUserData = Object.assign(request.all(), { isAdmin: false })
-      // validate input
-      const payload = await ExternalUserValidator.validate(newUserData) //status 400 error, bad request
-      const user = await User.create(payload)
-      // email, password from request.
-      // verify if credentials are valid.
-      // const userVerifired = await User.verifyCredentials(user.email, user.password) //status 400 error
-      // create acess token.
+      // response.status(201).json({ message: 'user creation sucessed' })
+
+      const newUserData = Object.assign(request.all())
+      const payload = await ExternalUserValidator.validate(newUserData) //status 422 error, bad request
+      const user = await User.create(Object.assign(payload, { isAdmin: false }))
       const token = await User.accessTokens.create(user)
-      // return token, user id to be saved in front-end.
       return { token: token, user: user }
     }
   }
