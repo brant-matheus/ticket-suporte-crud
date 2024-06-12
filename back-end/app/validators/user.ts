@@ -8,15 +8,14 @@ export const ExternalUserValidator = vine.compile(
     email: vine.string().trim().toLowerCase().email(),
     password: vine
       .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
+      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
       .confirmed({
         confirmationField: 'passwordConfirmation',
       }),
     fullName: vine
       .string()
       .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim()
-      .toLowerCase(),
+      .trim(),
   })
 )
 
@@ -29,15 +28,14 @@ export const InternalUserValidator = vine.compile(
       .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/),
     password: vine
       .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
+      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
       .confirmed({
         confirmationField: 'passwordConfirmation',
       }),
     fullName: vine
       .string()
       .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim()
-      .toLowerCase(),
+      .trim(),
     isAdmin: vine.boolean(),
   })
 )
@@ -52,8 +50,7 @@ export const PutUserValidator = vine.compile(
     fullName: vine
       .string()
       .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim()
-      .toLowerCase(),
+      .trim(),
     isAdmin: vine.boolean(),
   })
 )
@@ -62,7 +59,7 @@ export const PutPasswordValidator = vine.compile(
   vine.object({
     password: vine
       .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
+      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
       .confirmed({
         confirmationField: 'passwordConfirmation',
       }),
@@ -74,8 +71,7 @@ export const PutProfileValidator = vine.compile(
     fullName: vine
       .string()
       .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim()
-      .toLowerCase(),
+      .trim(),
     email: vine
       .string()
       .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/)

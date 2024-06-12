@@ -16,29 +16,19 @@ import Operation from '#models/operation'
 import { DateTime } from 'luxon'
 import Comment from '#models/comment'
 import { CommentFactory } from '#database/factories/comment_factory'
+import { AdminFactory } from '#database/factories/admin_factory'
+import { OperationFactory } from '#database/factories/operation_factory'
 
 export default class extends BaseSeeder {
   color = faker.color
   async run() {
-    // await User.create({
-    //   fullName: 'matheus',
-    //   email: 'matheus@saga.com',
-    //   isAdmin: true,
-    //   password: 'Testing@123',
-    // })
-    // await UserFactory.createMany(100)
+    // await AdminFactory.create()
     // await TicketCategory.createMany(TicketCategoryFactory)
     // await TicketPriority.createMany(TicketPrioriesFactory)
     // await TicketStatus.createMany(TicketStatusesFactory)
-    // await Ticket.create({
-    //   createdById: 2,
-    //   subject: 'aaaaaaaaa',
-    //   ticketCategoryId: 1,
-    //   ticketStatusId: 1,
-    //   ticketPriorityId: 1,
-    //   isConclued: false,
-    //   description: 'aaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaa a',
-    // })
+    // await UserFactory.with('ticket').create()
+    // await CommentFactory.createMany(20)
+    // await OperationFactory.createMany(5)
     // await CommentFactory.createMany(20)
   }
 }

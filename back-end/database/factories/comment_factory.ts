@@ -9,4 +9,6 @@ export const CommentFactory = factory
       responsibleId: faker.number.int({ min: 1, max: 2 }),
     }
   })
+  .relation('user', () => CommentFactory)
+
   .build()

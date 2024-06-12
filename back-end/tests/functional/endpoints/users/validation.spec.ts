@@ -1,7 +1,9 @@
+import { Admin } from '#models/admin'
 import { UserFactory } from '#database/factories/user_factory'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
+import { AdminFactory } from '#database/factories/admin_factory'
 
 test.group('Users validation', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
@@ -119,4 +121,17 @@ test.group('Users validation', (group) => {
     response.assertStatus(422)
     assert.isNull(await User.findBy('email', request.email))
   })
+
+  test('it should not be able to admin store a user with already taken email').run(
+    async ({ assert, client, route }) => {
+      const admin = await AdminFactory.create()
+      const user = await UserFactory.create()
+      const request = { email: user.email }
+      const response = await client.post(route('user.store')).json(request).loginAs(admin)
+
+      response.assertStatus(400)
+      const users = await User.findManyBy('email', user.email)
+    }
+  )
+  test('').run(async ({ assert, client, route }) => {})
 })

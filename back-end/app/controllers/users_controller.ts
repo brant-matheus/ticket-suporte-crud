@@ -32,8 +32,8 @@ export default class UsersController {
 
     //next auth
     if (auth.user?.isAdmin) {
-      const payload = await request.validateUsing(InternalUserValidator) //status 400 error
-      await User.create(payload)
+      const payload = await request.validateUsing(InternalUserValidator)
+      return await User.create(payload)
     } else {
       // response.status(201).json({ message: 'user creation sucessed' })
 
@@ -46,25 +46,18 @@ export default class UsersController {
   }
 
   async update({ params, request, auth }: HttpContext) {
-    console.log(request.all())
-    // check if the params sent is valid
     const user = await User.findOrFail(params.id) //error 500
     // update update at
-    const updatedAt = { updatedAt: DateTime.local() } //update updateAt
-    // check if the request is profile edit or user managment edit
+    const updatedAt = { updatedAt: DateTime.local() }
     const { isProfile } = request.only(['isProfile'])
     const isPassword = request.all().hasOwnProperty('password') //check if has the key password in obj
-    // for admin actions
     const isAdmin = auth.user?.isAdmin
-    // for profile, the user MUST edit itself.
     const isUserProfileValid = auth.user?.id === parseInt(params.id)
-    // profile logic
     if (isProfile && isUserProfileValid) {
-      // request is password
       if (isPassword) {
         const passwordObj = request.only(['password', 'passwordConfirmation'])
         const payload = await PutPasswordValidator.validate(passwordObj)
-        await user.merge(Object.assign(payload, updatedAt)).save()
+        return await user.merge(Object.assign(payload, updatedAt)).save()
       }
       //request is a general information
       else {
@@ -79,7 +72,7 @@ export default class UsersController {
         // validate input
         const payload = await PutProfileValidator.validate(data) //error 400
         // save modification, payload data to be edit original data, update update at
-        await user.merge(Object.assign(payload, updatedAt)).save()
+        return await user.merge(Object.assign(payload, updatedAt)).save()
       }
     }
     //user managment
@@ -92,7 +85,6 @@ export default class UsersController {
         // validate input
         const data = request.only(['email', 'fullName', 'isAdmin'])
         const payload = await PutUserValidator.validate(data) //error 400
-        console.log(payload)
         // save modification, payload data to be edit original data, update update at
         await user.merge(Object.assign(payload, updatedAt)).save()
       }

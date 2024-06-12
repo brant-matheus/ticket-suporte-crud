@@ -3,7 +3,7 @@ import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
-test.group('Login', (group) => {
+test.group('Logout', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
   test('it should be able to logout the user, deleting all token for the user id').run(
     async ({ assert, route, client }) => {

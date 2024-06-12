@@ -8,6 +8,10 @@ import { AccessToken } from '@adonisjs/auth/access_tokens'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Ticket from './ticket.js'
 import Operation from './operation.js'
+import Comment from './comment.js'
+import TicketCategory from './ticket_category.js'
+import TicketPriority from './ticket_priority.js'
+import TicketStatus from './ticket_status.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -39,4 +43,34 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
+
+  @hasMany(() => Ticket, {
+    foreignKey: 'createdById',
+  })
+  declare ticket: HasMany<typeof Ticket>
+
+  @hasMany(() => Comment, {
+    foreignKey: 'responsibleId',
+  })
+  declare comment: HasMany<typeof Comment>
+
+  @hasMany(() => Operation, {
+    foreignKey: 'responsibleId',
+  })
+  declare operation: HasMany<typeof Operation>
+
+  @hasMany(() => TicketCategory, {
+    foreignKey: 'responsibleId',
+  })
+  declare ticketCategory: HasMany<typeof TicketCategory>
+
+  @hasMany(() => TicketPriority, {
+    foreignKey: 'responsibleId',
+  })
+  declare ticketPriority: HasMany<typeof TicketPriority>
+
+  @hasMany(() => TicketStatus, {
+    foreignKey: 'responsibleId',
+  })
+  declare ticketStatus: HasMany<typeof TicketStatus>
 }
