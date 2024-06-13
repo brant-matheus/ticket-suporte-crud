@@ -8,8 +8,6 @@ test.group('Logout', (group) => {
   test('it should be able to logout the user, deleting all token for the user id').run(
     async ({ assert, route, client }) => {
       const user = await UserFactory.create()
-      const request = { email: user.email, password: 'Testing@123' }
-      await client.post(route('login')).json(request)
 
       const response = await client.get(route('sign_out')).loginAs(user)
       response.assertStatus(200)
@@ -17,4 +15,9 @@ test.group('Logout', (group) => {
       assert.isEmpty(tokens)
     }
   )
+
+  test('it should not be able to logout with no token').run(async ({ assert, route, client }) => {
+    const response = await client.get(route('sign_out'))
+    response.assertStatus(401)
+  })
 })

@@ -9,14 +9,12 @@ import {
 } from '#validators/user'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
-import { messages } from '@vinejs/vine/defaults'
 
 export default class UsersController {
   async index({ request }: HttpContext) {
-    // return await User.query().orderBy('id', 'desc').paginate(page, pageSize)
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
-    return await User.query().paginate(page, pageSize)
+    return await User.query().paginate(parseInt(page), parseInt(pageSize))
   }
 
   async store({ request, auth, response }: HttpContext) {
@@ -62,6 +60,7 @@ export default class UsersController {
       //request is a general information
       else {
         const data = request.only(['email', 'fullName'])
+
         for (let key in data) {
           // avoid typescript error
           const keyProperty = key as keyof typeof data
@@ -76,7 +75,7 @@ export default class UsersController {
       }
     }
     //user managment
-    else if (!!isProfile && isAdmin) {
+    else if (!isProfile && isAdmin) {
       if (isPassword) {
         const passwordObj = request.only(['password', 'passwordConfirmation'])
         const payload = await PutPasswordValidator.validate(passwordObj)
@@ -86,10 +85,8 @@ export default class UsersController {
         const data = request.only(['email', 'fullName', 'isAdmin'])
         const payload = await PutUserValidator.validate(data) //error 400
         // save modification, payload data to be edit original data, update update at
-        await user.merge(Object.assign(payload, updatedAt)).save()
+        return await user.merge(Object.assign(payload, updatedAt)).save()
       }
-    } else {
-      throw new Error() //status 500
     }
   }
 

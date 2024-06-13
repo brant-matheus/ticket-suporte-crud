@@ -1,4 +1,3 @@
-import { Admin } from '#models/admin'
 import { UserFactory } from '#database/factories/user_factory'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
@@ -133,5 +132,123 @@ test.group('Users validation', (group) => {
       const users = await User.findManyBy('email', user.email)
     }
   )
-  test('').run(async ({ assert, client, route }) => {})
+  test('it should not be able to admin store a guest user with invalid email').run(
+    async ({ client, route, assert }) => {
+      const admin = await AdminFactory.create()
+
+      const request = {
+        email: 'invalid',
+        password: 'Testing@123',
+        fullName: 'invalid',
+        passwordConfirmation: 'Testing@123',
+      }
+      const response = await client.post(route('user.store')).json(request).loginAs(admin)
+      response.assertStatus(422)
+
+      assert.isNull(await User.findBy('email', request.email))
+    }
+  )
+  test('it should not be able to admin store a guest user with invalid full name').run(
+    async ({ client, route, assert }) => {
+      const admin = await AdminFactory.create()
+
+      const request = {
+        email: 'invalid@email.com',
+        password: 'Testing@123',
+        fullName: 'invalid5',
+        passwordConfirmation: 'Testing@123',
+      }
+      const response = await client.post(route('user.store')).json(request).loginAs(admin)
+      response.assertStatus(422)
+
+      assert.isNull(await User.findBy('email', request.email))
+    }
+  )
+  test('it should not be able to admin store a guest user without required data').run(
+    async ({ client, route, assert }) => {
+      const admin = await AdminFactory.create()
+
+      const response = await client.post(route('user.store')).json({ email: 'any' }).loginAs(admin)
+      response.assertStatus(422)
+
+      assert.isNull(await User.findBy('email', 'any'))
+    }
+  )
+
+  test(
+    'it should not be able to admin store a guest user with less than 8 password characters'
+  ).run(async ({ client, route, assert }) => {
+    const admin = await AdminFactory.create()
+
+    const request = {
+      email: 'invalid@invalid.com',
+      fullName: 'invalid',
+      password: 'Aa@1345',
+      passwordConfirmation: 'Aa@1345',
+    }
+    const response = await client.post(route('user.store')).json(request).loginAs(admin)
+    response.assertStatus(422)
+    assert.isNull(await User.findBy('email', request.email))
+  })
+
+  test('it should not be able to admin store a guest user without uppercase letter').run(
+    async ({ client, route, assert }) => {
+      const admin = await AdminFactory.create()
+
+      const request = {
+        email: 'invalid@invalid.com',
+        fullName: 'invalid',
+        password: 'aa@1345a',
+        passwordConfirmation: 'aa@1345a',
+      }
+      const response = await client.post(route('user.store')).json(request).loginAs(admin)
+      response.assertStatus(422)
+      assert.isNull(await User.findBy('email', request.email))
+    }
+  )
+  test('it should not be able to admin store a guest user without a special character').run(
+    async ({ client, route, assert }) => {
+      const admin = await AdminFactory.create()
+
+      const request = {
+        email: 'invalid@invalid.com',
+        fullName: 'invalid',
+        password: 'aaA1345A',
+        passwordConfirmation: 'aaA1345A',
+      }
+      const response = await client.post(route('user.store')).json(request).loginAs(admin)
+      response.assertStatus(422)
+      assert.isNull(await User.findBy('email', request.email))
+    }
+  )
+  test('it should not be able to admin store a guest user without a lowercase letter').run(
+    async ({ client, route, assert }) => {
+      const admin = await AdminFactory.create()
+
+      const request = {
+        email: 'invalid@invalid.com',
+        fullName: 'invalid',
+        password: 'AAA@1345A',
+        passwordConfirmation: 'AAA@1345A',
+      }
+      const response = await client.post(route('user.store')).json(request).loginAs(admin)
+      response.assertStatus(422)
+      assert.isNull(await User.findBy('email', request.email))
+    }
+  )
+  test(
+    'it should not be able to admin store a guest user with no macthing password and password confirmation'
+  ).run(async ({ client, route, assert }) => {
+    const admin = await AdminFactory.create()
+
+    const request = {
+      email: 'invalid@invalid.com',
+      fullName: 'invalid',
+      password: 'Testing@123',
+      passwordConfirmation: 'Testing@1234',
+    }
+    const response = await client.post(route('user.store')).json(request).loginAs(admin)
+    response.assertStatus(422)
+    assert.isNull(await User.findBy('email', request.email))
+  })
 })

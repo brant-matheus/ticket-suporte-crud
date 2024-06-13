@@ -68,14 +68,7 @@ export const PutPasswordValidator = vine.compile(
 
 export const PutProfileValidator = vine.compile(
   vine.object({
-    fullName: vine
-      .string()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim(),
-    email: vine
-      .string()
-      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/)
-      .trim()
-      .toLowerCase(),
+    fullName: vine.string().trim(),
+    email: vine.string().email().trim().toLowerCase(),
   })
 )
