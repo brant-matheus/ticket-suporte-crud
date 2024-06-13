@@ -1,4 +1,5 @@
 import { UserFactory } from '#database/factories/user_factory'
+import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 test.group('Login', (group) => {
@@ -22,6 +23,7 @@ test.group('Login', (group) => {
   )
   test('it should not be able to login with invalid email').run(
     async ({ assert, client, route }) => {
+      await UserFactory.create()
       const request = { email: 'invalid', password: 'Testing@123' }
       const response = await client.post(route('login')).json(request)
       response.assertStatus(400)

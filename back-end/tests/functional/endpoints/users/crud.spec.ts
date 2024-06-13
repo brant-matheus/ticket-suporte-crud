@@ -5,7 +5,9 @@ import hash from '@adonisjs/core/services/hash'
 import testUtils from '@adonisjs/core/services/test_utils'
 import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
+import { create } from 'domain'
 
+// update 200, destroy 204
 test.group('Users crud', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
   test('it should be able to store a guest user in external register').run(
@@ -13,7 +15,6 @@ test.group('Users crud', (group) => {
       const data = {
         fullName: 'saga brasil',
         email: 'saga@brasil.com',
-        isAdmin: false,
       }
       const request = {
         password: 'Testing@123',
@@ -21,7 +22,7 @@ test.group('Users crud', (group) => {
         ...data,
       }
       const response = await client.post(route('sign_up')).json(request)
-      response.assertStatus(200)
+      response.assertStatus(201)
 
       const user = await User.findByOrFail('email', data.email)
 
@@ -46,10 +47,12 @@ test.group('Users crud', (group) => {
       ...data,
     }
     const response = await client.post(route('user.store')).loginAs(user).json(request)
-    response.assertStatus(200)
-    await User.findByOrFail('email', request.email)
+    response.assertStatus(201)
+    const createdUser = await User.findByOrFail('email', request.email)
     const body = response.body()
-    assert.include(body, data)
+
+    assert.include(createdUser.serialize(), data)
+    assert.include(body.user, data)
   })
 
   test('it should be able to the guest user update its password').run(
@@ -203,4 +206,24 @@ test.group('Users crud', (group) => {
     }
   )
 
+  test('it should be able user to delete itself').run(async ({ assert, client, route }) => {
+    const guest = await UserFactory.create()
+    const response = await client.delete(route('user.destroy', { id: guest.id })).loginAs(guest)
+    response.assertStatus(204)
+    assert.isNull(await User.find(guest.id))
+    assert.isNull(await User.findBy('email', guest.email))
+  })
+
+  test('it should not be able to guest user delete somebody else').run(
+    async ({ assert, client, route }) => {
+      const guest = await UserFactory.create()
+      const anotherGuest = await UserFactory.create()
+
+      const response = await client
+        .delete(route('user.destroy', { id: anotherGuest.id }))
+        .loginAs(guest)
+      response.assertStatus(401)
+      assert.isNotNull(await User.find(anotherGuest.id))
+    }
+  )
 })

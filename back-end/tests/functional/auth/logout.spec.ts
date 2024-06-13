@@ -16,7 +16,7 @@ test.group('Logout', (group) => {
     }
   )
 
-  test('it should not be able to logout with no token').run(async ({ assert, route, client }) => {
+  test('it should not be able to logout with no token').run(async ({ route, client }) => {
     const response = await client.get(route('sign_out'))
     response.assertStatus(401)
   })

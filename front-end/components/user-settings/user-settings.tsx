@@ -5,23 +5,15 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import GeneralUserForm from "./general-user-settings-form";
 import UserDeleteButton from "../buttons/user-delete-button";
 import PasswordFormEdit from "../forms/password-from-edit";
-// import PasswordFormEdit from "../forms/redifine-password copy";
-import { ModeToggle } from "@/components/ui/theme-toggle";
 
 const UserSettings = () => {
-  var userId: any;
-  try {
-    userId = localStorage.getItem("userId");
-  } catch (error) {
-    userId = null;
-  }
+  var userId: string = localStorage.getItem("userId")!;
 
   return (
     <div className="container flex justify-center ">
