@@ -5,52 +5,35 @@ import vine from '@vinejs/vine'
 // external register validator, strick to false, user MUST not create anything bug a client user.
 export const ExternalUserValidator = vine.compile(
   vine.object({
-    email: vine.string().trim().toLowerCase().email(),
+    email: vine.string().email().trim().toLowerCase(),
     password: vine
       .string()
       .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
       .confirmed({
         confirmationField: 'passwordConfirmation',
       }),
-    fullName: vine
-      .string()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim(),
+    fullName: vine.string().trim(),
   })
 )
 
 export const InternalUserValidator = vine.compile(
   vine.object({
-    email: vine
-      .string()
-      .trim()
-      .toLowerCase()
-      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/),
+    email: vine.string().trim().email().toLowerCase(),
     password: vine
       .string()
       .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
       .confirmed({
         confirmationField: 'passwordConfirmation',
       }),
-    fullName: vine
-      .string()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim(),
+    fullName: vine.string().trim(),
     isAdmin: vine.boolean(),
   })
 )
 
 export const PutUserValidator = vine.compile(
   vine.object({
-    email: vine
-      .string()
-      .trim()
-      .toLowerCase()
-      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/),
-    fullName: vine
-      .string()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/)
-      .trim(),
+    email: vine.string().email().trim().toLowerCase(),
+    fullName: vine.string().trim(),
     isAdmin: vine.boolean(),
   })
 )

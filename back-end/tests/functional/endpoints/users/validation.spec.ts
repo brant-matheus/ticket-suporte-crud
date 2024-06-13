@@ -38,7 +38,7 @@ test.group('Users validation', (group) => {
       const request = {
         email: 'invalid@email.com',
         password: 'Testing@123',
-        fullName: 'invalid5',
+        fullName: 12345678,
         passwordConfirmation: 'Testing@123',
       }
       const response = await client.post(route('sign_up')).json(request)
