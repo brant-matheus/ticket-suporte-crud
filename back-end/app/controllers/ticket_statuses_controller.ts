@@ -22,7 +22,7 @@ export default class TicketStatusesController {
 
   async update({ params, request, response, auth }: HttpContext) {
     if (params.id == 1) {
-      return response.forbidden({ message: 'cannot delete this params id' })
+      return response.forbidden({ message: 'cannot delete anything besides itself' })
     } else {
       const statusUpdateRequest: any = request.only(['statusUpdateRequest'])
       const status = await TicketStatus.findByOrFail(params.id)

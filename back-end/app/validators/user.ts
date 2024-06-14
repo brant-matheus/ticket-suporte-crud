@@ -1,57 +1,29 @@
 import vine from '@vinejs/vine'
 
-//same regex front/back
-//trim: removes whitespace from start to end, lowercase: lowercase the input before storing it
-// external register validator, strick to false, user MUST not create anything bug a client user.
-export const ExternalUserValidator = vine.compile(
+//schemas
+const PasswordSchema = vine.object({
+  password: vine
+    .string()
+    .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
+    .confirmed({
+      confirmationField: 'passwordConfirmation',
+    }),
+})
+
+const UserSchema = vine.object({
+  email: vine.string().trim().email().toLowerCase(),
+  fullName: vine.string().trim(),
+  isAdmin: vine.boolean(),
+})
+
+//compiles
+export const StoreUserValidator = vine.compile(
   vine.object({
-    email: vine.string().email().trim().toLowerCase(),
-    password: vine
-      .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
-      .confirmed({
-        confirmationField: 'passwordConfirmation',
-      }),
-    fullName: vine.string().trim(),
+    ...PasswordSchema.getProperties(),
+    ...UserSchema.getProperties(),
   })
 )
 
-export const InternalUserValidator = vine.compile(
-  vine.object({
-    email: vine.string().trim().email().toLowerCase(),
-    password: vine
-      .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
-      .confirmed({
-        confirmationField: 'passwordConfirmation',
-      }),
-    fullName: vine.string().trim(),
-    isAdmin: vine.boolean(),
-  })
-)
+export const PasswordValidator = vine.compile(PasswordSchema)
 
-export const PutUserValidator = vine.compile(
-  vine.object({
-    email: vine.string().email().trim().toLowerCase(),
-    fullName: vine.string().trim(),
-    isAdmin: vine.boolean(),
-  })
-)
-
-export const PutPasswordValidator = vine.compile(
-  vine.object({
-    password: vine
-      .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/)
-      .confirmed({
-        confirmationField: 'passwordConfirmation',
-      }),
-  })
-)
-
-export const PutProfileValidator = vine.compile(
-  vine.object({
-    fullName: vine.string().trim(),
-    email: vine.string().email().trim().toLowerCase(),
-  })
-)
+export const PutUserValidator = vine.compile(UserSchema)

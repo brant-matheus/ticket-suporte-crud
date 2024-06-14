@@ -10,7 +10,6 @@ export default class AuthController {
     return { token: token, user: user }
   }
   async logout({ auth }: HttpContext) {
-
     const userId = auth.user?.id! as number
     await db.from('auth_access_tokens').where('tokenable_id', userId).delete()
   }

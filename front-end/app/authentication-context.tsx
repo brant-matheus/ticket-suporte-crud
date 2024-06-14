@@ -75,14 +75,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (request.status ?? status === 200) {
         setAuthData(data);
         localStorage.setItem("token", data.token.token);
-        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("user", JSON.stringify(data.user));
         // update axios authInstace with the token and userId
         // token
         authInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.token.token}`;
         //user id
-        authInstance.defaults.params = { userId: data.user.id };
+        authInstance.defaults.params = { user: data.user };
 
         router.push("/guest");
       }
@@ -99,14 +99,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // set item
         setAuthData(data);
         localStorage.setItem("token", data.token.token);
-        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("user", JSON.stringify(data.user));
         // update axios authInstace with the token and userId
         // token
         authInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.token.token}`;
         //user id
-        authInstance.defaults.params = { userId: data.user.id };
+        authInstance.defaults.params = { user: data.user };
         // redirecting
         if (data.user.isAdmin) {
           router.push("/admin");
@@ -131,10 +131,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
   useEffect(() => {
     const token = `Bearer ${localStorage.getItem("token")}`;
-    const userId = localStorage.getItem("userId");
+    const user = localStorage.getItem("user");
 
     authInstance.defaults.headers.common["Authorization"] = token;
-    authInstance.defaults.params = { userId: userId };
+    authInstance.defaults.params = { user: user };
     setLoading(false);
   }, []);
   return (
