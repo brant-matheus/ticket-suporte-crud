@@ -100,7 +100,7 @@ const page = () => {
                 }
                 filterColumn=""
                 fromTable="statuses"
-                route="ticket-configs"
+                route="ticket-status"
                 showFilter={false}
               />
             </CardContent>

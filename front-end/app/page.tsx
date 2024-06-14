@@ -18,18 +18,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "./authentication-context";
 import { ModeToggle } from "@/components/ui/theme-toggle";
-/* 
-'use client' client server, not server side.
-'useState', disable login button after submit.
-zodResolver, input validation.
-useForm, controll / handleSubmit. register and submit registered input
-z, validation schema, infer data type
-card = "shadow box",
-form 
-instance, axios instance
-useRouter, redirect
-Link, redirect after click
-*/
+
 import { usePathname } from "next/navigation";
 import { useToastContext } from "@/components/utils/context-toast";
 import LoaderButton from "@/components/buttons/loader-button";
@@ -45,9 +34,7 @@ export default function Login() {
 
   //define zod schema with validation
   const formSchema = z.object({
-    email: z.string().regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
-      message: "Email inválido!",
-    }),
+    email: z.string().email({ message: "email inválido" }),
     password: z.string().min(1, { message: "senha obrigatória" }),
   });
 

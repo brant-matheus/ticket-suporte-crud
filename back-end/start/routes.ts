@@ -6,6 +6,8 @@ import TicketConfigsController from '#controllers/ticket_configs_controller'
 import TicketsController from '#controllers/tickets_controller'
 import OperationsController from '#controllers/operations_controller'
 import CommentsController from '#controllers/comments_controller'
+import TicketStatus from '#models/ticket_status'
+import TicketStatusesController from '#controllers/ticket_statuses_controller'
 // internal, auth.
 router
   .group(() => {
@@ -33,7 +35,11 @@ router
       .except(['create', 'edit', 'show'])
       .use('*', middleware.admin())
 
-    router.resource('comments', CommentsController)
+    router
+      .resource('comments', CommentsController)
+      .except(['create', 'edit', 'show'])
+      .use('*', middleware.admin())
+    router.resource('ticket-status', TicketStatusesController).except(['create', 'edit', 'show'])
   })
   .middleware(middleware.auth())
 
