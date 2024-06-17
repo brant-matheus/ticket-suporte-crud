@@ -3,7 +3,7 @@ import { z } from "zod";
 // Define UserSchema using Zod
 export const SignUpValidator = z
   .object({
-    fullName: z.string().min(1),
+    fullName: z.string().min(1).trim(),
     email: z.string().email("Use um email válido"),
     password: z
       .string()
@@ -32,7 +32,7 @@ export type PasswordInfer = z.infer<typeof PasswordValidator>;
 
 export const StoreUserValidator = z
   .object({
-    fullName: z.string().min(1),
+    fullName: z.string().min(1).trim(),
     email: z.string().email("Use um email válido"),
     password: z
       .string()
@@ -48,14 +48,14 @@ export const StoreUserValidator = z
 export type StoreUserInfer = z.infer<typeof StoreUserValidator>;
 
 export const UserInfoProfileValidator = z.object({
-  fullName: z.string().min(1),
+  fullName: z.string().min(1).trim(),
   email: z.string().email("Use um email válido"),
 });
 
 export type UserInfoProfileInfer = z.infer<typeof UserInfoProfileValidator>;
 
 export const PutUserValidator = z.object({
-  fullName: z.string().min(1),
+  fullName: z.string().min(1).trim(),
   email: z.string().email("Use um email válido"),
   isAdmin: z.enum(["false", "true"]),
 });

@@ -3,7 +3,7 @@ import {
   UserInfoProfileInfer,
   UserInfoProfileValidator,
 } from "@/validators/user";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -23,8 +23,10 @@ import { Input } from "@/components/ui/input";
 import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "../utils/context-toast";
 import LoaderButton from "../buttons/loader-button";
-
+import { useRouter, usePathname } from "next/navigation";
 const GeneralUserForm = () => {
+  const pathName = usePathname();
+  const router = useRouter();
   const userString = localStorage.getItem("user");
   const userObject = JSON.parse(userString!);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,57 +39,60 @@ const GeneralUserForm = () => {
     },
   });
   async function editUser(editForm: UserInfoProfileInfer) {
+    setIsLoading(true);
     if (
       editForm.email === userObject.email &&
-      editForm.fullName === userObject.fullname
+      userObject.fullName == editForm.fullName
     ) {
       ToastFail({ description: "Nenhum campo preenchido" });
+      setIsLoading(false);
+
       return true;
     }
-    // get all typed/validated inputs
-    setIsLoading(true);
+
     try {
       const { request, status, data } = await authInstance.put(
         `user/${userObject.id}`,
-        editForm,
-        { params: { isProfile: true } }
+        editForm
       );
-      form.reset();
-      ToastSuccess();
-      setIsLoading(false);
+      if ((request.status ?? status) == 200) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        router.refresh();
+
+        ToastSuccess();
+      }
     } catch (error) {
+      console.log(error);
       ToastFail({
         description: "Email já existe em nosso banco de dados, tente outro.",
       });
-      setIsLoading(false);
+      router.refresh();
     }
   }
-
   return (
     <div className="">
       <Form {...form}>
-        {/* html form, submit inputs registered by control*/}
-        <FormField
-          // make sure we can acess the expected type. (fullName, email...)
-          control={form.control}
-          // ctrl+space should auto complete the name, default values
-          name="email"
-          //field name to validate the form field input and save it for email
-          render={({ field }) => (
-            //a single field
-            <FormItem>
-              {/* what is shown to user */}
-              <FormLabel>email</FormLabel>
-              {/* register, validate then save the input, linked to dataType in ...field*/}
-              <FormControl>
-                <Input placeholder="seu email aqui" {...field} />
-              </FormControl>
-              {/* zod message */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <form onSubmit={form.handleSubmit(editUser)} className="grid gap-4">
+          <FormField
+            // make sure we can acess the expected type. (fullName, email...)
+            control={form.control}
+            // ctrl+space should auto complete the name, default values
+            name="email"
+            //field name to validate the form field input and save it for email
+            render={({ field }) => (
+              //a single field
+              <FormItem>
+                {/* what is shown to user */}
+                <FormLabel>email</FormLabel>
+                {/* register, validate then save the input, linked to dataType in ...field*/}
+                <FormControl>
+                  <Input placeholder="seu email aqui" {...field} />
+                </FormControl>
+                {/* zod message */}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             // make sure we can acess the expected type. (fullName, email...)
             control={form.control}

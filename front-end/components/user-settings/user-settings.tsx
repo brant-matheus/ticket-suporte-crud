@@ -33,6 +33,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* geral content */}
         <CardContent>
+          {/* form */}
           <GeneralUserForm />
         </CardContent>
         <Separator />
