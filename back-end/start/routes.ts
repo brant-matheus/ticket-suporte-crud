@@ -44,7 +44,6 @@ router
   })
   .middleware(middleware.auth())
 
-// login
 router.post('auth', [AuthController, 'login']).as('login')
 
 //guest register by guest

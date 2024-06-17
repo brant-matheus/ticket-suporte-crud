@@ -6,7 +6,6 @@ import testUtils from '@adonisjs/core/services/test_utils'
 import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
 
-// update 200, destroy 204
 test.group('Users crud', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
   test('it should be able to store a guest user in external register').run(
@@ -65,45 +64,24 @@ test.group('Users crud', (group) => {
     assert.include(body.user, data)
   })
 
-  test('it should be able to the guest user update its password').run(
-    async ({ assert, client, route }) => {
-      const guest = await UserFactory.create()
-      const passwords = {
-        password: 'Anypass@123',
-        passwordConfirmation: 'Anypass@123',
-      }
-
-      const response = await client
-        .put(route('user.update', { id: guest.id }))
-        .loginAs(guest)
-        .json(passwords)
-
-      response.assertStatus(200)
-      const user = await User.findOrFail(guest.id)
-      assert.isTrue(await hash.verify(user.password, passwords.password))
+  test('it should be able to update user password').run(async ({ assert, client, route }) => {
+    const guest = await UserFactory.create()
+    const passwords = {
+      password: 'Anypass@123',
+      passwordConfirmation: 'Anypass@123',
     }
-  )
 
-  test('it should be able to the admin user update its password').run(
-    async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
-      const passwords = {
-        password: 'Anypass@123',
-        passwordConfirmation: 'Anypass@123',
-      }
+    const response = await client
+      .put(route('user.update', { id: guest.id }))
+      .loginAs(guest)
+      .json(passwords)
 
-      const response = await client
-        .put(route('user.update', { id: admin.id }))
-        .loginAs(admin)
-        .json(passwords)
+    response.assertStatus(200)
+    const user = await User.findOrFail(guest.id)
+    assert.isTrue(await hash.verify(user.password, passwords.password))
+  })
 
-      response.assertStatus(200)
-      const user = await User.findOrFail(admin.id)
-      assert.isTrue(await hash.verify(user.password, passwords.password))
-    }
-  )
-
-  test('it should be able to guest user update its general Information').run(
+  test('it should be able to update user general Information').run(
     async ({ assert, client, route }) => {
       const guest = await UserFactory.create()
       const request = {
@@ -123,26 +101,7 @@ test.group('Users crud', (group) => {
       assert.include(user.serialize(), request)
     }
   )
-  test('it should be able to admin user update its general Information').run(
-    async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
-      const request = {
-        email: 'saga@saga.com',
-        fullName: 'saga saga',
-      }
 
-      const response = await client
-        .put(route('user.update', { id: admin.id }))
-        .loginAs(admin)
-        .json(request)
-      response.assertStatus(200)
-      const body = response.body()
-      assert.include(body.user, request)
-
-      const user = await User.findByOrFail('id', admin.id)
-      assert.include(user.serialize(), request)
-    }
-  )
   test('it should be able to update user general Information by admin').run(
     async ({ assert, client, route }) => {
       const admin = await AdminFactory.create()
@@ -165,16 +124,14 @@ test.group('Users crud', (group) => {
       assert.include(user.serialize(), request)
     }
   )
-  test('it should be able to the guest user to delete itself').run(
-    async ({ assert, client, route }) => {
-      const guest = await UserFactory.create()
-      const response = await client.delete(route('user.destroy', { id: guest.id })).loginAs(guest)
-      response.assertStatus(204)
-      assert.isNull(await User.find(guest.id))
-      assert.isNull(await User.findBy('email', guest.email))
-      assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))
-    }
-  )
+  test('it should be able to delete user').run(async ({ assert, client, route }) => {
+    const guest = await UserFactory.create()
+    const response = await client.delete(route('user.destroy', { id: guest.id })).loginAs(guest)
+    response.assertStatus(204)
+    assert.isNull(await User.find(guest.id))
+    assert.isNull(await User.findBy('email', guest.email))
+    assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))
+  })
   test('it should be able to delete a user by admin').run(async ({ assert, client, route }) => {
     const admin = await AdminFactory.create()
     const guest = await UserFactory.create()

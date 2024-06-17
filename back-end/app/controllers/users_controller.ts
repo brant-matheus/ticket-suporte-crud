@@ -17,6 +17,7 @@ export default class UsersController {
       return response.conflict({ message: 'user already exists in our database' })
     }
 
+    // data.isAdmin = data.isAdmin ?? false
     data.isAdmin = data.hasOwnProperty('isAdmin') ? data.isAdmin : false
 
     const payload = await StoreUserValidator.validate(data)
