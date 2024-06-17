@@ -7,7 +7,7 @@ export default class AdminMiddleware {
     if (ctx.auth.user?.isAdmin) {
       await next()
     } else {
-      throw new Exception()
+      return ctx.response.unauthorized('not authorized')
     }
   }
 }

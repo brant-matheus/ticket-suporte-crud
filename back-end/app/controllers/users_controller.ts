@@ -17,8 +17,7 @@ export default class UsersController {
       return response.conflict({ message: 'user already exists in our database' })
     }
 
-    // data.isAdmin = data.isAdmin ?? false
-    data.isAdmin = data.hasOwnProperty('isAdmin') ? data.isAdmin : false
+    data.isAdmin = data.isAdmin ?? false
 
     const payload = await StoreUserValidator.validate(data)
     const createdUser = await User.create(payload)
@@ -47,8 +46,8 @@ export default class UsersController {
       const updatedUser = await user.merge(payload).save()
       return response.ok({ message: 'User update succeeded', user: updatedUser })
     } else {
-      data.isAdmin = data.hasOwnProperty('isAdmin') ? data.isAdmin : user.isAdmin
-      const payload = await request.validateUsing(PutUserValidator)
+      data.isAdmin = data.isAdmin ?? user.isAdmin
+      const payload = await PutUserValidator.validate(data)
       const updatedUser = await user.merge(payload).save()
       return response.ok({ message: 'User update succeeded', user: updatedUser })
     }

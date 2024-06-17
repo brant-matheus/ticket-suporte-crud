@@ -39,31 +39,58 @@ test.group('Users crud', (group) => {
       assert.include(user.serialize(), data)
     }
   )
-  test('it should be able store a user by admin').run(async ({ assert, client, route }) => {
-    const admin = await AdminFactory.create()
-    const data = {
-      email: 'validemail@valid.com',
-      fullName: 'full name',
-      isAdmin: false,
+  test('it should be able to store a admin user by admin').run(
+    async ({ assert, client, route }) => {
+      const admin = await AdminFactory.create()
+      const data = {
+        email: 'validemail@valid.com',
+        fullName: 'full name',
+        isAdmin: true,
+      }
+
+      const request = {
+        passwordConfirmation: 'Testing@123',
+        password: 'Testing@123',
+
+        ...data,
+      }
+      const response = await client.post(route('user.store')).loginAs(admin).json(request)
+      response.assertStatus(201)
+
+      const user = await User.findByOrFail('email', request.email)
+      assert.include(user.serialize(), data)
+      assert.isTrue(await hash.verify(user.password, request.password))
+
+      const body = response.body()
+      assert.include(body.user, data)
     }
+  )
+  test('it should be able to store a guest user by admin').run(
+    async ({ assert, client, route }) => {
+      const admin = await AdminFactory.create()
+      const data = {
+        email: 'validemail@valid.com',
+        fullName: 'full name',
+        isAdmin: false,
+      }
 
-    const request = {
-      passwordConfirmation: 'Testing@123',
-      password: 'Testing@123',
+      const request = {
+        passwordConfirmation: 'Testing@123',
+        password: 'Testing@123',
 
-      ...data,
+        ...data,
+      }
+      const response = await client.post(route('user.store')).loginAs(admin).json(request)
+      response.assertStatus(201)
+
+      const user = await User.findByOrFail('email', request.email)
+      assert.include(user.serialize(), data)
+      assert.isTrue(await hash.verify(user.password, request.password))
+
+      const body = response.body()
+      assert.include(body.user, data)
     }
-    const response = await client.post(route('user.store')).loginAs(admin).json(request)
-    response.assertStatus(201)
-
-    const user = await User.findByOrFail('email', request.email)
-    assert.include(user.serialize(), data)
-    assert.isTrue(await hash.verify(user.password, request.password))
-
-    const body = response.body()
-    assert.include(body.user, data)
-  })
-
+  )
   test('it should be able to update user password').run(async ({ assert, client, route }) => {
     const guest = await UserFactory.create()
     const passwords = {
@@ -141,4 +168,28 @@ test.group('Users crud', (group) => {
     assert.isNull(await User.findBy('email', guest.email))
     assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))
   })
+
+  test('it should be able to get/index all users by admin').run(
+    async ({ assert, client, route }) => {
+      const admin = await AdminFactory.create()
+      await UserFactory.createMany(20)
+
+      const request = {
+        page: 1,
+        pageSize: 10,
+      }
+      const response = await client.get(route('user.index')).loginAs(admin).qs(request)
+      response.assertStatus(200)
+
+      const body = response.body()
+      assert.properties(body.meta, ['total'])
+      assert.properties(body.data[0], ['email', 'fullName', 'isAdmin'])
+
+      assert.propertyVal(body.meta, 'total', 21)
+      assert.propertyVal(body.meta, 'perPage', 10)
+      assert.propertyVal(body.meta, 'currentPage', 1)
+
+      assert.isTrue(body.data.length === request.pageSize)
+    }
+  )
 })
