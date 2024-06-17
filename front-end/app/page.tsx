@@ -24,8 +24,6 @@ import { useToastContext } from "@/components/utils/context-toast";
 import LoaderButton from "@/components/buttons/loader-button";
 
 export default function Login() {
-  const pathname = usePathname();
-
   const { userLogin } = useAuth();
   //loginError sets after request fails
   const [loginError, setLoginError] = useState("");
@@ -55,7 +53,7 @@ export default function Login() {
   async function login(loginForm: z.infer<typeof formSchema>) {
     setIsLoading(true);
     const status = await userLogin(loginForm);
-    if (status === "fail") {
+    if (status === 400) {
       setIsLoading(false);
       setLoginError("*Error no login, confira suas credenciais");
       form.resetField("password");
@@ -63,7 +61,6 @@ export default function Login() {
   }
 
   return (
-    // center our item, h and v.
     <div>
       <div className="flex justify-center items-center h-screen ">
         {/*our shadow box, w size large*/}

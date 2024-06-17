@@ -76,8 +76,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setAuthData(data);
         localStorage.setItem("token", data.token.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        // update axios authInstace with the token and userId
-        // token
         authInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.token.token}`;
@@ -100,8 +98,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setAuthData(data);
         localStorage.setItem("token", data.token.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        // update axios authInstace with the token and userId
-        // token
+
         authInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.token.token}`;
@@ -115,13 +112,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       }
     } catch (error) {
-      return "fail";
+      return 400;
     }
   }
   async function userLogout() {
     try {
       // request to delete all tokens in auth token acess for the user id
-      await authInstance.get(`auth`);
+      await authInstance.delete(`auth`);
       localStorage.clear();
       router.push("/");
     } catch (error) {

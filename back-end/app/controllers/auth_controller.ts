@@ -7,10 +7,11 @@ export default class AuthController {
     const { email, password } = request.only(['email', 'password'])
     const user = await User.verifyCredentials(email, password)
     const token = await User.accessTokens.create(user)
-    return { token: token, user: user }
+    return response.ok({ message: 'valid credentials', token: token, user: user })
   }
-  async logout({ auth }: HttpContext) {
+  async logout({ auth, response }: HttpContext) {
     const userId = auth.user?.id! as number
     await db.from('auth_access_tokens').where('tokenable_id', userId).delete()
+    return response.noContent()
   }
 }
