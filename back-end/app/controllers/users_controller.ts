@@ -58,7 +58,7 @@ export default class UsersController {
       return response.forbidden('guest should not be able to delete another user, beside itself.')
     }
     const user = await User.findOrFail(params.id)
-    await db.from('auth_access_tokens').where('tokenable_id', auth.user?.id!).delete()
+    await db.from('auth_access_tokens').where('tokenable_id', params.id).delete()
     await user.delete()
     return response.noContent()
   }

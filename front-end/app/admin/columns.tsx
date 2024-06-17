@@ -7,7 +7,6 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
-import { DateTime } from "luxon";
 import {
   Tooltip,
   TooltipProvider,
@@ -24,19 +23,10 @@ import {
 } from "lucide-react";
 import { string } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  DialogDescription,
-  DialogTitle,
-  DialogHeader,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 import ActionCreateButton from "@/components/buttons/action-create-button";
 
 import EditButton from "@/components/buttons/edit-button";
@@ -49,7 +39,7 @@ interface User {
   id: number;
   fullName: string;
   email: string;
-  isAdmin: number;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
 }

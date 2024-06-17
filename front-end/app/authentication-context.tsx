@@ -14,7 +14,7 @@ interface User {
   id: number;
   fullName: string;
   email: string;
-  isAdmin: number;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           "Authorization"
         ] = `Bearer ${data.token.token}`;
         //user id
-        authInstance.defaults.params = { user: data.user };
+        authInstance.defaults.params = { userId: data.user.id };
 
         router.push("/guest");
       }
@@ -92,7 +92,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   async function userLogin(loginForm: loginForm) {
     try {
       const { status, request, data } = await instance.post("auth", loginForm);
-      //if sucess, setitem localstorage to persist itens(authData disaper after refresh), set data to authData
       if ((request.status ?? status) === 200) {
         // set item
         setAuthData(data);
@@ -103,7 +102,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           "Authorization"
         ] = `Bearer ${data.token.token}`;
         //user id
-        authInstance.defaults.params = { user: data.user };
+        authInstance.defaults.params = { userId: data.user.id };
         // redirecting
         if (data.user.isAdmin) {
           router.push("/admin");
@@ -117,8 +116,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
   async function userLogout() {
     try {
+      const user = localStorage.get("user");
+
       // request to delete all tokens in auth token acess for the user id
-      await authInstance.delete(`auth`);
+      await authInstance.delete(`/auth/${user.id}`);
       localStorage.clear();
       router.push("/");
     } catch (error) {
@@ -131,7 +132,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const user = localStorage.getItem("user");
 
     authInstance.defaults.headers.common["Authorization"] = token;
-    authInstance.defaults.params = { user: user };
+    authInstance.defaults.params = { userId: 1 };
     setLoading(false);
   }, []);
   return (

@@ -19,7 +19,7 @@ interface responsible {
   id: number;
   fullName: string;
   email: string;
-  isAdmin: number;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -40,7 +40,6 @@ interface TicketConfigsProps {
 
 export function ticketConfigsColumns({
   title,
-  fromTableWhere,
   fromTable,
 }: TicketConfigsProps): ColumnDef<TData>[] {
   return [
@@ -99,11 +98,9 @@ export function ticketConfigsColumns({
             ) : (
               <>
                 <DeleteDialog
-                  fromTableWhere={fromTableWhere}
                   params={item.id}
                   route="ticket-configs"
                   title={title}
-                  key={item.id}
                 />
                 <EditButton
                   action={() =>

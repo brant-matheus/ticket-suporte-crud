@@ -22,13 +22,14 @@ import { OperationFactory } from '#database/factories/operation_factory'
 export default class extends BaseSeeder {
   color = faker.color
   async run() {
-    // await AdminFactory.create()
-    // await TicketCategory.createMany(TicketCategoryFactory)
-    // await TicketPriority.createMany(TicketPrioriesFactory)
-    // await TicketStatus.createMany(TicketStatusesFactory)
-    // await UserFactory.with('ticket').create()
-    // await CommentFactory.createMany(20)
-    // await OperationFactory.createMany(5)
-    // await CommentFactory.createMany(20)
+    await AdminFactory.create()
+    await TicketCategory.createMany(TicketCategoryFactory)
+    await TicketPriority.createMany(TicketPrioriesFactory)
+    await TicketStatus.createMany(TicketStatusesFactory)
+    await UserFactory.with('ticket').create()
+    await CommentFactory.createMany(20)
+    await OperationFactory.createMany(5)
+    await CommentFactory.createMany(20)
+    await UserFactory.createMany(20)
   }
 }

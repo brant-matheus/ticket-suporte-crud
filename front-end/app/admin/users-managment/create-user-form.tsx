@@ -48,7 +48,7 @@ export const CreateUserForm = forwardRef((props, ref) => {
       email: "",
       password: "",
       passwordConfirmation: "",
-      isAdmin: "0",
+      isAdmin: "false",
     },
   });
 
@@ -156,13 +156,13 @@ export const CreateUserForm = forwardRef((props, ref) => {
                       >
                         <FormItem className="flex items-center space-x-2 space-y-0">
                           <FormControl>
-                            <RadioGroupItem value="0"></RadioGroupItem>
+                            <RadioGroupItem value="false"></RadioGroupItem>
                           </FormControl>
                           <FormLabel className="">Cliente</FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2 space-y-0">
                           <FormControl>
-                            <RadioGroupItem value="1"></RadioGroupItem>
+                            <RadioGroupItem value="true"></RadioGroupItem>
                           </FormControl>
                           <FormLabel>Administrador</FormLabel>
                         </FormItem>

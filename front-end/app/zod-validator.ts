@@ -87,7 +87,7 @@ export const InternalRegisterValidator = z
         message: "8 digitos, caracter especial, letras maisculas e minusculas",
       }),
     passwordConfirmation: z.string(),
-    isAdmin: z.enum(["0", "1"]),
+    isAdmin: z.enum(["false", "true"]),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
     message: "As senhas devem ser a mesma",
@@ -108,7 +108,7 @@ export const GeneralUsersValidator = z.object({
     })
     .trim()
     .toLowerCase(),
-  isAdmin: z.enum(["0", "1"]),
+  isAdmin: z.enum(["false", "true"]),
 });
 
 export type GeneralUsersInfer = z.infer<typeof GeneralUsersValidator>;

@@ -12,7 +12,7 @@ export type TData = {
   id: number;
   fullName: string;
   email: string;
-  isAdmin: number;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -71,12 +71,7 @@ export const columns: ColumnDef<TData>[] = [
           {" "}
           <EditUserForm ref={modalRef} />
           <div className="flex space-x-2">
-            <DeleteDialog
-              route="user"
-              title="Usuário"
-              params={user.id}
-              fromTableWhere=""
-            />
+            <DeleteDialog route="user" title="Usuário" params={user.id} />
             <EditButton
               action={() =>
                 modalRef.current?.handleClick({

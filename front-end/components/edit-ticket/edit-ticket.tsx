@@ -25,7 +25,7 @@ export interface ModalEditProps {
     title: string;
     ticketId: number;
     fromTable: string;
-    isAdmin: number;
+    isAdmin: boolean;
   }) => void;
 }
 
@@ -45,7 +45,7 @@ export const EditTicketModal = forwardRef((props, ref) => {
   const [ticketId, setTicketId] = useState<number>();
   const [fromTable, setFromTable] = useState<string>("");
   const [title, setTitle] = useState<string>("");
-  const [isAdmin, setIsAdmin] = useState<number>();
+  const [isAdmin, setIsAdmin] = useState<boolean>();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
@@ -69,7 +69,7 @@ export const EditTicketModal = forwardRef((props, ref) => {
       title: string;
       ticketId: number;
       fromTable: string;
-      isAdmin: number;
+      isAdmin: boolean;
     }) {
       setIsAdmin(isAdmin);
       setIsOpen(true);

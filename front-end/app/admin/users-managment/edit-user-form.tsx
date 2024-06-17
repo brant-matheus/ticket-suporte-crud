@@ -34,7 +34,7 @@ export interface EditModalHandles {
 interface FormProps {
   fullName?: string;
   email: string;
-  isAdmin: number;
+  isAdmin: boolean;
   userId: number;
 }
 
@@ -62,11 +62,7 @@ export const EditUserForm = forwardRef((props, ref) => {
   async function userEdit(editForm: GeneralUsersInfer) {
     setIsLoading(true);
     try {
-      await authInstance.put(`user/${stateProps?.userId}`, editForm, {
-        params: {
-          isProfile: false,
-        },
-      });
+      await authInstance.put(`user/${stateProps?.userId}`, editForm);
       closeDialog();
       ToastSuccess();
     } catch (error) {
@@ -137,7 +133,7 @@ export const EditUserForm = forwardRef((props, ref) => {
                         )}
                       />{" "}
                       <FormField
-                        defaultValue={stateProps?.isAdmin.toString()}
+                        defaultValue={stateProps?.isAdmin ? "true" : "false"}
                         control={form.control}
                         shouldUnregister
                         name="isAdmin"
@@ -153,13 +149,13 @@ export const EditUserForm = forwardRef((props, ref) => {
                               >
                                 <FormItem className="flex items-center space-x-2 space-y-0">
                                   <FormControl>
-                                    <RadioGroupItem value="0"></RadioGroupItem>
+                                    <RadioGroupItem value="false"></RadioGroupItem>
                                   </FormControl>
                                   <FormLabel className="">Cliente</FormLabel>
                                 </FormItem>
                                 <FormItem className="flex items-center space-x-2 space-y-0">
                                   <FormControl>
-                                    <RadioGroupItem value="1"></RadioGroupItem>
+                                    <RadioGroupItem value="true"></RadioGroupItem>
                                   </FormControl>
                                   <FormLabel>Administrador</FormLabel>
                                 </FormItem>
@@ -181,7 +177,10 @@ export const EditUserForm = forwardRef((props, ref) => {
             <TabsContent value="password">
               <Card>
                 <CardContent>
-                  <PasswordFormEdit closeDialog={closeDialog} userId={1} />
+                  <PasswordFormEdit
+                    closeDialog={closeDialog}
+                    userId={stateProps?.userId!}
+                  />
                 </CardContent>
               </Card>
             </TabsContent>
