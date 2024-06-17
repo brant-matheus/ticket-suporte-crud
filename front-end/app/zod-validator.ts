@@ -11,7 +11,7 @@ export const PasswordRedefinitionValidator = z
   .object({
     password: z
       .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
+      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/, {
         message: "8 digitos, caracter especial, letras maisculas e minusculas",
       }),
     passwordConfirmation: z.string(),
@@ -30,24 +30,11 @@ export type PasswordRedefinitionInfer = z.infer<
 export const ExternalRegisterValidator = z
   .object({
     // a to z, A to Z, acentos, remove start and end space, lowercase
-    fullName: z
-      .string()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
-        message: "apenas letras, com ou sem acentos!",
-      })
-      .trim()
-      .min(5)
-      .toLowerCase(),
-    email: z
-      .string()
-      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
-        message: "deve conter nome e dominio, exemplo: email@email.com",
-      })
-      .trim()
-      .toLowerCase(),
+    fullName: z.string().trim().min(5).toLowerCase(),
+    email: z.string().email().trim().toLowerCase(),
     password: z
       .string()
-      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
+      .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*]).{8,}$/, {
         message: "8 digitos, caracter especial, letras maisculas e minusculas",
       }),
     passwordConfirmation: z.string(),
@@ -66,21 +53,8 @@ ExternalRegisterValidator;
 export const InternalRegisterValidator = z
   .object({
     // a to z, A to Z, acentos, remove start and end space, lowercase
-    fullName: z
-      .string()
-      .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
-        message: "apenas letras, com ou sem acentos!",
-      })
-      .trim()
-      .min(5)
-      .toLowerCase(),
-    email: z
-      .string()
-      .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
-        message: "deve conter nome e dominio, exemplo: email@email.com",
-      })
-      .trim()
-      .toLowerCase(),
+    fullName: z.string().trim().min(5).toLowerCase(),
+    email: z.string().email().trim().toLowerCase(),
     password: z
       .string()
       .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
@@ -98,16 +72,8 @@ export type InternalRegisterInfer = z.infer<typeof InternalRegisterValidator>;
 
 // general users edit
 export const GeneralUsersValidator = z.object({
-  fullName: z.string().regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
-    message: "Nome deve conter apenas letras, com ou sem acentos!",
-  }),
-  email: z
-    .string()
-    .regex(/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/, {
-      message: "Email deve conter nome e dominio, exemplo: nome@dominio.com",
-    })
-    .trim()
-    .toLowerCase(),
+  fullName: z.string(),
+  email: z.string().email().trim().toLowerCase(),
   isAdmin: z.enum(["false", "true"]),
 });
 
@@ -115,15 +81,7 @@ export type GeneralUsersInfer = z.infer<typeof GeneralUsersValidator>;
 
 // user general
 export const GeneralUserValidation = z.object({
-  fullName: z
-    .string()
-    .toLowerCase()
-    .trim()
-    .regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ\s]+$/, {
-      message: "Nome deve conter apenas letras, com ou sem acentos!",
-    })
-    .optional()
-    .or(z.literal("")),
+  fullName: z.string().toLowerCase().trim().optional().or(z.literal("")),
 
   email: z
     .string()

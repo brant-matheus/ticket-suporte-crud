@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { useToastContext } from "../utils/context-toast";
 import LoaderButton from "../buttons/loader-button";
 interface deleteUserPops {
-  userId?: string;
+  userId: number;
 }
 const UserDeleteForm = ({ userId }: deleteUserPops) => {
   const { ToastFail } = useToastContext();

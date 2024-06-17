@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { GeneralUsersValidator, GeneralUsersInfer } from "@/app/zod-validator";
+import { PutUserInfer, PutUserValidator } from "@/validators/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -55,11 +55,11 @@ export const EditUserForm = forwardRef((props, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const form = useForm<GeneralUsersInfer>({
-    resolver: zodResolver(GeneralUsersValidator),
+  const form = useForm<PutUserInfer>({
+    resolver: zodResolver(PutUserValidator),
   });
 
-  async function userEdit(editForm: GeneralUsersInfer) {
+  async function userEdit(editForm: PutUserInfer) {
     setIsLoading(true);
     try {
       await authInstance.put(`user/${stateProps?.userId}`, editForm);
@@ -90,27 +90,7 @@ export const EditUserForm = forwardRef((props, ref) => {
                       onSubmit={form.handleSubmit(userEdit)}
                       className="grid gap-4"
                     >
-                      <FormField
-                        defaultValue={stateProps?.fullName}
-                        // make sure we can acess the expected type. (fullName, email...)
-                        control={form.control}
-                        // ctrl+space should auto complete the name, default values
-                        name="fullName"
-                        //field name to validate the form field input and save it for email
-                        render={({ field }) => (
-                          //a single field
-                          <FormItem>
-                            {/* what is shown to user */}
-                            <FormLabel>Nome completo</FormLabel>
-                            {/* register, validate then save the input, linked to dataType in ...field*/}
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            {/* zod message */}
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {" "}
                       <FormField
                         defaultValue={stateProps?.email}
                         // make sure we can acess the expected type. (fullName, email...)
@@ -132,6 +112,27 @@ export const EditUserForm = forwardRef((props, ref) => {
                           </FormItem>
                         )}
                       />{" "}
+                      <FormField
+                        defaultValue={stateProps?.fullName}
+                        // make sure we can acess the expected type. (fullName, email...)
+                        control={form.control}
+                        // ctrl+space should auto complete the name, default values
+                        name="fullName"
+                        //field name to validate the form field input and save it for email
+                        render={({ field }) => (
+                          //a single field
+                          <FormItem>
+                            {/* what is shown to user */}
+                            <FormLabel>Nome completo</FormLabel>
+                            {/* register, validate then save the input, linked to dataType in ...field*/}
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            {/* zod message */}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       <FormField
                         defaultValue={stateProps?.isAdmin ? "true" : "false"}
                         control={form.control}

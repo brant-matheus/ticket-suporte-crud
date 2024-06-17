@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         router.push("/guest");
       }
     } catch (error) {
-      return "fail";
+      return 400;
     }
   }
 
@@ -116,10 +116,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
   async function userLogout() {
     try {
-      const user = localStorage.get("user");
-
       // request to delete all tokens in auth token acess for the user id
-      await authInstance.delete(`/auth/${user.id}`);
+      await authInstance.delete(`/auth`);
       localStorage.clear();
       router.push("/");
     } catch (error) {

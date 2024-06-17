@@ -2,10 +2,7 @@
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import {
-  InternalRegisterValidator,
-  InternalRegisterInfer,
-} from "@/app/zod-validator";
+import { StoreUserValidator, StoreUserInfer } from "@/validators/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useForm } from "react-hook-form";
@@ -41,8 +38,8 @@ export const CreateUserForm = forwardRef((props, ref) => {
   }));
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
-  const form = useForm<InternalRegisterInfer>({
-    resolver: zodResolver(InternalRegisterValidator),
+  const form = useForm<StoreUserInfer>({
+    resolver: zodResolver(StoreUserValidator),
     defaultValues: {
       fullName: "",
       email: "",
@@ -52,7 +49,7 @@ export const CreateUserForm = forwardRef((props, ref) => {
     },
   });
 
-  async function modalRegister(dataForm: InternalRegisterInfer) {
+  async function modalRegister(dataForm: StoreUserInfer) {
     setIsLoading(true);
 
     try {

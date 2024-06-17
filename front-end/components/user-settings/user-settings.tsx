@@ -13,8 +13,6 @@ import UserDeleteButton from "../buttons/user-delete-button";
 import PasswordFormEdit from "../forms/password-from-edit";
 
 const UserSettings = () => {
-  var userId: string = localStorage.getItem("userId")!;
-
   return (
     <div className="container flex justify-center ">
       <Card className="w-11/12 ">
@@ -35,7 +33,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* geral content */}
         <CardContent>
-          <GeneralUserForm userId={userId} />
+          <GeneralUserForm />
         </CardContent>
         <Separator />
 
@@ -48,10 +46,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* password content */}
         <CardContent>
-          <PasswordFormEdit
-            closeDialog={null}
-            userId={userId}
-          ></PasswordFormEdit>
+          {/* <PasswordFormEdit closeDialog={null}></PasswordFormEdit> */}
         </CardContent>
         <Separator />
 
@@ -65,7 +60,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* delete user content */}
         <CardContent>
-          <UserDeleteButton userId={userId} />
+          {/* <UserDeleteButton userId={userObject.id} /> */}
         </CardContent>
       </Card>
     </div>

@@ -1,5 +1,8 @@
 "use client";
-import { GeneralUserValidation, GeneralUserInfer } from "@/app/zod-validator";
+import {
+  UserInfoProfileInfer,
+  UserInfoProfileValidator,
+} from "@/validators/user";
 import React, { useState } from "react";
 import {
   Form,
@@ -21,34 +24,31 @@ import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "../utils/context-toast";
 import LoaderButton from "../buttons/loader-button";
 
-interface UserSettings {
-  userId: string;
-}
-
-const GeneralUserForm = ({ userId }: UserSettings) => {
+const GeneralUserForm = () => {
+  const userString = localStorage.getItem("user");
+  const userObject = JSON.parse(userString!);
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
-  const form = useForm<GeneralUserInfer>({
-    resolver: zodResolver(GeneralUserValidation),
+  const form = useForm<UserInfoProfileInfer>({
+    resolver: zodResolver(UserInfoProfileValidator),
     defaultValues: {
-      fullName: "",
-      email: "",
+      fullName: userObject.fullName,
+      email: userObject.email,
     },
   });
-  async function editUser(editForm: GeneralUserInfer) {
-    const isEmpty = Object.values(editForm).every(
-      (x) => x === null || x === ""
-    );
-    if (isEmpty) {
+  async function editUser(editForm: UserInfoProfileInfer) {
+    if (
+      editForm.email === userObject.email &&
+      editForm.fullName === userObject.fullname
+    ) {
       ToastFail({ description: "Nenhum campo preenchido" });
-
       return true;
     }
     // get all typed/validated inputs
     setIsLoading(true);
     try {
       const { request, status, data } = await authInstance.put(
-        `user/${userId}`,
+        `user/${userObject.id}`,
         editForm,
         { params: { isProfile: true } }
       );
@@ -67,6 +67,26 @@ const GeneralUserForm = ({ userId }: UserSettings) => {
     <div className="">
       <Form {...form}>
         {/* html form, submit inputs registered by control*/}
+        <FormField
+          // make sure we can acess the expected type. (fullName, email...)
+          control={form.control}
+          // ctrl+space should auto complete the name, default values
+          name="email"
+          //field name to validate the form field input and save it for email
+          render={({ field }) => (
+            //a single field
+            <FormItem>
+              {/* what is shown to user */}
+              <FormLabel>email</FormLabel>
+              {/* register, validate then save the input, linked to dataType in ...field*/}
+              <FormControl>
+                <Input placeholder="seu email aqui" {...field} />
+              </FormControl>
+              {/* zod message */}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <form onSubmit={form.handleSubmit(editUser)} className="grid gap-4">
           <FormField
             // make sure we can acess the expected type. (fullName, email...)
@@ -88,26 +108,7 @@ const GeneralUserForm = ({ userId }: UserSettings) => {
               </FormItem>
             )}
           />
-          <FormField
-            // make sure we can acess the expected type. (fullName, email...)
-            control={form.control}
-            // ctrl+space should auto complete the name, default values
-            name="email"
-            //field name to validate the form field input and save it for email
-            render={({ field }) => (
-              //a single field
-              <FormItem>
-                {/* what is shown to user */}
-                <FormLabel>email</FormLabel>
-                {/* register, validate then save the input, linked to dataType in ...field*/}
-                <FormControl>
-                  <Input placeholder="seu email aqui" {...field} />
-                </FormControl>
-                {/* zod message */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
           {isLoading ? (
             <LoaderButton title={"Salvando edição"} />
           ) : (

@@ -1,8 +1,5 @@
 "use client";
-import {
-  ExternalRegisterValidator,
-  ExternalRegisterInfer,
-} from "@/app/zod-validator";
+import { SignUpValidator, SignUpInfer } from "@/validators/user";
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,9 +31,9 @@ const RegisterExternal = () => {
   const router = useRouter();
 
   //controll, handle submit typed by formSchema. {email: string, password: string}
-  const form = useForm<ExternalRegisterInfer>({
+  const form = useForm<SignUpInfer>({
     //validate input
-    resolver: zodResolver(ExternalRegisterValidator),
+    resolver: zodResolver(SignUpValidator),
     //for each form field, MUST have to have a deafult values.
     defaultValues: {
       fullName: "",
@@ -46,11 +43,10 @@ const RegisterExternal = () => {
     },
   });
 
-  //loginForm is typed by formSchema. {email: string, password: string}
-  async function RegisterForm(externalPostUser: ExternalRegisterInfer) {
+  async function RegisterForm(externalPostUser: SignUpInfer) {
     setIsLoading(true);
     const status = await userRegister(externalPostUser);
-    if (status === "fail") {
+    if (status === 400) {
       setIsLoading(false);
       form.resetField("email");
       setLoginError("*Email já existe no Banco de dados");

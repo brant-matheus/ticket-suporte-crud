@@ -1,8 +1,5 @@
 "use client";
-import {
-  PasswordRedefinitionValidator,
-  PasswordRedefinitionInfer,
-} from "@/app/zod-validator";
+import { PasswordInfer, PasswordValidator } from "@/validators/user";
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -32,14 +29,14 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
 
-  const form = useForm<PasswordRedefinitionInfer>({
-    resolver: zodResolver(PasswordRedefinitionValidator),
+  const form = useForm<PasswordInfer>({
+    resolver: zodResolver(PasswordValidator),
     defaultValues: {
       password: "",
       passwordConfirmation: "",
     },
   });
-  async function passwordRedefine(passwordForm: PasswordRedefinitionInfer) {
+  async function passwordRedefine(passwordForm: PasswordInfer) {
     setIsLoading(true);
     try {
       await authInstance.put(`user/${userId}`, passwordForm, {
