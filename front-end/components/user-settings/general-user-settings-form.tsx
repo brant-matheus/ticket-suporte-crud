@@ -3,7 +3,7 @@ import {
   UserInfoProfileInfer,
   UserInfoProfileValidator,
 } from "@/validators/user";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Form,
   FormControl,
@@ -26,11 +26,14 @@ import LoaderButton from "../buttons/loader-button";
 import { useRouter, usePathname } from "next/navigation";
 const GeneralUserForm = () => {
   const pathName = usePathname();
-  const router = useRouter();
-  const userString = localStorage.getItem("user");
-  const userObject = JSON.parse(userString!);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const [userString, setUserString] = useState(localStorage.getItem("user"));
+  const userObject = JSON.parse(userString!);
+
   const { ToastFail, ToastSuccess } = useToastContext();
+
   const form = useForm<UserInfoProfileInfer>({
     resolver: zodResolver(UserInfoProfileValidator),
     defaultValues: {
@@ -38,6 +41,7 @@ const GeneralUserForm = () => {
       email: userObject.email,
     },
   });
+
   async function editUser(editForm: UserInfoProfileInfer) {
     setIsLoading(true);
     if (
@@ -56,18 +60,17 @@ const GeneralUserForm = () => {
         editForm
       );
       if ((request.status ?? status) == 200) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-        router.refresh();
-
+        const user = JSON.stringify(data.user);
+        localStorage.setItem("user", user);
+        setUserString(user);
         ToastSuccess();
       }
     } catch (error) {
-      console.log(error);
       ToastFail({
         description: "Email já existe em nosso banco de dados, tente outro.",
       });
-      router.refresh();
     }
+    setIsLoading(false);
   }
   return (
     <div className="">
