@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
+import Color from './color.js'
 export default class TicketStatus extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
@@ -10,7 +11,7 @@ export default class TicketStatus extends BaseModel {
   declare name: string
 
   @column()
-  declare color: string
+  declare colorId: number
 
   @column()
   declare responsibleId: number
@@ -25,4 +26,7 @@ export default class TicketStatus extends BaseModel {
     foreignKey: 'responsibleId',
   })
   declare responsible: BelongsTo<typeof User>
+
+  @belongsTo(() => Color)
+  declare color: BelongsTo<typeof Color>
 }
