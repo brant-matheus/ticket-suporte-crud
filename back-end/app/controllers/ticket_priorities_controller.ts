@@ -2,9 +2,18 @@ import type { HttpContext } from '@adonisjs/core/http'
 import TicketPriority from '#models/ticket_priority'
 
 export default class TicketPrioritiesController {
-  async index({ request, response }: HttpContext) {
+  async index({ request, response, auth }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
-    const data = await TicketPriority.query().preload('responsible').paginate(page, pageSize)
+
+    if (auth.user?.isAdmin) {
+      const data = await TicketPriority.query()
+        .preload('responsible')
+        .preload('color')
+        .paginate(page, pageSize)
+      return response.ok(data)
+    }
+
+    const data = await TicketPriority.query().preload('color')
     return response.ok(data)
   }
   async store({ request, response }: HttpContext) {

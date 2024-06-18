@@ -9,12 +9,11 @@ export default class TicketStatus extends BaseModel {
 
   @column()
   declare name: string
+  @column()
+  declare responsibleId: number
 
   @column()
   declare colorId: number
-
-  @column()
-  declare responsibleId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

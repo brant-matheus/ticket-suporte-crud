@@ -2,9 +2,18 @@ import TicketCategory from '#models/ticket_category'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TicketCategoriesController {
-  async index({ request, response }: HttpContext) {
+  async index({ request, response, auth }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
-    const data = await TicketCategory.query().preload('responsible').paginate(page, pageSize)
+
+    if (auth.user?.isAdmin) {
+      const data = await TicketCategory.query()
+        .preload('responsible')
+        .preload('color')
+        .paginate(page, pageSize)
+      return response.ok(data)
+    }
+
+    const data = await TicketCategory.query().preload('color')
     return response.ok(data)
   }
 

@@ -1,5 +1,4 @@
 import { UserFactory } from '#database/factories/user_factory'
-import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 test.group('Login', (group) => {
