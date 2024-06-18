@@ -17,7 +17,9 @@ import { number, string } from "zod";
 interface UserSettings {
   userId: string;
 }
-const CreateUserButton = ({ userId }: UserSettings) => {
+const DeleteUserButton = () => {
+  const user = localStorage.getItem("user");
+  const userObject = JSON.parse(user!);
   return (
     <div>
       <Dialog>
@@ -33,11 +35,11 @@ const CreateUserButton = ({ userId }: UserSettings) => {
             </DialogDescription>
           </DialogHeader>
           {/* form  */}
-          <DeleteUserForm userId={userId} />
+          <DeleteUserForm userId={userObject.id} />
         </DialogContent>
       </Dialog>
     </div>
   );
 };
 
-export default CreateUserButton;
+export default DeleteUserButton;

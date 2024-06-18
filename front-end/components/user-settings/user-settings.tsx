@@ -47,7 +47,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* password content */}
         <CardContent>
-          {/* <PasswordFormEdit closeDialog={null}></PasswordFormEdit> */}
+          <PasswordFormEdit />
         </CardContent>
         <Separator />
 
@@ -61,7 +61,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* delete user content */}
         <CardContent>
-          {/* <UserDeleteButton userId={userObject.id} /> */}
+          <UserDeleteButton/>
         </CardContent>
       </Card>
     </div>

@@ -155,6 +155,7 @@ test.group('Users crud', (group) => {
     const guest = await UserFactory.create()
     const response = await client.delete(route('user.destroy', { id: guest.id })).loginAs(guest)
     response.assertStatus(204)
+
     assert.isNull(await User.find(guest.id))
     assert.isNull(await User.findBy('email', guest.email))
     assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))
@@ -164,6 +165,7 @@ test.group('Users crud', (group) => {
     const guest = await UserFactory.create()
     const response = await client.delete(route('user.destroy', { id: guest.id })).loginAs(admin)
     response.assertStatus(204)
+
     assert.isNull(await User.find(guest.id))
     assert.isNull(await User.findBy('email', guest.email))
     assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))

@@ -21,11 +21,12 @@ import { useToastContext } from "../utils/context-toast";
 import LoaderButton from "../buttons/loader-button";
 
 interface props {
-  closeDialog: any;
-  userId: number;
+  closeDialog?: Function;
 }
 
-const PasswordFormEdit = ({ closeDialog, userId }: props) => {
+const PasswordFormEdit = ({ closeDialog }: props) => {
+  const user = localStorage.getItem("user");
+  const userObject = JSON.parse(user!);
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
 
@@ -39,9 +40,7 @@ const PasswordFormEdit = ({ closeDialog, userId }: props) => {
   async function passwordRedefine(passwordForm: PasswordInfer) {
     setIsLoading(true);
     try {
-      await authInstance.put(`user/${userId}`, passwordForm, {
-        params: { isProfile: false },
-      });
+      await authInstance.put(`user/${userObject.id!}`, passwordForm);
       if (typeof closeDialog === "function") {
         closeDialog();
       }
