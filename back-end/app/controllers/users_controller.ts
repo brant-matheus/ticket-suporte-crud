@@ -12,12 +12,12 @@ export default class UsersController {
 
   async store({ request, auth, response }: HttpContext) {
     const data = request.all()
-    const user = await User.findBy('email', data.email)
-    if (user?.$isPersisted) {
+    const alreadyExistUser = await User.findBy('email', data.email)
+    if (alreadyExistUser) {
       return response.conflict({ message: 'user already exists in our database' })
     }
 
-    data.isAdmin = data.isAdmin ?? false
+    data.isAdmin ??= false
 
     const payload = await StoreUserValidator.validate(data)
     const createdUser = await User.create(payload)
@@ -29,9 +29,9 @@ export default class UsersController {
         token: token,
         user: createdUser,
       })
-    } else {
-      return response.created({ message: 'user creation succeeded', user: createdUser })
     }
+
+    return response.created({ message: 'user creation succeeded', user: createdUser })
   }
 
   async update({ params, request, auth, response }: HttpContext) {
@@ -46,7 +46,7 @@ export default class UsersController {
       const updatedUser = await user.merge(payload).save()
       return response.ok({ message: 'User update succeeded', user: updatedUser })
     } else {
-      data.isAdmin = data.isAdmin ?? user.isAdmin
+      data.isAdmin ??= false
       const payload = await PutUserValidator.validate(data)
       const updatedUser = await user.merge(payload).save()
       return response.ok({ message: 'User update succeeded', user: updatedUser })

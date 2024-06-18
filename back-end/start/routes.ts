@@ -7,6 +7,9 @@ import TicketsController from '#controllers/tickets_controller'
 import OperationsController from '#controllers/operations_controller'
 import CommentsController from '#controllers/comments_controller'
 import TicketStatusesController from '#controllers/ticket_statuses_controller'
+import TicketCategory from '#models/ticket_category'
+import TicketPrioritiesController from '#controllers/ticket_priorities_controller'
+import TicketCategoriesController from '#controllers/ticket_categories_controller'
 router
   .group(() => {
     // user
@@ -17,11 +20,7 @@ router
 
     // logout
     router.delete('auth', [AuthController, 'logout']).as('sign_out')
-    // ticket config
-    router
-      .resource('ticket-configs', TicketConfigsController)
-      .except(['create', 'edit', 'show'])
-      .use(['destroy', 'store', 'update'], middleware.admin()) //only admins MUST DO those actions.
+
     // ticket
     router
       .resource('ticket', TicketsController)
@@ -32,12 +31,27 @@ router
       .resource('operation', OperationsController)
       .except(['create', 'edit', 'show'])
       .use('*', middleware.admin())
-
+    //comments
     router
       .resource('comments', CommentsController)
       .except(['create', 'edit', 'show'])
       .use('*', middleware.admin())
     router.resource('ticket-status', TicketStatusesController).except(['create', 'edit', 'show'])
+
+    router
+      .resource('ticket-status', TicketStatusesController)
+      .except(['create', 'edit', 'show'])
+      .use(['destroy', 'store', 'update'], middleware.admin())
+
+    router
+      .resource('ticket-category', TicketCategoriesController)
+      .except(['create', 'edit', 'show'])
+      .use(['destroy', 'store', 'update'], middleware.admin())
+
+    router
+      .resource('ticket-priority', TicketPrioritiesController)
+      .except(['create', 'edit', 'show'])
+      .use(['destroy', 'store', 'update'], middleware.admin())
   })
   .middleware(middleware.auth())
 

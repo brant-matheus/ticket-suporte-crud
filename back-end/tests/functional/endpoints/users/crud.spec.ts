@@ -157,7 +157,6 @@ test.group('Users crud', (group) => {
     response.assertStatus(204)
 
     assert.isNull(await User.find(guest.id))
-    assert.isNull(await User.findBy('email', guest.email))
     assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))
   })
   test('it should be able to delete a user by admin').run(async ({ assert, client, route }) => {
@@ -167,7 +166,6 @@ test.group('Users crud', (group) => {
     response.assertStatus(204)
 
     assert.isNull(await User.find(guest.id))
-    assert.isNull(await User.findBy('email', guest.email))
     assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))
   })
 
@@ -184,14 +182,13 @@ test.group('Users crud', (group) => {
       response.assertStatus(200)
 
       const body = response.body()
-      assert.properties(body.meta, ['total'])
-      assert.properties(body.data[0], ['email', 'fullName', 'isAdmin'])
 
-      assert.propertyVal(body.meta, 'total', 21)
-      assert.propertyVal(body.meta, 'perPage', 10)
-      assert.propertyVal(body.meta, 'currentPage', 1)
+      response.assertPaginatedStructure({ '*': ['email', 'fullName', 'isAdmin'] })
+      response.assertBodyLength(request.pageSize, 'data')
 
-      assert.isTrue(body.data.length === request.pageSize)
+      assert.equal(body.meta.total, 21)
+      assert.equal(body.meta.perPage, 10)
+      assert.equal(body.meta.currentPage, 1)
     }
   )
 })

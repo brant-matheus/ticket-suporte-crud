@@ -1,44 +1,37 @@
-import Ticket from '#models/ticket'
 import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
-import { stat } from 'fs'
-import { DateTime } from 'luxon'
 
 export default class TicketStatusesController {
-  /**
-   * Display a list of resource
-   */
-  async index({ request }: HttpContext) {
+  async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
-    return await TicketStatus.query().preload('responsible').paginate(page, pageSize)
+    const data = await TicketStatus.query().preload('responsible').paginate(page, pageSize)
+    return response.ok({ message: 'get/index request succeed', data: data })
   }
 
-  /**
-   * Handle form submission for the create action
-   */
-  async store({ request }: HttpContext) {
-    return await Ticket.create(request.all())
+  async store({ request, response }: HttpContext) {
+    await TicketStatus.create(request.all())
+    return response.created({ message: 'ticket status creation succeed' })
   }
 
   async update({ params, request, response, auth }: HttpContext) {
     if (params.id == 1) {
-      return response.forbidden({ message: 'cannot delete anything besides itself' })
-    } else {
-      const statusUpdateRequest: any = request.only(['statusUpdateRequest'])
-      const status = await TicketStatus.findByOrFail(params.id)
-      await status
-        .merge({
-          responsibleId: auth.user?.id,
-          updatedAt: DateTime.local(),
-          name: statusUpdateRequest,
-        })
-        .save()
-      return response.ok({ message: 'ticket updation succeed' })
+      return response.forbidden({ message: 'cannot delete this specific status' })
     }
+    const statusUpdateRequest: any = request.only(['statusUpdateRequest'])
+    const status = await TicketStatus.findOrFail(params.id)
+    await status
+      .merge({
+        responsibleId: auth.user?.id,
+        name: statusUpdateRequest,
+      })
+      .save()
+    return response.ok({ message: 'ticket status update succeed' })
   }
 
-  /**
-   * Delete record
-   */
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params, response }: HttpContext) {
+    const status = await TicketStatus.findBy(params.id)
+    await status?.delete()
+
+    return response.noContent()
+  }
 }
