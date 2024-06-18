@@ -36,7 +36,6 @@ router
       .resource('comments', CommentsController)
       .except(['create', 'edit', 'show'])
       .use('*', middleware.admin())
-    router.resource('ticket-status', TicketStatusesController).except(['create', 'edit', 'show'])
 
     router
       .resource('ticket-status', TicketStatusesController)

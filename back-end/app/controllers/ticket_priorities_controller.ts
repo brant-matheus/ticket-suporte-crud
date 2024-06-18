@@ -5,23 +5,23 @@ export default class TicketPrioritiesController {
   async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
     const data = await TicketPriority.query().preload('responsible').paginate(page, pageSize)
-    return response.ok({ message: 'get/index request succeed', data: data })
+    return response.ok(data)
   }
   async store({ request, response }: HttpContext) {
-    await TicketPriority.create(request.all())
-    return response.created({ message: 'ticket priority creation succeed' })
+    const data = await TicketPriority.create(request.all())
+    return response.created(data)
   }
 
   async update({ params, request, response, auth }: HttpContext) {
     const priorityUpdateRequest: any = request.only(['priorityUpdateRequest'])
     const priority = await TicketPriority.findOrFail(params.id)
-    await priority
+    const data = await priority
       .merge({
         responsibleId: auth.user?.id,
         name: priorityUpdateRequest,
       })
       .save()
-    return response.ok({ message: 'ticket priority update succeed' })
+    return response.ok(data)
   }
 
   async destroy({ params, response }: HttpContext) {

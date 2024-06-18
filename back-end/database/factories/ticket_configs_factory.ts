@@ -29,7 +29,6 @@ export const TicketPrioriesFactory = [
 ]
 
 export const TicketStatusesFactory = [
-  { name: 'pendente', color: '#4169E1', responsible_id: 1 },
   { name: 'em análise', color: '#FFA500', responsible_id: 1 },
   { name: 'em aberto', color: '#90ee90', responsible_id: 1 },
   { name: 'concluído', color: '#32CD32', responsible_id: 1 },

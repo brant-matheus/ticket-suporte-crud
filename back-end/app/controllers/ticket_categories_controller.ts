@@ -5,24 +5,24 @@ export default class TicketCategoriesController {
   async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
     const data = await TicketCategory.query().preload('responsible').paginate(page, pageSize)
-    return response.ok({ message: 'get/index request succeed', data: data })
+    return response.ok(data)
   }
 
   async store({ request, response }: HttpContext) {
-    await TicketCategory.create(request.all())
-    return response.created({ message: 'ticket category creation succeed' })
+    const data = await TicketCategory.create(request.all())
+    return response.created(data)
   }
 
   async update({ params, request, response, auth }: HttpContext) {
     const categoryUpdateRequest: any = request.only(['categoryUpdateRequest'])
     const category = await TicketCategory.findOrFail(params.id)
-    await category
+    const data = await category
       .merge({
         responsibleId: auth.user?.id,
         name: categoryUpdateRequest,
       })
       .save()
-    return response.ok({ message: 'ticket category update succeed' })
+    return response.ok(data)
   }
 
   async destroy({ params, response }: HttpContext) {

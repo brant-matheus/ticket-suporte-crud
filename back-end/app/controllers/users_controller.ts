@@ -4,10 +4,11 @@ import { PasswordValidator, PutUserValidator, StoreUserValidator } from '#valida
 import db from '@adonisjs/lucid/services/db'
 
 export default class UsersController {
-  async index({ request }: HttpContext) {
+  async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
-    return await User.query().paginate(parseInt(page), parseInt(pageSize))
+    const data = await User.query().paginate(parseInt(page), parseInt(pageSize))
+    return response.ok(data)
   }
 
   async store({ request, auth, response }: HttpContext) {
@@ -25,13 +26,12 @@ export default class UsersController {
     if (!auth.isAuthenticated) {
       const token = await User.accessTokens.create(createdUser)
       return response.created({
-        message: 'user creation succeeded',
         token: token,
         user: createdUser,
       })
     }
 
-    return response.created({ message: 'user creation succeeded', user: createdUser })
+    return response.created(createdUser)
   }
 
   async update({ params, request, auth, response }: HttpContext) {
@@ -44,12 +44,12 @@ export default class UsersController {
     if (data.hasOwnProperty('password')) {
       const payload = await request.validateUsing(PasswordValidator)
       const updatedUser = await user.merge(payload).save()
-      return response.ok({ message: 'User update succeeded', user: updatedUser })
+      return response.ok(updatedUser)
     } else {
       data.isAdmin ??= false
       const payload = await PutUserValidator.validate(data)
       const updatedUser = await user.merge(payload).save()
-      return response.ok({ message: 'User update succeeded', user: updatedUser })
+      return response.ok(updatedUser)
     }
   }
 
