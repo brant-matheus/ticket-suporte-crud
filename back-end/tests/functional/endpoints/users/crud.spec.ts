@@ -122,7 +122,7 @@ test.group('Users crud', (group) => {
         .json(request)
       response.assertStatus(200)
       const body = response.body()
-      assert.include(body.user, request)
+      assert.include(body, request)
 
       const user = await User.findByOrFail('id', guest.id)
       assert.include(user.serialize(), request)
@@ -145,7 +145,7 @@ test.group('Users crud', (group) => {
         .json(request)
       response.assertStatus(200)
       const body = response.body()
-      assert.include(body.user, request)
+      assert.include(body, request)
 
       const user = await User.findByOrFail('id', guest.id)
       assert.include(user.serialize(), request)
@@ -186,7 +186,8 @@ test.group('Users crud', (group) => {
       response.assertPaginatedStructure({ '*': ['email', 'fullName', 'isAdmin'] })
       response.assertBodyLength(request.pageSize, 'data')
 
-      assert.equal(body.meta.total, 21)
+      const total = await (await User.all()).length
+      assert.equal(body.meta.total, total)
       assert.equal(body.meta.perPage, 10)
       assert.equal(body.meta.currentPage, 1)
     }
