@@ -62,7 +62,7 @@ test.group('Users crud', (group) => {
       assert.isTrue(await hash.verify(user.password, request.password))
 
       const body = response.body()
-      assert.include(body.user, data)
+      assert.include(body, data)
     }
   )
   test('it should be able to store a guest user by admin').run(
@@ -88,7 +88,7 @@ test.group('Users crud', (group) => {
       assert.isTrue(await hash.verify(user.password, request.password))
 
       const body = response.body()
-      assert.include(body.user, data)
+      assert.include(body, data)
     }
   )
   test('it should be able to update user password').run(async ({ assert, client, route }) => {

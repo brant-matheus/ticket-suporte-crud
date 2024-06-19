@@ -3,7 +3,6 @@ import TicketStatus from '#models/ticket_status'
 import Color from '#models/color'
 import User from '#models/user'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
-import Ticket from '#models/ticket'
 
 export default class extends BaseSeeder {
   async run() {
@@ -13,52 +12,27 @@ export default class extends BaseSeeder {
       isAdmin: true,
       password: 'Testing@123',
     })
-    const color = await Color.createMany([
-      {
-        name: 'Azul',
-        hex: '#00BFFF',
-      },
-      {
-        name: 'Verde',
-        hex: '#32CD32',
-      },
-      {
-        name: 'Amarelo',
-        hex: '#FFFF00',
-      },
-      {
-        name: 'Laranja',
-        hex: '#FFA500',
-      },
-      {
-        name: 'Vermelho',
-        hex: '#FF4500',
-      },
-      {
-        name: 'Rosa',
-        hex: '#FF1493',
-      },
-      {
-        name: 'Roxo',
-        hex: '#800080',
-      },
+    await Color.createMany([
+      { name: 'azul', hex: '#00bfff' },
+      { name: 'verde', hex: '#32cd32' },
+      { name: 'amarelo', hex: '#ffff00' },
+      { name: 'laranja', hex: '#ffa500' },
+      { name: 'vermelho', hex: '#ff4500' },
+      { name: 'rosa', hex: '#ff1493' },
+      { name: 'roxo', hex: '#800080' },
     ])
 
-    const green = await Color.findBy('name', 'Verde')
-    const blue = await Color.findBy('name', 'Azul')
-    await TicketStatus.create({
-      name: 'pendente',
-      responsibleId: admin.id,
-      colorId: 1,
-    })
-
-    // await TicketStatus.createMany([
-    //   { name: 'pendente', colorId: blue?.id, responsibleId: admin.id },
-    //   {
-    //     name: 'concluido',
-    //     colorId: green?.id,
-    //     responsibleId: admin.id,
-    //   },
-    // ])
+    await TicketStatus.createMany([
+      {
+        name: 'pendente',
+        responsibleId: 1,
+        colorId: 1,
+      },
+      {
+        name: 'concluido',
+        responsibleId: 1,
+        colorId: 2,
+      },
+    ])
   }
 }
