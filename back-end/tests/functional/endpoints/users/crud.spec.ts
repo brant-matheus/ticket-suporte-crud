@@ -186,7 +186,7 @@ test.group('Users crud', (group) => {
       response.assertPaginatedStructure({ '*': ['email', 'fullName', 'isAdmin'] })
       response.assertBodyLength(request.pageSize, 'data')
 
-      const total = await (await User.all()).length
+      const total = (await User.all()).length
       assert.equal(body.meta.total, total)
       assert.equal(body.meta.perPage, 10)
       assert.equal(body.meta.currentPage, 1)
