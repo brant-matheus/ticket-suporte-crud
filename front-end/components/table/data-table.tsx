@@ -47,7 +47,6 @@ export type MetaProps = {
 
 export function DataTable<TData, TValue>({
   columns,
-  fromTable,
   route,
   showFilter,
   filterColumn,
@@ -68,9 +67,8 @@ export function DataTable<TData, TValue>({
     try {
       const { data, request, status } = await authInstance.get(`${route}`, {
         params: {
-          page: pagination.pageIndex + 1, //first page {front: 0, back: 1}
+          page: pagination.pageIndex + 1,
           pageSize: pagination.pageSize,
-          fromTable: fromTable,
         },
       });
       if ((request.status ?? status) === 200) {

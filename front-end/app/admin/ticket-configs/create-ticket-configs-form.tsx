@@ -6,13 +6,15 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "@/components/utils/context-toast";
+import { Select } from "@/components/ui/select";
 
 export interface HandleClickType {
-  handleClick: Function;
+  handleClick: ({ route, title }: StateProps) => void;
 }
 
 interface FormType {
-  item: string;
+  name: string;
+  color: string;
 }
 
 interface StateProps {
@@ -38,7 +40,7 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
     setButtonBoolean(true);
     try {
       const { data, status, request } = await authInstance.post(
-        "route",
+        `${stateProps?.route}`,
         ticketConfigSubmit
       );
       if ((status ?? request.status) == 201) {
@@ -49,12 +51,12 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
       ToastFail({ description: "Nome em branco ou já existente" });
       setButtonBoolean(false);
 
-      resetField("item");
+      resetField("name");
     }
   }
 
   useEffect(() => {
-    resetField("item");
+    resetField("name");
   }, [open]);
 
   return (
@@ -67,10 +69,11 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
           >
             <Label>{stateProps?.title}</Label>
             <Input
-              {...register("item")}
+              {...register("name")}
               placeholder="Digite nova configuração do ticket"
             ></Input>
-
+            <Label>Cor</Label>
+            <Select></Select>
             <Button disabled={buttonBoolean}>Criar</Button>
           </form>
         </DialogContent>

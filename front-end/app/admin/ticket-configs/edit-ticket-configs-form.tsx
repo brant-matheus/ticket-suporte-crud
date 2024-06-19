@@ -34,7 +34,6 @@ interface HandleProps {
   ticketConfigName: string;
   title: string;
   params: number;
-  fromTable: string;
 }
 
 export const TicketConfigForm = forwardRef((props, ref) => {
@@ -59,13 +58,8 @@ export const TicketConfigForm = forwardRef((props, ref) => {
     setButtonBool(true);
     try {
       const { status } = await authInstance.put(
-        `ticket-configs/${stateProps?.params}`,
-        item,
-        {
-          params: {
-            fromTable: stateProps?.fromTable,
-          },
-        }
+        `ticket-status/${stateProps?.params}`,
+        item
       );
 
       ToastSuccess();

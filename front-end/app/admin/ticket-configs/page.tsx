@@ -28,15 +28,13 @@ const page = () => {
               <DataTable
                 columns={ticketConfigsColumns({
                   title: "categoria",
-                  fromTableWhere: "ticket_category_id",
-                  fromTable: "categories",
                 })}
                 component={
                   <CreateButton
                     action={() =>
                       formRef.current?.handleClick({
                         title: "categoria",
-                        fromTable: "categories",
+                        route: "",
                       })
                     }
                     title="categoria"
@@ -56,15 +54,13 @@ const page = () => {
               <DataTable
                 columns={ticketConfigsColumns({
                   title: "prioridade",
-                  fromTable: "priorities",
-                  fromTableWhere: "ticket_priority_id",
                 })}
                 component={
                   <CreateButton
                     action={() =>
                       formRef.current?.handleClick({
                         title: "prioridade",
-                        fromTable: "priorities",
+                        route: "",
                       })
                     }
                     title="prioridade"
@@ -84,21 +80,18 @@ const page = () => {
               <DataTable
                 columns={ticketConfigsColumns({
                   title: "status",
-                  fromTableWhere: "ticket_status_id",
-                  fromTable: "statuses",
                 })}
                 component={
                   <CreateButton
                     action={() =>
                       formRef.current?.handleClick({
                         title: "status",
-                        fromTable: "statuses",
+                        route: "status",
                       })
                     }
                     title="status"
                   />
                 }
-                fromTable="statuses"
                 route="ticket-status"
               />
             </CardContent>

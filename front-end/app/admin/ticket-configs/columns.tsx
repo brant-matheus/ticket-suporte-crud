@@ -35,13 +35,10 @@ export type TData = {
 
 interface TicketConfigsProps {
   title: string;
-  fromTableWhere: string;
-  fromTable: string;
 }
 
 export function ticketConfigsColumns({
   title,
-  fromTable,
 }: TicketConfigsProps): ColumnDef<TData>[] {
   return [
     { accessorKey: "id", header: "id" },
@@ -108,7 +105,6 @@ export function ticketConfigsColumns({
 
                       title: title,
                       params: item.id,
-                      fromTable: fromTable,
                     })
                   }
                 />
