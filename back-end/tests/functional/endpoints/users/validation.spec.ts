@@ -1,10 +1,8 @@
-import { assert } from '@japa/assert'
-import { test } from '@japa/runner'
-import { AdminFactory } from '#database/factories/admin_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import User from '#models/user'
-import testUtils from '@adonisjs/core/services/test_utils'
 import hash from '@adonisjs/core/services/hash'
+import testUtils from '@adonisjs/core/services/test_utils'
+import { test } from '@japa/runner'
 
 test.group('user crud validation', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())

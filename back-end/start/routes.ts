@@ -1,15 +1,14 @@
+import AuthController from '#controllers/auth_controller'
+import CommentsController from '#controllers/comments_controller'
+import OperationsController from '#controllers/operations_controller'
+import TicketCategoriesController from '#controllers/ticket_categories_controller'
+import TicketPrioritiesController from '#controllers/ticket_priorities_controller'
+import TicketStatusesController from '#controllers/ticket_statuses_controller'
+import TicketsController from '#controllers/tickets_controller'
 import UsersController from '#controllers/users_controller'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import AuthController from '#controllers/auth_controller'
-import TicketConfigsController from '#controllers/ticket_configs_controller'
-import TicketsController from '#controllers/tickets_controller'
-import OperationsController from '#controllers/operations_controller'
-import CommentsController from '#controllers/comments_controller'
-import TicketStatusesController from '#controllers/ticket_statuses_controller'
-import TicketCategory from '#models/ticket_category'
-import TicketPrioritiesController from '#controllers/ticket_priorities_controller'
-import TicketCategoriesController from '#controllers/ticket_categories_controller'
+
 router
   .group(() => {
     // user

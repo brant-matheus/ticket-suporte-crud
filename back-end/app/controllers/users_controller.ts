@@ -15,7 +15,7 @@ export default class UsersController {
     const data = request.all()
     const alreadyExistUser = await User.findBy('email', data.email)
     if (alreadyExistUser) {
-      return response.conflict({ message: 'user already exists in our database' })
+      return response.conflict('user already exists in our database')
     }
 
     data.isAdmin ??= false

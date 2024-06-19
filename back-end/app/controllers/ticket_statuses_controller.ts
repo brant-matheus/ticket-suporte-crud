@@ -1,4 +1,5 @@
 import Color from '#models/color'
+import Ticket from '#models/ticket'
 import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -21,6 +22,11 @@ export default class TicketStatusesController {
   async store({ request, response, auth }: HttpContext) {
     const { name, color } = request.only(['name', 'color'])
 
+    const isNameExist = await TicketStatus.findBy('name', name)
+    if (isNameExist) {
+      return response.conflict('ticket already exist')
+    }
+
     const colorId = (await Color.findByOrFail('name', color)).id
     const status = await TicketStatus.create({
       name: name,
@@ -31,8 +37,13 @@ export default class TicketStatusesController {
   }
 
   async update({ params, request, response, auth }: HttpContext) {
-    if (params.id == 1 || params.id == 2) {
-      return response.forbidden({ message: 'cannot delete this specific status' })
+    const ticket = await Ticket.findManyBy('ticketStatusId', params.id)
+
+    const isStatusUsed = ticket.length >= 1
+
+    const condition = [1, 2].includes(parseInt(params.id)) || isStatusUsed
+    if (condition) {
+      return response.forbidden('cannot update this specific status')
     }
     const { name, color } = request.only(['name', 'color'])
 
@@ -49,8 +60,13 @@ export default class TicketStatusesController {
   }
 
   async destroy({ params, response }: HttpContext) {
-    if ([1, 2].includes(params.id)) {
-      return response.forbidden({ message: 'cannot delete this specific status' })
+    const ticket = await Ticket.findManyBy('ticketStatusId', params.id)
+
+    const isStatusUsed = ticket.length >= 1
+
+    const condition = [1, 2].includes(parseInt(params.id)) || isStatusUsed
+    if (condition) {
+      return response.forbidden('cannot delete this specific status')
     }
     const status = await TicketStatus.findBy(params)
 

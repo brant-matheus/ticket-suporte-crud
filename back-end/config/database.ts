@@ -6,6 +6,7 @@ const dbConfig = defineConfig({
   connections: {
     mysql: {
       client: 'mysql2',
+
       connection: {
         host: env.get('DB_HOST'),
         port: env.get('DB_PORT'),
@@ -16,6 +17,9 @@ const dbConfig = defineConfig({
       migrations: {
         naturalSort: true,
         paths: ['database/migrations'],
+      },
+      seeders: {
+        paths: ['./database/seeders/main'],
       },
     },
   },
