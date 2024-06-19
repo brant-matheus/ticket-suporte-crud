@@ -1,26 +1,20 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
-import {
-  ColumnDef,
-  SortingState,
-  ColumnFiltersState,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  VisibilityState,
-  getSortedRowModel,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  PaginationState,
-} from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  PaginationState,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { useCallback, useEffect, useState } from "react";
 
+import { authInstance } from "@/app/axios-config";
 import {
   Table,
   TableBody,
@@ -29,17 +23,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { authInstance } from "@/app/axios-config";
-import { DataTablePagination } from "./data-table-pagination";
-import { Button } from "../ui/button";
 import { ColumnVisiablity } from "./column-visibility";
+import { DataTablePagination } from "./data-table-pagination";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   route: string;
-  filterColumn: string;
-  showFilter: boolean;
+  filterColumn?: string;
+  showFilter?: boolean;
   component: any;
-  fromTable: string;
+  fromTable?: string;
 }
 export type MetaProps = {
   total: number;
@@ -117,15 +109,19 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       {/* render condition show/not show filter */}
-      {showFilter ? (
+      {showFilter ?? true ? (
         <div className="flex items-center py-2 space-x-4">
           <Input
             placeholder="Pesquisar email..."
             value={
-              (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
+              (table
+                .getColumn(filterColumn ?? "email")
+                ?.getFilterValue() as string) ?? ""
             }
             onChange={(event) =>
-              table.getColumn(filterColumn)?.setFilterValue(event.target.value)
+              table
+                .getColumn(filterColumn ?? "email")
+                ?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />

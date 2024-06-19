@@ -17,7 +17,7 @@ interface FormType {
 
 interface StateProps {
   title: string;
-  fromTable: string;
+  route: string;
 }
 
 export const CreateTicketConfigsForm = forwardRef((props, ref) => {
@@ -26,9 +26,9 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
   const [stateProps, setStateProps] = useState<StateProps>();
   useImperativeHandle(ref, () => ({
-    handleClick({ title, fromTable }: StateProps) {
+    handleClick({ title, route }: StateProps) {
       setOpen(true);
-      setStateProps({ title: title, fromTable: fromTable });
+      setStateProps({ title: title, route: route });
     },
   }));
 
@@ -38,15 +38,10 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
     setButtonBoolean(true);
     try {
       const { data, status, request } = await authInstance.post(
-        "ticket-configs",
-        ticketConfigSubmit,
-        {
-          params: {
-            fromTable: stateProps?.fromTable,
-          },
-        }
+        "route",
+        ticketConfigSubmit
       );
-      if (status || request.status === 200) {
+      if ((status ?? request.status) == 201) {
         ToastSuccess();
         setOpen(false);
       }

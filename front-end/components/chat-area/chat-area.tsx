@@ -96,7 +96,7 @@ export default function ChatArea() {
       <div className="container-md mx-auto ">
         <ScrollArea className="h-96 w-auto" ref={scrollAreaRef}>
           {data.map((value) => {
-            const isAdmin = !!value.user.isAdmin;
+            const isAdmin = value.user.isAdmin;
             const condition =
               (isAdmin && isPageAdmin) || (!isAdmin && !isPageAdmin);
 

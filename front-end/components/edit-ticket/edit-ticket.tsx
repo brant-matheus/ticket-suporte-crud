@@ -109,7 +109,7 @@ export const EditTicketModal = forwardRef((props, ref) => {
                 <CardContent>
                   <GenericEditTicketForm
                     action={() => setIsOpen(false)}
-                    data={isAdmin === 1 ? data?.statuses : data?.categories}
+                    data={isAdmin ? data?.statuses : data?.categories}
                     fromTable={fromTable}
                     title={title}
                     ticketId={ticketId}

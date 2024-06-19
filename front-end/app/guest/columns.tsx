@@ -1,20 +1,26 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
-import DeleteDialog from "@/components/buttons/delete-dialog";
-import ModificationEye from "@/components/utils/modification-datetime-eye";
-import { DateTime } from "luxon";
-import { formatIso } from "@/components/utils/formatIso";
-import EditButton from "@/components/buttons/edit-button";
-import { useRef } from "react";
-import {
-  ModalEditProps,
-  EditTicketModal,
-} from "@/components/edit-ticket/edit-ticket";
 import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
+import DeleteDialog from "@/components/buttons/delete-dialog";
+import EditButton from "@/components/buttons/edit-button";
+import {
+  EditTicketModal,
+  ModalEditProps,
+} from "@/components/edit-ticket/edit-ticket";
+import BadgeColumn from "@/components/utils/badgeColumn";
+import { formatIso } from "@/components/utils/formatIso";
+import ModificationEye from "@/components/utils/modification-datetime-eye";
+import { ColumnDef } from "@tanstack/react-table";
+import { useRef } from "react";
+
+interface Color {
+  name: string;
+  hex: string;
+}
+
 interface TicketConfig {
   id: number;
   name: string;
-  color: string;
+  color: Color;
   responsibleId: number;
   createdAt: string;
   updatedAt: string;
@@ -24,7 +30,7 @@ interface User {
   id: number;
   fullName: string;
   email: string;
-  isAdmin: number;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -53,9 +59,10 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "Categoria",
     cell: ({ row }) => {
       const item = row.original;
-      const color = { color: item.ticketCategory.color };
-
-      return <p style={color}>{item.ticketCategory.name}</p>;
+      return BadgeColumn({
+        title: item.ticketStatus.name,
+        hex: item.ticketStatus.color.hex,
+      });
     },
   },
   {
@@ -63,9 +70,10 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "Prioridade",
     cell: ({ row }) => {
       const item = row.original;
-      const color = { color: item.ticketPriority.color };
-
-      return <p style={color}>{item.ticketPriority.name}</p>;
+      return BadgeColumn({
+        title: item.ticketStatus.name,
+        hex: item.ticketStatus.color.hex,
+      });
     },
   },
   {
@@ -73,9 +81,10 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "status",
     cell: ({ row }) => {
       const item = row.original;
-      const color = { color: item.ticketStatus.color };
-
-      return <p style={color}>{item.ticketStatus.name}</p>;
+      return BadgeColumn({
+        title: item.ticketStatus.name,
+        hex: item.ticketStatus.color.hex,
+      });
     },
   },
   {
@@ -117,13 +126,7 @@ export const columns: ColumnDef<Ticket>[] = [
           <div className="flex items-center gap-x-1">
             <EditTicketModal ref={modalRef} />
 
-            <DeleteDialog
-              route="ticket"
-              title="ticket"
-              params={item.id}
-              fromTableWhere="
-        "
-            />
+            <DeleteDialog route="ticket" title="ticket" params={item.id} />
             <EditButton
               action={() =>
                 modalRef.current?.handleCLick({

@@ -11,7 +11,7 @@ interface CreateButtonProps {
 const CreateButton = ({ title, action }: CreateButtonProps) => {
   return (
     <>
-      <Button onClick={() => action()} className="gap-1">
+      <Button onClick={() => action()} className="gap-1" variant={"secondary"}>
         <PlusCircle className="h-4 w-4"></PlusCircle>
         Criar {title}
       </Button>

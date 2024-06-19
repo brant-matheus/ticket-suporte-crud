@@ -1,20 +1,15 @@
-// id
-// name + cor
-// responsibleId EMAIL
-// modificado
-// action
-
 "use client";
-import { ModalHandles, TicketConfigForm } from "./edit-ticket-configs-form";
-import DisabledDeleteButton from "@/components/buttons/disabled-delete-button";
-import { ColumnDef } from "@tanstack/react-table";
-import ModificationEye from "@/components/utils/modification-datetime-eye";
+import { Badge } from "@/components/ui/badge";
+
 import DeleteDialog from "@/components/buttons/delete-dialog";
-import EditButton from "@/components/buttons/edit-button";
-import { useRef } from "react";
-import { Delete, Trash2 } from "lucide-react";
+import DisabledDeleteButton from "@/components/buttons/disabled-delete-button";
 import DisabledEditButton from "@/components/buttons/disabled-edit-button";
-import { Button } from "@/components/ui/button";
+import EditButton from "@/components/buttons/edit-button";
+import ModificationEye from "@/components/utils/modification-datetime-eye";
+import { ColumnDef } from "@tanstack/react-table";
+import { useRef } from "react";
+import { ModalHandles, TicketConfigForm } from "./edit-ticket-configs-form";
+import BadgeColumn from "@/components/utils/badgeColumn";
 interface responsible {
   id: number;
   fullName: string;
@@ -23,10 +18,16 @@ interface responsible {
   createdAt: string;
   updatedAt: string;
 }
+
+interface Color {
+  id: number;
+  name: string;
+  hex: string;
+}
 export type TData = {
   id: number;
   name: string;
-  color: string;
+  color: Color;
   responsible: responsible;
   createdAt: string;
   updatedAt: string;
@@ -50,13 +51,11 @@ export function ticketConfigsColumns({
       header: "nome",
       cell: ({ row }) => {
         const item = row.original;
-        const color = { color: item.color };
 
-        return (
-          <p style={color}>
-            <Button variant="ghost">{item.name}</Button>
-          </p>
-        );
+        return BadgeColumn({
+          title: item.name,
+          hex: item.color.hex,
+        });
       },
     },
     {

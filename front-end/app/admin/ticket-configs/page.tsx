@@ -98,10 +98,8 @@ const page = () => {
                     title="status"
                   />
                 }
-                filterColumn=""
                 fromTable="statuses"
                 route="ticket-status"
-                showFilter={false}
               />
             </CardContent>
           </Card>

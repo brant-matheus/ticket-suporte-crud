@@ -1,40 +1,35 @@
 "use client";
 
+import ActionCreateButton from "@/components/buttons/action-create-button";
 import {
-  ModalEditProps,
   EditTicketModal,
+  ModalEditProps,
 } from "@/components/edit-ticket/edit-ticket";
-import { ColumnDef } from "@tanstack/react-table";
-import DeleteDialog from "@/components/buttons/delete-dialog";
-import ModificationEye from "@/components/utils/modification-datetime-eye";
-import {
-  Tooltip,
-  TooltipProvider,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  ChevronsUpDown,
-  CircleUserRound,
-  LucideAArrowDown,
-  MessagesSquare,
-  Send,
-  ArrowUpFromLine,
-} from "lucide-react";
-import { string } from "zod";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import ModificationEye from "@/components/utils/modification-datetime-eye";
+import { ColumnDef } from "@tanstack/react-table";
+import { MessagesSquare } from "lucide-react";
 import { useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import ActionCreateButton from "@/components/buttons/action-create-button";
 
-import EditButton from "@/components/buttons/edit-button";
 import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
+import EditButton from "@/components/buttons/edit-button";
+import { Separator } from "@/components/ui/separator";
 import { formatIso } from "@/components/utils/formatIso";
 import { CreateTicketOperation, ModalProps } from "./create-operation-form";
-import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import BadgeColumn from "@/components/utils/badgeColumn";
 
+interface Color {
+  name: string;
+  hex: string;
+}
 interface User {
   id: number;
   fullName: string;
@@ -47,7 +42,7 @@ interface User {
 interface TicketConfig {
   id: number;
   name: string;
-  color: string;
+  color: Color;
   responsibleId: number;
   createdAt: string;
   updatedAt: string;
@@ -78,9 +73,10 @@ export const columns: ColumnDef<Ticket>[] = [
     cell: ({ row }) => {
       const item = row.original;
 
-      const color = { color: item.ticketCategory.color };
-
-      return <p style={color}>{item.ticketCategory.name}</p>;
+      return BadgeColumn({
+        title: item.ticketStatus.name,
+        hex: item.ticketStatus.color.hex,
+      });
     },
   },
   {
@@ -89,13 +85,11 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "Prioridade",
     cell: ({ row }) => {
       const item = row.original;
-      const color = { color: item.ticketPriority.color };
 
-      return (
-        <>
-          <p style={color}>{item.ticketPriority.name}</p>
-        </>
-      );
+      return BadgeColumn({
+        title: item.ticketStatus.name,
+        hex: item.ticketStatus.color.hex,
+      });
     },
   },
   {
@@ -104,9 +98,11 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "status",
     cell: ({ row }) => {
       const item = row.original;
-      const color = { color: item.ticketStatus.color };
 
-      return <p style={color}>{item.ticketStatus.name}</p>;
+      return BadgeColumn({
+        title: item.ticketStatus.name,
+        hex: item.ticketStatus.color.hex,
+      });
     },
   },
   {

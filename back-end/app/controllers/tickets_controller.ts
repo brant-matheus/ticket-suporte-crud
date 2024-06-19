@@ -15,17 +15,29 @@ export default class TicketsController {
     if (auth.user?.isAdmin) {
       return await Ticket.query()
         .preload('user')
-        .preload('ticketCategory')
-        .preload('ticketPriority')
-        .preload('ticketStatus')
+        .preload('ticketCategory', (preload) => {
+          preload.preload('color')
+        })
+        .preload('ticketPriority', (preload) => {
+          preload.preload('color')
+        })
+        .preload('ticketStatus', (preload) => {
+          preload.preload('color')
+        })
         .paginate(page, pageSize)
     } else {
       return await Ticket.query()
         .where('created_by_id', auth.user?.id as number)
         .preload('user')
-        .preload('ticketCategory')
-        .preload('ticketPriority')
-        .preload('ticketStatus')
+        .preload('ticketCategory', (preload) => {
+          preload.preload('color')
+        })
+        .preload('ticketPriority', (preload) => {
+          preload.preload('color')
+        })
+        .preload('ticketStatus', (preload) => {
+          preload.preload('color')
+        })
         .paginate(page, pageSize)
     }
   }
