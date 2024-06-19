@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { authInstance } from "@/app/axios-config";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "../ui/button";
 
 interface props {
   route: string;
@@ -43,7 +44,9 @@ const DeleteDialog = ({ route, params, title }: props) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Trash2 className="text-[red] h-5 w-5"></Trash2>
+        <Button className="border-[red]" size={"icon"} variant={"outline"}>
+          <Trash2 className="text-[red] h-5 w-5"></Trash2>
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
