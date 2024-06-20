@@ -35,10 +35,12 @@ export type TData = {
 
 interface TicketConfigsProps {
   title: string;
+  route: string;
 }
 
 export function ticketConfigsColumns({
   title,
+  route,
 }: TicketConfigsProps): ColumnDef<TData>[] {
   return [
     { accessorKey: "id", header: "id" },
@@ -86,23 +88,19 @@ export function ticketConfigsColumns({
         return (
           <div className="flex space-x-2">
             <TicketConfigForm ref={modalRef} />
-            {item.name === "pendente" ? (
+            {["pendente", "concluido"].includes(item.name) ? (
               <>
                 <DisabledDeleteButton />
                 <DisabledEditButton />
               </>
             ) : (
               <>
-                <DeleteDialog
-                  params={item.id}
-                  route="ticket-configs"
-                  title={title}
-                />
+                <DeleteDialog params={item.id} route={route} title={title} />
                 <EditButton
                   action={() =>
                     modalRef.current?.handleClick({
                       ticketConfigName: item.name,
-
+                      route: route,
                       title: title,
                       params: item.id,
                     })

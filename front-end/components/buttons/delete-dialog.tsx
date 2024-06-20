@@ -37,13 +37,13 @@ const DeleteDialog = ({ route, params, title }: props) => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: `${title} não existe no nosso banco de dados.`,
+        description: `${title} não deletado.`,
       });
     }
   }
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <Button className="border-[red]" size={"icon"} variant={"outline"}>
           <Trash2 className="text-[red] h-5 w-5"></Trash2>
         </Button>

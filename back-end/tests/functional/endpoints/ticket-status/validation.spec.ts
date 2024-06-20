@@ -1,13 +1,14 @@
 import { AdminFactory } from '#database/factories/admin_factory'
 import { TicketStatusFactory } from '#database/factories/ticket_status_factory'
 import { UserFactory } from '#database/factories/user_factory'
+import Color from '#models/color'
 import TicketStatus from '#models/ticket_status'
 import { ticketFactoryStatusId } from '#tests/utils/ticketFactoryStatusId'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
 test.group('ticket status validation', (group) => {
-  group.each.setup(() => testUtils.db().withGlobalTransaction())
+  // group.each.setup(() => testUtils.db().withGlobalTransaction())
 
   test('it should not be able to get/index by unauthorized').run(
     async ({ assert, client, route }) => {
@@ -83,30 +84,38 @@ test.group('ticket status validation', (group) => {
   )
   test('it should not be able to update a status if already used in ticket').run(
     async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
-      const status = await TicketStatusFactory.create()
+      console.log((await Color.all()).map((a) => a.id))
+      const user = await UserFactory.apply('admin').create()
+      const status = await TicketStatusFactory.with('responsible').create()
 
       await ticketFactoryStatusId(status.id)
 
       const response = await client
         .put(route('ticket_status.update', { id: status.id }))
-        .loginAs(admin)
+        .loginAs(user)
 
       response.assertStatus(403)
+
+      const dataVerify = { name: status.name, colorId: status.colorId }
+
+      const statusRefresh = await status.refresh()
+
+      assert.include(dataVerify, { name: statusRefresh.name, colorId: statusRefresh.colorId })
     }
   )
 
   test('it should not be able to delete pendente status').run(async ({ assert, client, route }) => {
     const admin = await AdminFactory.create()
-    const pending = await TicketStatus.findByOrFail('name', 'pendente')
+    const status = await TicketStatus.findByOrFail('name', 'pendente')
 
     const response = await client
-      .delete(route('ticket_status.update', { id: pending.id }))
+      .delete(route('ticket_status.destroy', { id: status.id }))
       .loginAs(admin)
 
     response.assertStatus(403)
+
     const statusNotDeleted = await TicketStatus.findByOrFail('name', 'pendente')
-    assert.isNotEmpty(statusNotDeleted)
+    assert.equal(status.name, statusNotDeleted.name)
   })
   test('it should not be able to delete concluido status').run(
     async ({ assert, client, route }) => {
@@ -115,20 +124,21 @@ test.group('ticket status validation', (group) => {
       const status = await TicketStatus.findByOrFail('name', 'concluido')
 
       const response = await client
-        .delete(route('ticket_status.update', { id: status.id }))
+        .delete(route('ticket_status.destroy', { id: status.id }))
         .loginAs(admin)
 
       response.assertStatus(403)
+
       const statusNotDeleted = await TicketStatus.findByOrFail('name', 'concluido')
-      assert.isNotEmpty(statusNotDeleted)
+      assert.equal(status.name, statusNotDeleted.name)
     }
   )
 
-  test('it should not be able to delete a status if already used in ticket').run(
-    async ({ assert, client, route }) => {
+  test('it should not be able to delete a status if already used in ticket')
+    .with(new Array(4))
+    .run(async ({ assert, client, route }) => {
       const admin = await AdminFactory.create()
       const status = await TicketStatus.findByOrFail('name', 'concluido')
-
       await ticketFactoryStatusId(status.id)
 
       const response = await client
@@ -136,6 +146,8 @@ test.group('ticket status validation', (group) => {
         .loginAs(admin)
 
       response.assertStatus(403)
-    }
-  )
+
+      const statusNotDeleted = await TicketStatus.findByOrFail('name', 'concluido')
+      assert.include(status.serialize(), statusNotDeleted.serialize())
+    })
 })

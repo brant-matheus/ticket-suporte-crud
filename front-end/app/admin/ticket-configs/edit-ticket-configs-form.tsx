@@ -1,64 +1,83 @@
 "use client";
 
+import { authInstance } from "@/app/axios-config";
+import LoaderButton from "@/components/buttons/loader-button";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
-import { useForm } from "react-hook-form";
-import { authInstance } from "@/app/axios-config";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToastContext } from "@/components/utils/context-toast";
-
+import { forwardRef, useImperativeHandle, useState } from "react";
+import { useForm } from "react-hook-form";
 export interface ModalHandles {
   handleClick: (props: HandleProps) => void;
 }
 interface FormProps {
-  item: string;
+  name: string;
+  color: string;
 }
 
 interface HandleProps {
   ticketConfigName: string;
   title: string;
   params: number;
+  route: string;
+}
+
+interface Colors {
+  id: number;
+  name: string;
+  hex: string;
 }
 
 export const TicketConfigForm = forwardRef((props, ref) => {
-  const [editStatusBool, setEditStatusBool] = useState(false);
   const { ToastSuccess, ToastFail } = useToastContext();
-  const [buttonBool, setButtonBool] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [stateProps, setStateProps] = useState<HandleProps>();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
   };
+  const [colors, SetColors] = useState<Colors[]>([]);
 
+  async function getColors() {
+    setIsLoading(true);
+    try {
+      const { status, request, data } = await authInstance.get("color");
+      if ((status ?? request.status) == 200) {
+        SetColors(data);
+        setIsLoading(false);
+      }
+    } catch (error) {}
+  }
   useImperativeHandle(ref, () => ({
     handleClick(props: HandleProps) {
       handleOpen();
       setStateProps(props);
+      getColors();
     },
   }));
   const form = useForm<FormProps>();
   async function editTicketConfig(item: FormProps) {
-    setButtonBool(true);
+    setIsLoading(true);
     try {
       const { status } = await authInstance.put(
-        `ticket-status/${stateProps?.params}`,
+        `${stateProps?.route}/${stateProps?.params}`,
         item
       );
 
@@ -66,15 +85,14 @@ export const TicketConfigForm = forwardRef((props, ref) => {
 
       setOpen(false);
     } catch (error) {
-      setButtonBool(false);
+      console.log(error);
+      setIsLoading(false);
       ToastFail({
-        description: "Nome em branco ou nome já existente.",
+        description: `${stateProps?.title} usado em ticket.`,
       });
     }
   }
-  useEffect(() => {
-    form.reset();
-  }, [open]);
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -87,7 +105,7 @@ export const TicketConfigForm = forwardRef((props, ref) => {
               <FormField
                 defaultValue={stateProps?.ticketConfigName}
                 control={form.control}
-                name="item"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Editar {stateProps?.title}</FormLabel>
@@ -99,7 +117,38 @@ export const TicketConfigForm = forwardRef((props, ref) => {
                   </FormItem>
                 )}
               />
-              <Button disabled={buttonBool}>Salvar</Button>
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cores</FormLabel>
+
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione uma cor" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {colors.map((color) => (
+                          <SelectItem value={color.name} key={color.id}>
+                            {color.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              {isLoading ? (
+                <LoaderButton title="carregando..." />
+              ) : (
+                <Button>Salvar</Button>
+              )}
             </form>
           </Form>
         </DialogContent>

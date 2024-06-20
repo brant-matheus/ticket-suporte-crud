@@ -1,12 +1,13 @@
 import { TicketCategoryFactory } from '#database/factories/ticket_category_factory'
 import { TicketPriorityFactory } from '#database/factories/ticket_priority_factory'
 import { UserFactory } from '#database/factories/user_factory'
+import Color from '#models/color'
 import Ticket from '#models/ticket'
 
 export async function ticketFactoryStatusId(statusId: number) {
   const user = await UserFactory.create()
-  const category = await TicketCategoryFactory.create()
-  const priority = await TicketPriorityFactory.create()
+  const category = await TicketCategoryFactory.merge({ responsibleId: user.id }).create()
+  const priority = await TicketPriorityFactory.merge({ responsibleId: user.id }).create()
 
   await Ticket.create({
     createdById: user.id,

@@ -1,5 +1,6 @@
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
+import { errors } from '@adonisjs/lucid'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   /**
@@ -7,6 +8,8 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * with pretty printed stack traces.
    */
   protected debug = !app.inProduction
+
+  protected ignoreExceptions = [errors.E_ROW_NOT_FOUND]
 
   /**
    * The method is used for handling errors and returning

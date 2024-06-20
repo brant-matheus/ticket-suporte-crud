@@ -57,6 +57,7 @@ test.group('ticket status crud', (group) => {
   test('it should be able to update a ticket status').run(async ({ client, route, assert }) => {
     const admin = await AdminFactory.create()
     const request = { name: 'new status name', color: 'azul' }
+
     const status = await TicketStatusFactory.create()
 
     const blue = await Color.findByOrFail('name', 'azul')

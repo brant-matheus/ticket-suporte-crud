@@ -1,23 +1,26 @@
 import Color from '#models/color'
 import TicketStatus from '#models/ticket_status'
+import User from '#models/user'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    const colors = await Color.all()
+    const blueColor = await Color.findByOrFail('name', 'azul')
+    const greenColor = await Color.findByOrFail('name', 'verde')
+    const user = await User.findByOrFail('email', 'matheus@saga.com')
 
     await TicketStatus.updateOrCreateMany(
       ['name'],
       [
         {
           name: 'pendente',
-          responsibleId: 1,
-          colorId: colors.find((color) => color.name == 'azul')?.id,
+          responsibleId: user.id,
+          colorId: blueColor.id,
         },
         {
           name: 'concluido',
-          responsibleId: 1,
-          colorId: colors.find((color) => color.name == 'verde')?.id,
+          responsibleId: user.id,
+          colorId: greenColor.id,
         },
       ]
     )

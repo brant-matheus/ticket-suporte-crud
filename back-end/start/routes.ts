@@ -8,6 +8,7 @@ import TicketsController from '#controllers/tickets_controller'
 import UsersController from '#controllers/users_controller'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import ColorsController from '#controllers/colors_controller'
 
 router
   .group(() => {
@@ -50,6 +51,12 @@ router
       .resource('ticket-priority', TicketPrioritiesController)
       .except(['create', 'edit', 'show'])
       .use(['destroy', 'store', 'update'], middleware.admin())
+
+    // color
+    router
+      .resource('color', ColorsController)
+      .except(['create', 'edit', 'show'])
+      .use('*', middleware.admin())
   })
   .middleware(middleware.auth())
 

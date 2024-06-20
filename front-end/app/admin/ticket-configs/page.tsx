@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import { DataTable } from "@/components/table/data-table";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import {
   CreateTicketConfigsForm,
   HandleClickType,
 } from "./create-ticket-configs-form";
+import { authInstance } from "@/app/axios-config";
 const page = () => {
   const formRef = useRef<HandleClickType>(null);
   return (
@@ -54,22 +55,21 @@ const page = () => {
               <DataTable
                 columns={ticketConfigsColumns({
                   title: "prioridade",
+                  route: "ticket-priority",
                 })}
                 component={
                   <CreateButton
                     action={() =>
                       formRef.current?.handleClick({
                         title: "prioridade",
-                        route: "",
+                        route: "ticket-priority",
                       })
                     }
                     title="prioridade"
                   />
                 }
-                filterColumn=""
-                fromTable="priorities"
-                route="ticket-configs"
                 showFilter={false}
+                route="ticket-priority"
               />
             </CardContent>
           </Card>
@@ -80,18 +80,20 @@ const page = () => {
               <DataTable
                 columns={ticketConfigsColumns({
                   title: "status",
+                  route: "ticket-status",
                 })}
                 component={
                   <CreateButton
                     action={() =>
                       formRef.current?.handleClick({
                         title: "status",
-                        route: "status",
+                        route: "ticket-status",
                       })
                     }
                     title="status"
                   />
                 }
+                showFilter={false}
                 route="ticket-status"
               />
             </CardContent>

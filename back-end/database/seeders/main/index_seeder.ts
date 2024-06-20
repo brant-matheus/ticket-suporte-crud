@@ -2,7 +2,6 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class IndexSeeder extends BaseSeeder {
   private async seed(Seeder: { default: typeof BaseSeeder }) {
-    // this should run
     await new Seeder.default(this.client).run()
   }
 

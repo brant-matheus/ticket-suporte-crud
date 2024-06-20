@@ -39,9 +39,7 @@ export default class TicketStatusesController {
   async update({ params, request, response, auth }: HttpContext) {
     const ticket = await Ticket.findManyBy('ticketStatusId', params.id)
 
-    const isStatusUsed = ticket.length >= 1
-
-    const condition = [1, 2].includes(parseInt(params.id)) || isStatusUsed
+    const condition = [1, 2].includes(parseInt(params.id)) || ticket.length >= 1
     if (condition) {
       return response.forbidden('cannot update this specific status')
     }
@@ -62,9 +60,7 @@ export default class TicketStatusesController {
   async destroy({ params, response }: HttpContext) {
     const ticket = await Ticket.findManyBy('ticketStatusId', params.id)
 
-    const isStatusUsed = ticket.length >= 1
-
-    const condition = [1, 2].includes(parseInt(params.id)) || isStatusUsed
+    const condition = [1, 2].includes(parseInt(params.id)) || ticket.length >= 1
     if (condition) {
       return response.forbidden('cannot delete this specific status')
     }
