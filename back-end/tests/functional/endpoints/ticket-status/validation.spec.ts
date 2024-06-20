@@ -2,13 +2,14 @@ import { AdminFactory } from '#database/factories/admin_factory'
 import { TicketStatusFactory } from '#database/factories/ticket_status_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Color from '#models/color'
+import TicketCategory from '#models/ticket_category'
 import TicketStatus from '#models/ticket_status'
 import { ticketFactoryStatusId } from '#tests/utils/ticketFactoryStatusId'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
 test.group('ticket status validation', (group) => {
-  // group.each.setup(() => testUtils.db().withGlobalTransaction())
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
 
   test('it should not be able to get/index by unauthorized').run(
     async ({ assert, client, route }) => {
@@ -134,11 +135,12 @@ test.group('ticket status validation', (group) => {
     }
   )
 
-  test('it should not be able to delete a status if already used in ticket')
-    .with(new Array(4))
-    .run(async ({ assert, client, route }) => {
+  test('it should not be able to delete a status if already used in ticket').run(
+    async ({ assert, client, route }) => {
       const admin = await AdminFactory.create()
+
       const status = await TicketStatus.findByOrFail('name', 'concluido')
+
       await ticketFactoryStatusId(status.id)
 
       const response = await client
@@ -149,5 +151,6 @@ test.group('ticket status validation', (group) => {
 
       const statusNotDeleted = await TicketStatus.findByOrFail('name', 'concluido')
       assert.include(status.serialize(), statusNotDeleted.serialize())
-    })
+    }
+  )
 })

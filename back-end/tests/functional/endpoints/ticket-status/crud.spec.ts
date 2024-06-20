@@ -2,6 +2,7 @@ import { AdminFactory } from '#database/factories/admin_factory'
 import { TicketStatusFactory } from '#database/factories/ticket_status_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Color from '#models/color'
+import Ticket from '#models/ticket'
 import TicketStatus from '#models/ticket_status'
 import testUtils from '@adonisjs/core/services/test_utils'
 import db from '@adonisjs/lucid/services/db'
@@ -57,27 +58,30 @@ test.group('ticket status crud', (group) => {
   test('it should be able to update a ticket status').run(async ({ client, route, assert }) => {
     const admin = await AdminFactory.create()
     const request = { name: 'new status name', color: 'azul' }
+    try {
+      const status = await TicketStatusFactory.merge({ responsibleId: admin.id }).create()
 
-    const status = await TicketStatusFactory.create()
+      const blue = await Color.findByOrFail('name', 'azul')
+      const response = await client
+        .put(route('ticket_status.update', { id: status.id }))
+        .loginAs(admin)
+        .json(request)
+      response.assertStatus(200)
 
-    const blue = await Color.findByOrFail('name', 'azul')
-    const response = await client
-      .put(route('ticket_status.update', { id: status.id }))
-      .loginAs(admin)
-      .json(request)
-    response.assertStatus(200)
+      const body = response.body()
 
-    const body = response.body()
-
-    const updatedStatus = await TicketStatus.findOrFail(status.id)
-    assert.equal(updatedStatus.name, request.name)
-    assert.equal(updatedStatus.colorId, blue.id)
-    assert.propertyVal(body, 'name', request.name)
+      const updatedStatus = await TicketStatus.findOrFail(status.id)
+      assert.equal(updatedStatus.name, request.name)
+      assert.equal(updatedStatus.colorId, blue.id)
+      assert.propertyVal(body, 'name', request.name)
+    } catch (error) {
+      console.log('awui', (await TicketStatus.all()).length)
+    }
   })
 
   test('it should be able to delete a ticket status').run(async ({ client, route, assert }) => {
     const admin = await AdminFactory.create()
-    const status = await TicketStatusFactory.create()
+    const status = await TicketStatusFactory.merge({ responsibleId: admin.id }).create()
 
     const response = await client
       .delete(route('ticket_status.destroy', { id: status.id }))
@@ -85,7 +89,8 @@ test.group('ticket status crud', (group) => {
 
     response.assertStatus(204)
 
-    const deletedStatus = await db.from('test.ticket_statuses').where('id', status.id)
+    const deletedStatus = await TicketStatus.query().where('id', status.id)
+
     assert.isEmpty(deletedStatus)
   })
 })

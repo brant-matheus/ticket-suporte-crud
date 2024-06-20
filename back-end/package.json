@@ -44,14 +44,13 @@
     "@swc/core": "^1.4.16",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.12.7",
+    "c8": "^10.0.0",
     "eslint": "^8.57.0",
     "hot-hook": "^0.2.1",
     "pino-pretty": "^11.0.0",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "c8": "^10.0.0"
-
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@adonisjs/auth": "^9.2.0",
@@ -62,6 +61,7 @@
     "collect.js": "^4.36.1",
     "luxon": "^3.4.4",
     "mysql2": "^3.9.7",
+    "pg": "^8.12.0",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
@@ -74,5 +74,15 @@
     "extends": "@adonisjs/eslint-config/app"
   },
   "prettier": "@adonisjs/prettier-config",
-  "c8": {"reporter": ["text", "html"], "all": true, "include": ["app/**", "!app/models"]}
+  "c8": {
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "all": true,
+    "include": [
+      "app/**",
+      "!app/models"
+    ]
+  }
 }
