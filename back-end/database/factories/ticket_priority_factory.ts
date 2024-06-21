@@ -5,7 +5,7 @@ import { UserFactory } from './user_factory.js'
 export const TicketPriorityFactory = factory
   .define(TicketPriority, async ({ faker }) => {
     return {
-      name: faker.helpers.unique(faker.lorem.word),
+      name: faker.lorem.word(),
       colorId: faker.number.int({ min: 1, max: 7 }),
     }
   })

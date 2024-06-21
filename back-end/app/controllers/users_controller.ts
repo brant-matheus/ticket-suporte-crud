@@ -9,7 +9,7 @@ export default class UsersController {
   async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
-    const data = await User.query().paginate(parseInt(page), parseInt(pageSize))
+    const data = await User.query().paginate(page, pageSize)
     return response.ok(data)
   }
 
@@ -60,7 +60,6 @@ export default class UsersController {
       return response.forbidden('guest should not be able to delete another user, beside itself.')
     }
     const user = await User.findOrFail(params.id)
-    await db.from('auth_access_tokens').where('tokenable_id', params.id).delete()
     await user.delete()
     return response.noContent()
   }

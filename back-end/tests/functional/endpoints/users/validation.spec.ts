@@ -186,19 +186,17 @@ test.group('user crud validation', (group) => {
     }
   )
 
-  test('it should not be able to delete a user by a guest user').run(
-    async ({ assert, route, client }) => {
-      const firstGuest = await UserFactory.create()
-      const secondGuest = await UserFactory.create()
+  test('it should not be able to delete a user by a guest user').run(async ({ route, client }) => {
+    const firstGuest = await UserFactory.create()
+    const secondGuest = await UserFactory.create()
 
-      const response = await client
-        .delete(route('user.destroy', { id: secondGuest.id }))
-        .loginAs(firstGuest)
+    const response = await client
+      .delete(route('user.destroy', { id: secondGuest.id }))
+      .loginAs(firstGuest)
 
-      response.assertStatus(403)
-      await User.findOrFail(secondGuest.id)
-    }
-  )
+    response.assertStatus(403)
+    await User.findOrFail(secondGuest.id)
+  })
 
   test('it should not be able to get/index users by guest user').run(
     async ({ assert, client, route }) => {

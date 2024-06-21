@@ -1,4 +1,3 @@
-import { AdminFactory } from '#database/factories/admin_factory'
 import { TicketStatusFactory } from '#database/factories/ticket_status_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Color from '#models/color'
@@ -11,19 +10,21 @@ test.group('ticket status crud', (group) => {
 
   test('it should be able to get/index ticket status paginated by admin').run(
     async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
+      const user = await UserFactory.apply('admin').create()
 
       const request = {
         page: 1,
         pageSize: 10,
       }
 
-      const response = await client.get(route('ticket_status.index')).loginAs(admin).qs(request)
+      const response = await client.get(route('ticket_status.index')).loginAs(user).qs(request)
+
       response.assertStatus(200)
 
       response.assertPaginatedStructure({ '*': ['id', 'name', 'color', 'responsibleId'] })
 
       const body = response.body()
+
       assert.equal(body.meta.total, 2)
       assert.equal(body.meta.perPage, request.pageSize)
       assert.equal(body.meta.currentPage, request.page)
@@ -31,60 +32,69 @@ test.group('ticket status crud', (group) => {
   )
 
   test('it should be able to get/index ticket status by guest').run(async ({ client, route }) => {
-    const guest = await UserFactory.create()
+    const user = await UserFactory.create()
 
-    const response = await client.get(route('ticket_status.index')).loginAs(guest)
+    const response = await client.get(route('ticket_status.index')).loginAs(user)
     response.assertStatus(200)
 
     response.assertJsonStructure({ '*': ['id', 'name', 'color', 'responsibleId'] })
   })
 
-  test('it should be able to store a ticket status').run(async ({ client, route, assert }) => {
-    const admin = await AdminFactory.create()
+  test('it should be able to store a ticket status by admin').run(
+    async ({ client, route, assert }) => {
+      const user = await UserFactory.apply('admin').create()
 
-    const request = { name: 'novo status', color: 'vermelho' }
-    const response = await client.post(route('ticket_status.store')).loginAs(admin).json(request)
-    response.assertStatus(201)
+      const color = await Color.first()
+      const request = { name: 'novo status', color: color?.name }
+      const response = await client.post(route('ticket_status.store')).loginAs(user).json(request)
+      response.assertStatus(201)
 
-    const body = response.body()
-    const red = await Color.findByOrFail('name', request.color)
-    assert.properties(body, ['id', 'name', 'colorId', 'responsibleId'])
-    assert.propertyVal(body, 'name', request.name)
-    assert.propertyVal(body, 'colorId', red.id)
-  })
+      const body = response.body()
+      assert.properties(body, ['id', 'name', 'colorId', 'responsibleId'])
+      assert.propertyVal(body, 'name', request.name)
+      assert.propertyVal(body, 'colorId', color?.id)
+      await TicketStatus.findByOrFail('name', request.name)
+    }
+  )
 
-  test('it should be able to update a ticket status').run(async ({ client, route, assert }) => {
-    const admin = await AdminFactory.create()
-    const request = { name: 'new status name', color: 'azul' }
-    const status = await TicketStatusFactory.merge({ responsibleId: admin.id }).create()
+  test('it should be able to update a ticket status by admin').run(
+    async ({ client, route, assert }) => {
+      const user = await UserFactory.apply('admin').create()
 
-    const blue = await Color.findByOrFail('name', 'azul')
-    const response = await client
-      .put(route('ticket_status.update', { id: status.id }))
-      .loginAs(admin)
-      .json(request)
-    response.assertStatus(200)
+      const color = await Color.first()
+      const request = { name: 'new status name', color: color?.name }
+      const status = await TicketStatusFactory.merge({ responsibleId: user.id }).create()
 
-    const body = response.body()
+      const response = await client
+        .put(route('ticket_status.update', { id: status.id }))
+        .loginAs(user)
+        .json(request)
+      response.assertStatus(200)
 
-    const updatedStatus = await TicketStatus.findOrFail(status.id)
-    assert.equal(updatedStatus.name, request.name)
-    assert.equal(updatedStatus.colorId, blue.id)
-    assert.propertyVal(body, 'name', request.name)
-  })
+      const body = response.body()
 
-  test('it should be able to delete a ticket status').run(async ({ client, route, assert }) => {
-    const admin = await AdminFactory.create()
-    const status = await TicketStatusFactory.merge({ responsibleId: admin.id }).create()
+      const updatedStatus = await status.refresh()
 
-    const response = await client
-      .delete(route('ticket_status.destroy', { id: status.id }))
-      .loginAs(admin)
+      assert.equal(updatedStatus.name, request.name)
+      assert.equal(updatedStatus.colorId, color?.id)
+      assert.propertyVal(body, 'name', request.name)
+    }
+  )
 
-    response.assertStatus(204)
+  test('it should be able to delete a ticket status by admin').run(
+    async ({ client, route, assert }) => {
+      const admin = await UserFactory.apply('admin').create()
+      const status = await TicketStatusFactory.merge({ responsibleId: admin.id }).create()
 
-    const deletedStatus = await TicketStatus.query().where('id', status.id)
+      const response = await client
+        .delete(route('ticket_status.destroy', { id: status.id }))
+        .loginAs(admin)
 
-    assert.isEmpty(deletedStatus)
-  })
+      response.assertStatus(204)
+
+      const deletedStatus = await TicketStatus.find(status.id)
+
+      assert.isNull(deletedStatus)
+    }
+  )
 })

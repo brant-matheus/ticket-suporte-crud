@@ -1,4 +1,3 @@
-import { AdminFactory } from '#database/factories/admin_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import User from '#models/user'
 import hash from '@adonisjs/core/services/hash'
@@ -41,7 +40,7 @@ test.group('Users crud', (group) => {
   )
   test('it should be able to store a admin user by admin').run(
     async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
+      const user = await UserFactory.apply('admin').create()
       const data = {
         email: 'validemail@valid.com',
         fullName: 'full name',
@@ -54,12 +53,12 @@ test.group('Users crud', (group) => {
 
         ...data,
       }
-      const response = await client.post(route('user.store')).loginAs(admin).json(request)
+      const response = await client.post(route('user.store')).loginAs(user).json(request)
       response.assertStatus(201)
 
-      const user = await User.findByOrFail('email', request.email)
-      assert.include(user.serialize(), data)
-      assert.isTrue(await hash.verify(user.password, request.password))
+      const userStored = await User.findByOrFail('email', request.email)
+      assert.include(userStored.serialize(), data)
+      assert.isTrue(await hash.verify(userStored.password, request.password))
 
       const body = response.body()
       assert.include(body, data)
@@ -67,7 +66,7 @@ test.group('Users crud', (group) => {
   )
   test('it should be able to store a guest user by admin').run(
     async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
+      const user = await UserFactory.create()
       const data = {
         email: 'validemail@valid.com',
         fullName: 'full name',
@@ -80,63 +79,63 @@ test.group('Users crud', (group) => {
 
         ...data,
       }
-      const response = await client.post(route('user.store')).loginAs(admin).json(request)
+      const response = await client.post(route('user.store')).loginAs(user).json(request)
       response.assertStatus(201)
 
-      const user = await User.findByOrFail('email', request.email)
-      assert.include(user.serialize(), data)
-      assert.isTrue(await hash.verify(user.password, request.password))
+      const userStored = await User.findByOrFail('email', request.email)
+      assert.include(userStored.serialize(), data)
+      assert.isTrue(await hash.verify(userStored.password, request.password))
 
       const body = response.body()
       assert.include(body, data)
     }
   )
   test('it should be able to update user password').run(async ({ assert, client, route }) => {
-    const guest = await UserFactory.create()
+    const user = await UserFactory.create()
     const passwords = {
       password: 'Anypass@123',
       passwordConfirmation: 'Anypass@123',
     }
 
     const response = await client
-      .put(route('user.update', { id: guest.id }))
-      .loginAs(guest)
+      .put(route('user.update', { id: user.id }))
+      .loginAs(user)
       .json(passwords)
 
     response.assertStatus(200)
-    const user = await User.findOrFail(guest.id)
-    assert.isTrue(await hash.verify(user.password, passwords.password))
+    const updatedUser = await User.findOrFail(user.id)
+    assert.isTrue(await hash.verify(updatedUser.password, passwords.password))
   })
 
   test('it should be able to update user general Information').run(
     async ({ assert, client, route }) => {
-      const guest = await UserFactory.create()
+      const user = await UserFactory.create()
       const request = {
         email: 'saga@saga.com',
         fullName: 'saga saga',
       }
 
       const response = await client
-        .put(route('user.update', { id: guest.id }))
-        .loginAs(guest)
+        .put(route('user.update', { id: user.id }))
+        .loginAs(user)
         .json(request)
       response.assertStatus(200)
       const body = response.body()
       assert.include(body, request)
 
-      const user = await User.findByOrFail('id', guest.id)
-      assert.include(user.serialize(), request)
+      const updatedUser = await User.findOrFail(user.id)
+      assert.include(updatedUser.serialize(), request)
     }
   )
 
   test('it should be able to update user general Information by admin').run(
     async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
+      const admin = await UserFactory.apply('admin').create()
       const guest = await UserFactory.create()
       const request = {
         email: 'saga@saga.com',
         fullName: 'saga saga',
-        isAdmin: !admin.isAdmin,
+        isAdmin: !guest.isAdmin,
       }
 
       const response = await client
@@ -152,15 +151,15 @@ test.group('Users crud', (group) => {
     }
   )
   test('it should be able to delete user').run(async ({ assert, client, route }) => {
-    const guest = await UserFactory.create()
-    const response = await client.delete(route('user.destroy', { id: guest.id })).loginAs(guest)
+    const user = await UserFactory.create()
+    const response = await client.delete(route('user.destroy', { id: user.id })).loginAs(user)
     response.assertStatus(204)
 
-    assert.isNull(await User.find(guest.id))
-    assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', guest.id!))
+    assert.isNull(await User.find(user.id))
+    assert.isEmpty(await db.from('auth_access_tokens').where('tokenable_id', user.id!))
   })
   test('it should be able to delete a user by admin').run(async ({ assert, client, route }) => {
-    const admin = await AdminFactory.create()
+    const admin = await UserFactory.apply('admin').create()
     const guest = await UserFactory.create()
     const response = await client.delete(route('user.destroy', { id: guest.id })).loginAs(admin)
     response.assertStatus(204)
@@ -171,14 +170,14 @@ test.group('Users crud', (group) => {
 
   test('it should be able to get/index all users by admin').run(
     async ({ assert, client, route }) => {
-      const admin = await AdminFactory.create()
+      const user = await UserFactory.apply('admin').create()
       await UserFactory.createMany(20)
 
       const request = {
         page: 1,
         pageSize: 10,
       }
-      const response = await client.get(route('user.index')).loginAs(admin).qs(request)
+      const response = await client.get(route('user.index')).loginAs(user).qs(request)
       response.assertStatus(200)
 
       const body = response.body()
