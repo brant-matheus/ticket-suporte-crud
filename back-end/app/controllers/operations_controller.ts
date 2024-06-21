@@ -4,6 +4,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class OperationsController {
+  async show({ params }: HttpContext) {}
+
   async index({ request }: HttpContext) {
     const { ticketId } = request.only(['ticketId'])
     return await Operation.query()

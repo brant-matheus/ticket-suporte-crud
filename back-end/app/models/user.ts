@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeDelete, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { AccessToken } from '@adonisjs/auth/access_tokens'
@@ -12,6 +12,7 @@ import Comment from './comment.js'
 import TicketCategory from './ticket_category.js'
 import TicketPriority from './ticket_priority.js'
 import TicketStatus from './ticket_status.js'
+import db from '@adonisjs/lucid/services/db'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -21,6 +22,11 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 export default class User extends compose(BaseModel, AuthFinder) {
   currentAccessToken?: AccessToken
 
+  @beforeDelete()
+  static async removeAcessToken(user: User) {
+    await db.from('auth_access_tokens').where('tokenable_id', user.id).delete()
+  }
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -29,7 +35,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare email: string
-  //serialized(format) set password to null, which means if we use a model query instead of a data base query the password will be excepted.
+
   @column({ serializeAs: null })
   declare password: string
 

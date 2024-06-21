@@ -13,10 +13,7 @@ import ColorsController from '#controllers/colors_controller'
 router
   .group(() => {
     // user
-    router
-      .resource('user', UsersController)
-      .except(['create', 'edit', 'show'])
-      .use(['index'], middleware.admin())
+    router.resource('user', UsersController).apiOnly().use(['index'], middleware.admin())
 
     // logout
     router.delete('auth', [AuthController, 'logout']).as('sign_out')
@@ -24,18 +21,12 @@ router
     // ticket
     router
       .resource('ticket', TicketsController)
-      .except(['create', 'edit', 'show'])
+      .apiOnly()
       .use(['store', 'destroy'], middleware.guest())
     // operation
-    router
-      .resource('operation', OperationsController)
-      .except(['create', 'edit', 'show'])
-      .use('*', middleware.admin())
+    router.resource('operation', OperationsController).apiOnly().use('*', middleware.admin())
     //comments
-    router
-      .resource('comments', CommentsController)
-      .except(['create', 'edit', 'show'])
-      .use('*', middleware.admin())
+    router.resource('comments', CommentsController).apiOnly().use('*', middleware.admin())
 
     router
       .resource('ticket-status', TicketStatusesController)
@@ -55,7 +46,8 @@ router
     // color
     router
       .resource('color', ColorsController)
-      .except(['create', 'edit', 'show'])
+      // .except(['create', 'edit', 'show'])
+      .apiOnly()
       .use('*', middleware.admin())
   })
   .middleware(middleware.auth())

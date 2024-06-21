@@ -85,7 +85,6 @@ test.group('ticket status validation', (group) => {
   )
   test('it should not be able to update a status if already used in ticket').run(
     async ({ assert, client, route }) => {
-      console.log((await Color.all()).map((a) => a.id))
       const user = await UserFactory.apply('admin').create()
       const status = await TicketStatusFactory.with('responsible').create()
 

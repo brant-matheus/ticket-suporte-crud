@@ -4,6 +4,8 @@ import { PasswordValidator, PutUserValidator, StoreUserValidator } from '#valida
 import db from '@adonisjs/lucid/services/db'
 
 export default class UsersController {
+  async show({ params }: HttpContext) {}
+
   async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 

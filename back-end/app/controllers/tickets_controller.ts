@@ -7,9 +7,8 @@ import Operation from '#models/operation'
 import TicketStatus from '#models/ticket_status'
 
 export default class TicketsController {
-  /**
-   * Display a list of resource
-   */
+  async show({ params }: HttpContext) {}
+
   async index({ request, auth }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
     if (auth.user?.isAdmin) {
