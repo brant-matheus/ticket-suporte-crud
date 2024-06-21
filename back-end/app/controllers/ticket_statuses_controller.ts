@@ -39,8 +39,7 @@ export default class TicketStatusesController {
   async update({ params, request, response, auth }: HttpContext) {
     const ticket = await Ticket.findManyBy('ticketStatusId', params.id)
 
-    const condition = [1, 2].includes(parseInt(params.id)) || ticket.length >= 1
-    if (condition) {
+    if ([1, 2].includes(parseInt(params.id)) || ticket.length >= 1) {
       return response.forbidden('cannot update this specific status')
     }
     const { name, color } = request.only(['name', 'color'])
