@@ -49,8 +49,8 @@ router
     // color
     router
       .resource('color', ColorsController)
-      // .except(['create', 'edit', 'show'])
       .apiOnly()
+      .except(['destroy', 'show', 'store', 'update'])
       .use('*', middleware.admin())
   })
   .middleware(middleware.auth())

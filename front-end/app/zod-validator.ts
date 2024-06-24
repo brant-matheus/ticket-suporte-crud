@@ -114,9 +114,9 @@ export const StoreTicketValidation = z.object({
 export type StoreTicketInfer = z.infer<typeof StoreTicketValidation>;
 
 export const TicketConfigValidator = z.object({
-  name: z.string({ message: "digite um nome" }),
+  name: z.string().min(1, { message: "digite um nome" }),
 
-  color: z.string({ message: "Escolha uma cor" }),
+  color: z.string().min(1, { message: "Escolha uma cor" }),
 });
 
 export type TicketConfigInfer = z.infer<typeof TicketConfigValidator>;

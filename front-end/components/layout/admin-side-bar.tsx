@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import Logout from "./logout";
 import GenericToolTip from "../utils/generic-tool-tip";
+import { ModeToggle } from "../ui/theme-toggle";
 
 export default function AdminSideBar() {
   const pathName = usePathname();
@@ -45,6 +46,7 @@ export default function AdminSideBar() {
     <>
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-y-6 px-2 sm:py-5">
+          <ModeToggle />
           {links.map((link) => (
             <GenericToolTip
               content={link.toolTipContent}

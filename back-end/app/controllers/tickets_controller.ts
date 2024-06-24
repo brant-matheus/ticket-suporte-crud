@@ -1,13 +1,12 @@
-import type { HttpContext } from '@adonisjs/core/http'
 import Ticket from '#models/ticket'
 import TicketCategory from '#models/ticket_category'
 import TicketPriority from '#models/ticket_priority'
-import { DateTime } from 'luxon'
-import Operation from '#models/operation'
 import TicketStatus from '#models/ticket_status'
+import type { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
 
 export default class TicketsController {
-  async show({ params }: HttpContext) {}
+  async show({}: HttpContext) {}
 
   async index({ request, auth }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])

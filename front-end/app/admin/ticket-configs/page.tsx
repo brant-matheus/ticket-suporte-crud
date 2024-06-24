@@ -29,21 +29,20 @@ const page = () => {
               <DataTable
                 columns={ticketConfigsColumns({
                   title: "categoria",
+                  route: "ticket-category",
                 })}
                 component={
                   <CreateButton
                     action={() =>
                       formRef.current?.handleClick({
                         title: "categoria",
-                        route: "",
+                        route: "ticket-category",
                       })
                     }
                     title="categoria"
                   />
                 }
-                filterColumn=""
-                fromTable="categories"
-                route="ticket-configs"
+                route="ticket-category"
                 showFilter={false}
               />
             </CardContent>

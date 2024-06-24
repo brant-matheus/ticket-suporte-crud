@@ -25,6 +25,7 @@ export default function GenericToolTip({
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
+            size={"sm"}
             variant={variant}
             onClick={() => router.push(path)}
             className="rounded-full"

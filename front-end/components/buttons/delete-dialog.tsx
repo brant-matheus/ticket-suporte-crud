@@ -41,6 +41,7 @@ const DeleteDialog = ({ route, params, title }: props) => {
       });
     }
   }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>

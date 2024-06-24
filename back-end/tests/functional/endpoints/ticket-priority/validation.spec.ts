@@ -59,7 +59,7 @@ test.group('ticket priority validation', (group) => {
         user.apply('admin')
       ).create()
 
-      const t = await TicketFactory.with('user')
+      await TicketFactory.with('user')
         .merge({ ticketPriorityId: ticketPriority.id })
         .with('ticketCategory', 1, (ticketCategory) =>
           ticketCategory.merge({ responsibleId: user.id })
