@@ -9,13 +9,12 @@ import { test } from '@japa/runner'
 test.group('ticket status validation', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
-  test('it should not be able to get/index ticket status by unauthorized').run(
+  test('it should not be able to get/index ticket status by guest').run(
     async ({ client, route, assert }) => {
-      const response = await client.get(route('ticket_status.index'))
-      response.assertStatus(401)
+      const user = await UserFactory.create()
 
-      const body = response.body()
-      assert.property(body, 'errors')
+      const response = await client.get(route('ticket_status.index')).loginAs(user)
+      response.assertStatus(401)
     }
   )
 

@@ -4,18 +4,13 @@ import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TicketStatusesController {
-  async index({ request, response, auth }: HttpContext) {
+  async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
-    if (auth.user?.isAdmin) {
-      const data = await TicketStatus.query()
-        .preload('responsible')
-        .preload('color')
-        .paginate(page, pageSize)
-      return response.ok(data)
-    }
-
-    const data = await TicketStatus.query().preload('color')
+    const data = await TicketStatus.query()
+      .preload('responsible')
+      .preload('color')
+      .paginate(page, pageSize)
     return response.ok(data)
   }
 
@@ -37,9 +32,7 @@ export default class TicketStatusesController {
   }
 
   async update({ params, request, response, auth }: HttpContext) {
-    const ticket = await Ticket.findManyBy('ticketStatusId', params.id)
-
-    if ([1, 2].includes(parseInt(params.id)) || ticket.length >= 1) {
+    if ([1, 2].includes(parseInt(params.id))) {
       return response.badRequest('cannot update this specific status')
     }
     const { name, color } = request.only(['name', 'color'])

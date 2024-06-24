@@ -3,7 +3,7 @@ import Ticket from '#models/ticket'
 import TicketPriority from '#models/ticket_priority'
 import type { HttpContext } from '@adonisjs/core/http'
 
-export default class TicketPriorityesController {
+export default class TicketPrioritiesController {
   async index({ request, response, auth }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
@@ -15,8 +15,10 @@ export default class TicketPriorityesController {
       return response.ok(data)
     }
 
-    const data = await TicketPriority.query().preload('color')
-    return response.ok(data)
+    if (!auth.user?.isAdmin) {
+      const data = await TicketPriority.query().preload('color')
+      return response.ok(data)
+    }
   }
 
   async store({ request, response, auth }: HttpContext) {
@@ -24,29 +26,23 @@ export default class TicketPriorityesController {
 
     const isNameExist = await TicketPriority.findBy('name', name)
     if (isNameExist) {
-      return response.conflict('ticket already exist')
+      return response.conflict('ticket priority name already exist')
     }
 
     const colorId = (await Color.findByOrFail('name', color)).id
-    const priority = await TicketPriority.create({
+    const ticketPriority = await TicketPriority.create({
       name: name,
       responsibleId: auth.user?.id,
       colorId: colorId,
     })
-    return response.created(priority)
+    return response.created(ticketPriority)
   }
 
   async update({ params, request, response, auth }: HttpContext) {
-    const ticket = await Ticket.findManyBy('ticketPriorityId', params.id)
-
-    if (ticket.length >= 1) {
-      return response.forbidden('cannot update this specific priority')
-    }
     const { name, color } = request.only(['name', 'color'])
-
     const colorId = (await Color.findByOrFail('name', color)).id
-    const priority = await TicketPriority.findOrFail(params.id)
-    const data = await priority
+    const ticketPriority = await TicketPriority.findOrFail(params.id)
+    const data = await ticketPriority
       .merge({
         responsibleId: auth.user?.id,
         name: name,
@@ -60,11 +56,11 @@ export default class TicketPriorityesController {
     const ticket = await Ticket.findManyBy('ticketPriorityId', params.id)
 
     if (ticket.length >= 1) {
-      return response.badRequest('cannot delete this specific priority')
+      return response.badRequest('cannot delete this specific ticket priority')
     }
-    const priority = await TicketPriority.findBy(params)
+    const status = await TicketPriority.findBy(params)
 
-    await priority?.delete()
+    await status?.delete()
 
     return response.noContent()
   }

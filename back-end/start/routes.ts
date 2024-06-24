@@ -28,19 +28,22 @@ router
     //comments
     router.resource('comments', CommentsController).apiOnly().use('*', middleware.admin())
 
+    // ticket status
     router
       .resource('ticket-status', TicketStatusesController)
-      .except(['create', 'edit', 'show'])
-      .use(['destroy', 'store', 'update'], middleware.admin())
+      .apiOnly()
+      .use('*', middleware.admin())
 
+    //ticket category
     router
       .resource('ticket-category', TicketCategoriesController)
       .except(['create', 'edit', 'show'])
       .use(['destroy', 'store', 'update'], middleware.admin())
 
+    //ticket priority
     router
       .resource('ticket-priority', TicketPrioritiesController)
-      .except(['create', 'edit', 'show'])
+      .apiOnly()
       .use(['destroy', 'store', 'update'], middleware.admin())
 
     // color

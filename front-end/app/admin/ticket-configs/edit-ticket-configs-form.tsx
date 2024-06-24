@@ -21,8 +21,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToastContext } from "@/components/utils/context-toast";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
+import { TicketConfigValidator, TicketConfigInfer } from "@/app/zod-validator";
+
 export interface ModalHandles {
   handleClick: (props: HandleProps) => void;
 }
@@ -72,8 +75,11 @@ export const TicketConfigForm = forwardRef((props, ref) => {
       getColors();
     },
   }));
-  const form = useForm<FormProps>();
-  async function editTicketConfig(item: FormProps) {
+
+  const form = useForm<TicketConfigInfer>({
+    resolver: zodResolver(TicketConfigValidator),
+  });
+  async function editTicketConfig(item: TicketConfigInfer) {
     setIsLoading(true);
     try {
       const { status } = await authInstance.put(
@@ -93,6 +99,9 @@ export const TicketConfigForm = forwardRef((props, ref) => {
     }
   }
 
+  useEffect(() => {
+    form.reset();
+  }, [open]);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -141,6 +150,7 @@ export const TicketConfigForm = forwardRef((props, ref) => {
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />

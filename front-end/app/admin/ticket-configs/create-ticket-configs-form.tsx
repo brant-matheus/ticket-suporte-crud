@@ -8,6 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,8 +19,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToastContext } from "@/components/utils/context-toast";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
+import { TicketConfigValidator, TicketConfigInfer } from "@/app/zod-validator";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export interface HandleClickType {
   handleClick: ({ route, title }: StateProps) => void;
@@ -68,13 +71,14 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
     },
   }));
 
-  const form = useForm<FormType>({
+  const form = useForm<TicketConfigInfer>({
+    resolver: zodResolver(TicketConfigValidator),
     defaultValues: {
       color: "",
       name: "",
     },
   });
-  async function StoreTicketConfig(ticketConfigSubmit: FormType) {
+  async function StoreTicketConfig(ticketConfigSubmit: TicketConfigInfer) {
     setIsLoading(true);
     try {
       const { data, status, request } = await authInstance.post(
@@ -90,7 +94,9 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
       setIsLoading(false);
     }
   }
-
+  useEffect(() => {
+    form.reset();
+  }, [open]);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -109,6 +115,7 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
                     <FormControl>
                       <Input {...field} placeholder="Nome do status" />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -136,6 +143,7 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
                         ))}
                       </SelectContent>
                     </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />

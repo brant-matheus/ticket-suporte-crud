@@ -1,7 +1,9 @@
+import { TicketFactory } from '#database/factories/ticket_factory'
 import { TicketPriorityFactory } from '#database/factories/ticket_priority_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Color from '#models/color'
 import TicketPriority from '#models/ticket_priority'
+import Ticketpriority from '#models/ticket_priority'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
@@ -45,7 +47,7 @@ test.group('ticket priority crud', (group) => {
       const user = await UserFactory.apply('admin').create()
 
       const color = await Color.first()
-      const request = { name: 'novo ticket', color: color?.name }
+      const request = { name: 'priority', color: color?.name }
       const response = await client.post(route('ticket_priority.store')).loginAs(user).json(request)
       response.assertStatus(201)
 
@@ -62,39 +64,39 @@ test.group('ticket priority crud', (group) => {
       const user = await UserFactory.apply('admin').create()
 
       const color = await Color.first()
-      const request = { name: 'new ticket name', color: color?.name }
-      const ticket = await TicketPriorityFactory.merge({ responsibleId: user.id }).create()
+      const request = { name: 'new priority name', color: color?.name }
+      const ticketPriority = await TicketPriorityFactory.merge({ responsibleId: user.id }).create()
 
       const response = await client
-        .put(route('ticket_priority.update', { id: ticket.id }))
+        .put(route('ticket_priority.update', [ticketPriority.id]))
         .loginAs(user)
         .json(request)
       response.assertStatus(200)
 
       const body = response.body()
 
-      const updatedticket = await ticket.refresh()
+      const updatedPriority = await ticketPriority.refresh()
 
-      assert.equal(updatedticket.name, request.name)
-      assert.equal(updatedticket.colorId, color?.id)
+      assert.equal(updatedPriority.name, request.name)
+      assert.equal(updatedPriority.colorId, color?.id)
       assert.propertyVal(body, 'name', request.name)
     }
   )
 
   test('it should be able to delete a ticket priority by admin').run(
     async ({ client, route, assert }) => {
-      const admin = await UserFactory.apply('admin').create()
-      const ticket = await TicketPriorityFactory.merge({ responsibleId: admin.id }).create()
+      const user = await UserFactory.apply('admin').create()
+      const ticketPriority = await TicketPriorityFactory.merge({ responsibleId: user.id }).create()
 
       const response = await client
-        .delete(route('ticket_priority.destroy', { id: ticket.id }))
-        .loginAs(admin)
+        .delete(route('ticket_priority.destroy', [ticketPriority.id]))
+        .loginAs(user)
 
       response.assertStatus(204)
 
-      const deletedticket = await TicketPriority.find(ticket.id)
+      const deletedpriority = await Ticketpriority.find(ticketPriority.id)
 
-      assert.isNull(deletedticket)
+      assert.isNull(deletedpriority)
     }
   )
 })

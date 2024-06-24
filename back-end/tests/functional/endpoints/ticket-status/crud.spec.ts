@@ -31,15 +31,6 @@ test.group('ticket status crud', (group) => {
     }
   )
 
-  test('it should be able to get/index ticket status by guest').run(async ({ client, route }) => {
-    const user = await UserFactory.create()
-
-    const response = await client.get(route('ticket_status.index')).loginAs(user)
-    response.assertStatus(200)
-
-    response.assertJsonStructure({ '*': ['id', 'name', 'color', 'responsibleId'] })
-  })
-
   test('it should be able to store a ticket status by admin').run(
     async ({ client, route, assert }) => {
       const user = await UserFactory.apply('admin').create()
