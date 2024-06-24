@@ -1,6 +1,7 @@
 import { TicketCategoryFactory } from '#database/factories/ticket_category_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Color from '#models/color'
+import Ticket from '#models/ticket'
 import TicketCategory from '#models/ticket_category'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
@@ -10,7 +11,10 @@ test.group('ticket category crud', (group) => {
 
   test('it should be able to get/index ticket category paginated by admin').run(
     async ({ assert, client, route }) => {
-      const user = await UserFactory.apply('admin').with('ticketCategory', 2).create()
+      const limit = 1
+      const allLength = await TicketCategory.all()
+
+      const user = await UserFactory.apply('admin').with('ticketCategory', limit).create()
 
       const request = {
         page: 1,
@@ -25,7 +29,9 @@ test.group('ticket category crud', (group) => {
 
       const body = response.body()
 
-      assert.equal(body.meta.total, 2)
+      const total = allLength.length + limit
+
+      assert.equal(body.meta.total, total)
       assert.equal(body.meta.perPage, request.pageSize)
       assert.equal(body.meta.currentPage, request.page)
     }

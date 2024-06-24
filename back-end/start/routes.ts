@@ -26,7 +26,7 @@ router
     // operation
     router.resource('operation', OperationsController).apiOnly().use('*', middleware.admin())
     //comments
-    router.resource('comments', CommentsController).apiOnly().use('*', middleware.admin())
+    router.resource('comments', CommentsController).apiOnly()
 
     // ticket status
     router
@@ -37,7 +37,7 @@ router
     //ticket category
     router
       .resource('ticket-category', TicketCategoriesController)
-      .except(['create', 'edit', 'show'])
+      .apiOnly()
       .use(['destroy', 'store', 'update'], middleware.admin())
 
     //ticket priority

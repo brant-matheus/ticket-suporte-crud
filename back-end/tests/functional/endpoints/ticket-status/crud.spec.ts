@@ -10,7 +10,9 @@ test.group('ticket status crud', (group) => {
 
   test('it should be able to get/index ticket status paginated by admin').run(
     async ({ assert, client, route }) => {
-      const user = await UserFactory.apply('admin').create()
+      const limit = 1
+      const allLength = (await TicketStatus.all()).length
+      const user = await UserFactory.apply('admin').with('ticketStatus', limit).create()
 
       const request = {
         page: 1,
@@ -25,7 +27,8 @@ test.group('ticket status crud', (group) => {
 
       const body = response.body()
 
-      assert.equal(body.meta.total, 2)
+      const total = allLength + limit
+      assert.equal(body.meta.total, total)
       assert.equal(body.meta.perPage, request.pageSize)
       assert.equal(body.meta.currentPage, request.page)
     }

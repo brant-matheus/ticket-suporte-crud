@@ -9,5 +9,7 @@ export default class IndexSeeder extends BaseSeeder {
     await this.seed(await import('#database/seeders/user_seeder'))
     await this.seed(await import('#database/seeders/color_seeder'))
     await this.seed(await import('#database/seeders/ticket_status_seeder'))
+    await this.seed(await import('#database/seeders/ticket_category_seeder'))
+    await this.seed(await import('#database/seeders/ticket_priority_seeder'))
   }
 }

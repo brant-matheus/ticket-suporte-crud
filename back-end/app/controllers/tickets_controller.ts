@@ -8,35 +8,27 @@ import { DateTime } from 'luxon'
 export default class TicketsController {
   async show({}: HttpContext) {}
 
-  async index({ request, auth }: HttpContext) {
+  async index({ request, auth, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
+
     if (auth.user?.isAdmin) {
-      return await Ticket.query()
+      const data = await Ticket.query()
         .preload('user')
-        .preload('ticketCategory', (preload) => {
-          preload.preload('color')
-        })
-        .preload('ticketPriority', (preload) => {
-          preload.preload('color')
-        })
-        .preload('ticketStatus', (preload) => {
-          preload.preload('color')
-        })
+        .preload('ticketStatus', (ticketStatus) => ticketStatus.preload('color'))
+        .preload('ticketCategory', (ticketCategory) => ticketCategory.preload('color'))
+        .preload('ticketPriority', (ticketPriority) => ticketPriority.preload('color'))
         .paginate(page, pageSize)
-    } else {
-      return await Ticket.query()
-        .where('created_by_id', auth.user?.id as number)
-        .preload('user')
-        .preload('ticketCategory', (preload) => {
-          preload.preload('color')
-        })
-        .preload('ticketPriority', (preload) => {
-          preload.preload('color')
-        })
-        .preload('ticketStatus', (preload) => {
-          preload.preload('color')
-        })
-        .paginate(page, pageSize)
+      return response.ok(data)
+    }
+
+    if (!auth.user?.isAdmin) {
+      const data = await Ticket.query()
+        .where('createdById', auth.user?.id as number)
+        .preload('ticketCategory', (ticketCategory) => ticketCategory.preload('color'))
+        .preload('ticketPriority', (ticketPriority) => ticketPriority.preload('color'))
+        .preload('ticketStatus', (ticketStatus) => ticketStatus.preload('color'))
+
+      return response.ok(data)
     }
   }
 
@@ -47,27 +39,26 @@ export default class TicketsController {
       'priority',
       'description',
     ])
-    const userId = auth.user?.id
+
     const categoryId = (await TicketCategory.findByOrFail('name', category)).id
     const priorityId = (await TicketPriority.findByOrFail('name', priority)).id
+    const pendingId = (await TicketStatus.findByOrFail('name', 'pendente')).id
     return await Ticket.create({
       subject: subject,
       ticketCategoryId: categoryId,
-      createdById: userId,
+      createdById: auth.user?.id,
       description: description,
       ticketPriorityId: priorityId,
-      ticketStatusId: 1,
+      ticketStatusId: pendingId,
     })
   }
 
   async update({ params, request, auth }: HttpContext) {
-    // update either the priority or status
     const { fromTable, ticketConfigItem } = request.only(['fromTable', 'ticketConfigItem'])
     const ticket = await Ticket.findOrFail(params.id)
     //
     const updatedTime = DateTime.local()
 
-    // both admin and guest can modify ticket priority if no logic involve
     if (fromTable === 'priorities') {
       const priorityId = (await TicketPriority.findByOrFail('name', ticketConfigItem)).id
       await ticket.merge({ ticketPriorityId: priorityId, updatedAt: updatedTime }).save()
