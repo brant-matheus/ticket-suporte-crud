@@ -23,7 +23,6 @@ test.group('crud ticket', (group) => {
         .create()
 
       const response = await client.get(route('ticket.index')).qs(request).loginAs(user)
-      response.dumpBody()
 
       response.assertStatus(200)
       response.assertPaginatedStructure({
@@ -54,7 +53,6 @@ test.group('crud ticket', (group) => {
       .create()
 
     const response = await client.get(route('ticket.index')).loginAs(user)
-    response.dumpBody()
 
     response.assertStatus(200)
   })
