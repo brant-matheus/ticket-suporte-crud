@@ -60,7 +60,7 @@ export default class TicketPriorityesController {
     const ticket = await Ticket.findManyBy('ticketPriorityId', params.id)
 
     if (ticket.length >= 1) {
-      return response.forbidden('cannot delete this specific priority')
+      return response.badRequest('cannot delete this specific priority')
     }
     const priority = await TicketPriority.findBy(params)
 

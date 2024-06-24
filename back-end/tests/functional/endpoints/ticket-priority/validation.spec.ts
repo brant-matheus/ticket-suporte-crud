@@ -1,8 +1,8 @@
+import { TicketFactory } from '#database/factories/ticket_factory'
 import { TicketPriorityFactory } from '#database/factories/ticket_priority_factory'
 import { UserFactory } from '#database/factories/user_factory'
 import Color from '#models/color'
 import ticketPriority from '#models/ticket_priority'
-import { ticketFactoryStatusId } from '#tests/utils/ticketFactoryStatusId'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
@@ -39,7 +39,7 @@ test.group('ticket priority validation', (group) => {
 
   test('it should not be able to store a ticket priority with a already existing name').run(
     async ({ assert, client, route }) => {
-      const user = await UserFactory.apply('admin').create()
+      const user = await UserFactory.apply('admin').with('ticketPriority').create()
       const ticket = await ticketPriority.first()
       const request = { name: ticket?.name, color: ticket?.color }
 
@@ -52,22 +52,26 @@ test.group('ticket priority validation', (group) => {
     }
   )
 
-  test('it should not be able to delete a priority if already used in ticket').run(
+  test('it should not be able to delete a ticket priority if already used in ticket').run(
     async ({ assert, client, route }) => {
       const user = await UserFactory.apply('admin').create()
 
-      const status = await ticketPriority.findByOrFail('name', 'concluido')
+      const ticketPriority = await TicketPriorityFactory.with('responsible').create()
 
-      await ticketFactoryStatusId(status.id)
+      await TicketFactory.with('user')
+        .with('ticketStatus', 1, (ticketStatus) => ticketStatus.with('responsible'))
+        .with('ticketCategory', 1, (ticketCategory) => ticketCategory.with('responsible'))
+        .merge({ ticketPriorityId: ticketPriority.id })
+        .create()
 
       const response = await client
-        .delete(route('ticket_priority.destroy', { id: status.id }))
+        .delete(route('ticket_priority.destroy', [ticketPriority.id]))
         .loginAs(user)
 
-      response.assertStatus(403)
+      response.assertStatus(400)
 
-      const statusNotDeleted = await ticketPriority.findByOrFail('name', 'concluido')
-      assert.include(status.serialize(), statusNotDeleted.serialize())
+      const statusNotDeleted = await ticketPriority.refresh()
+      assert.isNotNull(statusNotDeleted)
     }
   )
 })

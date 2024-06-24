@@ -1,7 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import { PasswordValidator, PutUserValidator, StoreUserValidator } from '#validators/user'
-import db from '@adonisjs/lucid/services/db'
 
 export default class UsersController {
   async show({ params }: HttpContext) {}
@@ -38,7 +37,7 @@ export default class UsersController {
 
   async update({ params, request, auth, response }: HttpContext) {
     if (!auth.user?.isAdmin && auth.user?.id != params.id) {
-      return response.forbidden('cannot update anything besides itself')
+      return response.badRequest('cannot update anything besides itself')
     }
     const data = request.all()
     const user = await User.findOrFail(params.id)
@@ -47,7 +46,9 @@ export default class UsersController {
       const payload = await request.validateUsing(PasswordValidator)
       const updatedUser = await user.merge(payload).save()
       return response.ok(updatedUser)
-    } else {
+    }
+
+    if (data.hasOwnProperty('email')) {
       data.isAdmin ??= false
       const payload = await PutUserValidator.validate(data)
       const updatedUser = await user.merge(payload).save()
@@ -57,8 +58,9 @@ export default class UsersController {
 
   async destroy({ params, auth, response }: HttpContext) {
     if (!auth.user?.isAdmin && auth.user?.id != params.id) {
-      return response.forbidden('guest should not be able to delete another user, beside itself.')
+      return response.badRequest('guest should not be able to delete another user, beside itself.')
     }
+
     const user = await User.findOrFail(params.id)
     await user.delete()
     return response.noContent()

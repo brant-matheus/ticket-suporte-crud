@@ -161,7 +161,7 @@ test.group('user crud validation', (group) => {
         .json(request)
         .loginAs(firstGuest)
 
-      response.assertStatus(403)
+      response.assertStatus(400)
       assert.isFalse(await hash.verify(secondGuest.password, request.password))
     }
   )
@@ -180,7 +180,7 @@ test.group('user crud validation', (group) => {
         .json(request)
         .loginAs(firstGuest)
 
-      response.assertStatus(403)
+      response.assertStatus(400)
       const user = await User.findOrFail(secondGuest.id)
       assert.notInclude(user.serialize(), request)
     }
@@ -194,7 +194,7 @@ test.group('user crud validation', (group) => {
       .delete(route('user.destroy', { id: secondGuest.id }))
       .loginAs(firstGuest)
 
-    response.assertStatus(403)
+    response.assertStatus(400)
     await User.findOrFail(secondGuest.id)
   })
 

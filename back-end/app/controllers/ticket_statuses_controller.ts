@@ -24,7 +24,7 @@ export default class TicketStatusesController {
 
     const isNameExist = await TicketStatus.findBy('name', name)
     if (isNameExist) {
-      return response.conflict('ticket already exist')
+      return response.conflict('ticket status name already exist')
     }
 
     const colorId = (await Color.findByOrFail('name', color)).id
@@ -40,7 +40,7 @@ export default class TicketStatusesController {
     const ticket = await Ticket.findManyBy('ticketStatusId', params.id)
 
     if ([1, 2].includes(parseInt(params.id)) || ticket.length >= 1) {
-      return response.forbidden('cannot update this specific status')
+      return response.badRequest('cannot update this specific status')
     }
     const { name, color } = request.only(['name', 'color'])
 
@@ -61,7 +61,7 @@ export default class TicketStatusesController {
 
     const condition = [1, 2].includes(parseInt(params.id)) || ticket.length >= 1
     if (condition) {
-      return response.forbidden('cannot delete this specific status')
+      return response.badRequest('cannot delete this specific ticket status')
     }
     const status = await TicketStatus.findBy(params)
 
