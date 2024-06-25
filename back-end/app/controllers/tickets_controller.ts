@@ -59,7 +59,7 @@ export default class TicketsController {
       (!auth.user?.isAdmin && requestData.hasOwnProperty('status'))
 
     if (condition) {
-      return response.badRequest('unable to update ticket after status changed')
+      return response.badRequest('unable to update ticket if ticket in progress or conclued')
     }
 
     if (!auth.user?.isAdmin) {
