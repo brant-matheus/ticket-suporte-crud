@@ -154,7 +154,8 @@ test.group('crud ticket', (group) => {
 
       const ticketStatus = await TicketStatus.first()
       const request = {
-        status: ticketStatus?.name,
+        ticketConfigItem: ticketStatus?.name,
+        fromTable: 'status',
       }
 
       const response = await client
@@ -188,7 +189,8 @@ test.group('crud ticket', (group) => {
 
       const concluedTicketStatus = await TicketStatus.findByOrFail('name', 'concluido')
       const request = {
-        status: concluedTicketStatus?.name,
+        ticketConfigItem: concluedTicketStatus?.name,
+        fromTable: 'status',
       }
 
       const response = await client
@@ -206,6 +208,42 @@ test.group('crud ticket', (group) => {
       assert.include(ticketRefreshed.serialize(), bodyContains)
     }
   )
+
+  test('it should be able to update a ticket priority by admin').run(
+    async ({ assert, client, route }) => {
+      const user = await UserFactory.create()
+      const admin = await UserFactory.apply('admin').create()
+
+      const ticket = await TicketFactory.merge({ createdById: user.id })
+        .with('ticketCategory', 1, (ticketCategory) =>
+          ticketCategory.merge({ responsibleId: admin.id })
+        )
+        .with('ticketPriority', 1, (ticketPriority) =>
+          ticketPriority.merge({ responsibleId: admin.id })
+        )
+        .with('ticketStatus', 1, (ticketStatus) => ticketStatus.merge({ responsibleId: admin.id }))
+        .create()
+
+      const ticketPriority = await TicketPriority.first()
+      const request = {
+        ticketConfigItem: ticketPriority?.name,
+        fromTable: 'priority',
+      }
+
+      const response = await client
+        .put(route('ticket.update', [ticket.id]))
+        .loginAs(admin)
+        .json(request)
+      response.assertStatus(200)
+
+      const body = response.body()
+
+      const ticketRefreshed = await ticket.refresh()
+      assert.include(body, { ticketPriorityId: ticketPriority?.id })
+      assert.include(ticketRefreshed.serialize(), { ticketPriorityId: ticketPriority?.id })
+    }
+  )
+
   test('it should be able to delete a ticket not in progress by guest user').run(
     async ({ assert, client, route }) => {
       const user = await UserFactory.create()

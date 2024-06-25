@@ -5,11 +5,6 @@ import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
 import { TicketValidator } from '#validators/ticket'
 export default class TicketsController {
-  async show({ params, response }: HttpContext) {
-    const data = await Ticket.findOrFail(params)
-    return response.ok(data)
-  }
-
   async index({ request, auth, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
@@ -88,14 +83,17 @@ export default class TicketsController {
       return response.ok(data)
     }
 
-    if (requestData.hasOwnProperty('priority') && auth.user.isAdmin) {
-      const ticketPriorityId = (await TicketPriority.findByOrFail('name', requestData.priority)).id
+    if (requestData.fromTable === 'priority' && auth.user.isAdmin) {
+      const ticketPriorityId = (
+        await TicketPriority.findByOrFail('name', requestData.ticketConfigItem)
+      ).id
       const data = await ticket.merge({ ticketPriorityId: ticketPriorityId }).save()
       return response.ok(data)
     }
 
-    if (requestData.hasOwnProperty('status') && auth.user.isAdmin) {
-      const TicketStatusId = (await TicketStatus.findByOrFail('name', requestData.status)).id
+    if (requestData.fromTable === 'status' && auth.user.isAdmin) {
+      const TicketStatusId = (await TicketStatus.findByOrFail('name', requestData.ticketConfigItem))
+        .id
       const ticketStatusConcluedId = (await TicketStatus.findByOrFail('name', 'concluido')).id
 
       const data = await ticket
