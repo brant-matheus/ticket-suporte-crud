@@ -30,7 +30,7 @@ interface DataTableProps<TData, TValue> {
   route: string;
   filterColumn?: string;
   showFilter?: boolean;
-  component: any;
+  component?: any;
   fromTable?: string;
 }
 export type MetaProps = {

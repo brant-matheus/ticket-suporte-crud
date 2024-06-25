@@ -10,12 +10,10 @@ const page = () => {
       <AdminSideBar />
       <div className="container pt-0 pl-20 pb-5">
         <DataTable
-          component={null}
           showFilter={true}
           route="ticket"
           columns={columns}
           filterColumn="criado por"
-          fromTable=""
         />
       </div>
     </>

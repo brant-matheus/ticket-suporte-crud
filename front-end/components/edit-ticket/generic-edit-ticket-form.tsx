@@ -1,6 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { authInstance } from "@/app/axios-config";
+import LoaderButton from "@/components/buttons/loader-button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,12 +16,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "@/components/utils/context-toast";
-import LoaderButton from "@/components/buttons/loader-button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface DataProps {
   name: string;
@@ -31,7 +30,7 @@ interface FormProps {
   data: any[] | undefined;
   title: string;
   ticketId?: number;
-  fromTable: string;
+  fromTable: "priority" | "status";
   action: Function;
 }
 export function GenericEditTicketForm({
@@ -45,14 +44,10 @@ export function GenericEditTicketForm({
   const { ToastFail, ToastSuccess } = useToastContext();
   const FormSchema = z.object({
     ticketConfigItem: z.string().min(1, { message: "Selecione uma categoria" }),
-    description: z.string().min(1, {
-      message: "Escreva uma descrição de pelo menos 25 caracteres.",
-    }),
   });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      description: "",
       ticketConfigItem: "",
     },
   });
@@ -69,6 +64,7 @@ export function GenericEditTicketForm({
       ToastFail({ description: `error ao editar ${title}` });
     }
   }
+
   return (
     <>
       <Form {...form}>
@@ -96,25 +92,11 @@ export function GenericEditTicketForm({
                     ))}
                   </SelectContent>
                 </Select>
-
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Descrição </FormLabel>
-                <FormControl>
-                  <Textarea {...field} placeholder="Digite uma descrição" />
-                </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           {isLoading ? (
             <LoaderButton title={"Salvando edição"} />
           ) : (

@@ -1,10 +1,7 @@
 "use client";
 
 import ActionCreateButton from "@/components/buttons/action-create-button";
-import {
-  EditTicketModal,
-  ModalEditProps,
-} from "@/components/edit-ticket/edit-ticket";
+import { EditTicketModal, ModalEditProps } from "./edit-ticket";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
@@ -21,10 +18,9 @@ import { useRef, useState } from "react";
 import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
 import EditButton from "@/components/buttons/edit-button";
 import { Separator } from "@/components/ui/separator";
+import BadgeColumn from "@/components/utils/badgeColumn";
 import { formatIso } from "@/components/utils/formatIso";
 import { CreateTicketOperation, ModalProps } from "./create-operation-form";
-import { Badge } from "@/components/ui/badge";
-import BadgeColumn from "@/components/utils/badgeColumn";
 
 interface Color {
   name: string;
@@ -74,8 +70,8 @@ export const columns: ColumnDef<Ticket>[] = [
       const item = row.original;
 
       return BadgeColumn({
-        title: item.ticketStatus.name,
-        hex: item.ticketStatus.color.hex,
+        title: item.ticketCategory.name,
+        hex: item.ticketCategory.color.hex,
       });
     },
   },
@@ -87,8 +83,8 @@ export const columns: ColumnDef<Ticket>[] = [
       const item = row.original;
 
       return BadgeColumn({
-        title: item.ticketStatus.name,
-        hex: item.ticketStatus.color.hex,
+        title: item.ticketPriority.name,
+        hex: item.ticketPriority.color.hex,
       });
     },
   },
@@ -248,13 +244,11 @@ export const columns: ColumnDef<Ticket>[] = [
             <EditButton
               action={() =>
                 editRef.current?.handleCLick({
-                  ticketId: item.id,
-                  fromTable: "select",
-                  title: "status",
-                  isAdmin: item.user.isAdmin,
+                  item: item,
                 })
               }
             />
+
             <CommentaryOperationButton
               action={() =>
                 window.open(
