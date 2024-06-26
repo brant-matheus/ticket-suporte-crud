@@ -59,7 +59,7 @@ const page = () => {
   const [priorities, setPriorities] = useState<TicketConfigSelect[]>();
 
   const lengthLimit: number = 500;
-  const [caracters, setCaracters] = useState(0);
+  const [character, setCharacter] = useState(0);
   const form = useForm<StoreTicketInfer>({
     resolver: zodResolver(StoreTicketValidation),
     defaultValues: {
@@ -142,32 +142,21 @@ const page = () => {
                     <FormItem>
                       <FormLabel className="flex justify-between">
                         Descrição{" "}
-                        <p>Caracteres usados: {caracters} limite: 500</p>
+                        <p>Caracteres usados: {character} limite: 500</p>
                       </FormLabel>
                       <FormControl>
                         <Textarea
-                          // don't use register, do something else, like not using register and set value with set
+                          {...field}
                           onChange={(e) => {
-                            setCaracters(e.target.value.length);
-                            if (e.target.value.length >= 50) {
-                              form.setValue("description", e.target.value, {
-                                shouldValidate: true,
-                              });
-                            } else {
-                              form.setValue("description", e.target.value, {
-                                shouldValidate: false,
-                              });
-                            }
+                            setCharacter(e.target.value.length);
+                            field.onChange(e);
                           }}
-                          maxLength={lengthLimit}
-                          spellCheck="false"
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
-                />
-
+                />{" "}
                 <FormField
                   control={form.control}
                   name="category"
