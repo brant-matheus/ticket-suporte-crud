@@ -7,7 +7,8 @@ export default class AuthController {
     const { email, password } = request.only(['email', 'password'])
     const user = await User.verifyCredentials(email, password)
     const token = await User.accessTokens.create(user)
-    return response.ok({ token: token, user: user })
+    const data = { token: token, user: user }
+    return response.ok(data)
   }
   async logout({ auth, response }: HttpContext) {
     const userId = auth.user?.id! as number

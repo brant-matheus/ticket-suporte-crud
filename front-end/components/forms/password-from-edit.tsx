@@ -25,8 +25,8 @@ interface props {
 }
 
 const PasswordFormEdit = ({ closeDialog }: props) => {
-  const user = localStorage.getItem("user");
-  const userObject = JSON.parse(user!);
+  const userId = localStorage.getItem("userId");
+
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
 
@@ -40,7 +40,7 @@ const PasswordFormEdit = ({ closeDialog }: props) => {
   async function passwordRedefine(passwordForm: PasswordInfer) {
     setIsLoading(true);
     try {
-      await authInstance.put(`user/${userObject.id!}`, passwordForm);
+      await authInstance.put(`user/${userId!}`, passwordForm);
       if (typeof closeDialog === "function") {
         closeDialog();
       }

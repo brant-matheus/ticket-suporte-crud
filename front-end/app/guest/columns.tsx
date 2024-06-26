@@ -2,15 +2,15 @@
 import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import EditButton from "@/components/buttons/edit-button";
-import {
-  EditTicketModal,
-  ModalEditProps,
-} from "@/components/edit-ticket/edit-ticket";
 import BadgeColumn from "@/components/utils/badgeColumn";
 import { formatIso } from "@/components/utils/formatIso";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRef } from "react";
+import {
+  EditTicketModal,
+  ModalEditProps,
+} from "@/components/edit-ticket/edit-ticket";
 
 interface Color {
   name: string;
@@ -56,28 +56,34 @@ export const columns: ColumnDef<Ticket>[] = [
   { accessorKey: "id", header: "Id do ticket" },
   {
     accessorKey: "ticketCategory",
+    id: "Categoria",
+
     header: "Categoria",
     cell: ({ row }) => {
       const item = row.original;
       return BadgeColumn({
-        title: item.ticketStatus.name,
-        hex: item.ticketStatus.color.hex,
+        title: item.ticketCategory.name,
+        hex: item.ticketCategory.color.hex,
       });
     },
   },
   {
     accessorKey: "ticketPriority",
+    id: "Prioridade",
+
     header: "Prioridade",
     cell: ({ row }) => {
       const item = row.original;
       return BadgeColumn({
-        title: item.ticketStatus.name,
-        hex: item.ticketStatus.color.hex,
+        title: item.ticketPriority.name,
+        hex: item.ticketPriority.color.hex,
       });
     },
   },
   {
     accessorKey: "ticketStatus",
+    id: "status",
+
     header: "status",
     cell: ({ row }) => {
       const item = row.original;
@@ -89,6 +95,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "modificatedAt",
+    id: "modificado em",
     header: "modificado em",
     cell: ({ row }) => {
       const item = row.original;
@@ -105,6 +112,7 @@ export const columns: ColumnDef<Ticket>[] = [
   },
   {
     accessorKey: "isConclued",
+    id: "concluído",
     header: "Concluido em",
     cell: ({ row }) => {
       const item = row.original;
@@ -116,7 +124,7 @@ export const columns: ColumnDef<Ticket>[] = [
     },
   },
   {
-    id: "action",
+    id: "ações",
     header: "ações",
     cell: ({ row }) => {
       const item = row.original;
@@ -127,16 +135,7 @@ export const columns: ColumnDef<Ticket>[] = [
             <EditTicketModal ref={modalRef} />
 
             <DeleteDialog route="ticket" title="ticket" params={item.id} />
-            <EditButton
-              action={() =>
-                modalRef.current?.handleCLick({
-                  title: "categoria",
-                  fromTable: "categories",
-                  isAdmin: item.user.isAdmin,
-                  ticketId: item.id,
-                })
-              }
-            />
+
             <CommentaryOperationButton
               action={() =>
                 window.open(

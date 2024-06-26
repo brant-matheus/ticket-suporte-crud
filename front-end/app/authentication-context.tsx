@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (request.status ?? status === 200) {
         setAuthData(data);
         localStorage.setItem("token", data.token.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("userId", data.user.id);
         authInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.token.token}`;
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         // set item
         setAuthData(data);
         localStorage.setItem("token", data.token.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("userId", data.user.id);
 
         authInstance.defaults.headers.common[
           "Authorization"
@@ -127,10 +127,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
   useEffect(() => {
     const token = `Bearer ${localStorage.getItem("token")}`;
-    const user = localStorage.getItem("user");
+    const userId = localStorage.getItem("userId");
 
     authInstance.defaults.headers.common["Authorization"] = token;
-    authInstance.defaults.params = { userId: 1 };
+    authInstance.defaults.params = { userId: userId };
     setLoading(false);
   }, []);
   return (

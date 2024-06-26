@@ -5,6 +5,7 @@ import { GuestNavBar } from "@/components/layout/guest-side-bar";
 import { DataTable } from "@/components/table/data-table";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import CreateButton from "@/components/buttons/create-button";
 const page = () => {
   const router = useRouter();
   return (
@@ -15,13 +16,12 @@ const page = () => {
           columns={columns}
           route="ticket"
           component={
-            <Button onClick={() => router.push("/guest/send-ticket")}>
-              Criar novo ticket
-            </Button>
+            <CreateButton
+              action={() => router.push("/guest/send-ticket")}
+              title="novo ticket"
+            />
           }
-          showFilter={true}
-          filterColumn="id"
-          fromTable=""
+          showFilter={false}
         />
       </div>
     </>

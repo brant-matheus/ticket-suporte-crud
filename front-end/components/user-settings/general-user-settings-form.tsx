@@ -1,53 +1,69 @@
 "use client";
-import {
-  UserInfoProfileInfer,
-  UserInfoProfileValidator,
-} from "@/validators/user";
-import React, { useEffect, useMemo, useState } from "react";
+import { authInstance } from "@/app/axios-config";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { literal, z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useToast } from "@/components/ui/use-toast";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { authInstance } from "@/app/axios-config";
-import { useToastContext } from "../utils/context-toast";
+import {
+  UserInfoProfileInfer,
+  UserInfoProfileValidator,
+} from "@/validators/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import LoaderButton from "../buttons/loader-button";
-import { useRouter, usePathname } from "next/navigation";
-const GeneralUserForm = () => {
-  const pathName = usePathname();
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+import { useToastContext } from "../utils/context-toast";
 
-  const [userString, setUserString] = useState(localStorage.getItem("user"));
-  const userObject = JSON.parse(userString!);
+interface User {
+  id: number;
+  fullName: string;
+  email: string;
+  isAdmin: boolean;
+}
+
+const GeneralUserForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  // const [isPageLoading, setIsPageLoading] = useState(true);
+
+  const userId = localStorage.getItem("userId");
+
+  const [user, setUser] = useState<User>();
+  async function getSingleUser() {
+    try {
+      const { data } = await authInstance.get(`user`, {
+        params: {
+          isProfile: true,
+        },
+      });
+      setUser(data);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("fullName", data.fullName);
+    } catch (error) {}
+  }
+  useEffect(() => {
+    getSingleUser();
+  }, []);
 
   const { ToastFail, ToastSuccess } = useToastContext();
 
   const form = useForm<UserInfoProfileInfer>({
     resolver: zodResolver(UserInfoProfileValidator),
     defaultValues: {
-      fullName: userObject.fullName,
-      email: userObject.email,
+      fullName: localStorage.getItem("fullName")!,
+      email: localStorage.getItem("email")!,
     },
   });
 
   async function editUser(editForm: UserInfoProfileInfer) {
     setIsLoading(true);
-    if (
-      editForm.email === userObject.email &&
-      userObject.fullName == editForm.fullName
-    ) {
+    if (editForm.email === user?.email && user?.fullName == editForm.fullName) {
       ToastFail({ description: "Nenhum campo preenchido" });
       setIsLoading(false);
 
@@ -56,13 +72,15 @@ const GeneralUserForm = () => {
 
     try {
       const { request, status, data } = await authInstance.put(
-        `user/${userObject.id}`,
+        `user/${user?.id}`,
         editForm
       );
       if ((request.status ?? status) == 200) {
-        const user = JSON.stringify(data.user);
-        localStorage.setItem("user", user);
-        setUserString(user);
+        localStorage.setItem("userId", data.id);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("fullName", data.fullName);
+        setUser(data);
+
         ToastSuccess();
       }
     } catch (error) {
@@ -72,6 +90,7 @@ const GeneralUserForm = () => {
     }
     setIsLoading(false);
   }
+
   return (
     <div className="">
       <Form {...form}>

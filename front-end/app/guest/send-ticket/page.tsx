@@ -43,23 +43,20 @@ interface TicketProps {
   id: number;
 }
 
-interface DataProps {
-  categories: TicketProps[];
-  priorities: TicketProps[];
+interface ColorProps {
+  name: string;
 }
+interface TicketConfigSelect {
+  id: number;
+  name: string;
+  color: ColorProps;
+}
+
 const page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
-  const [data, setData] = useState<DataProps>();
-  const getData = useCallback(async () => {
-    try {
-      const { data } = await authInstance.get("ticket-configs");
-      setData(data);
-    } catch (error) {}
-  }, []);
-  useEffect(() => {
-    getData();
-  }, []);
+  const [categories, setCategories] = useState<TicketConfigSelect[]>();
+  const [priorities, setPriorities] = useState<TicketConfigSelect[]>();
 
   const lengthLimit: number = 500;
   const [caracters, setCaracters] = useState(0);
@@ -72,6 +69,25 @@ const page = () => {
       subject: "",
     },
   });
+
+  async function getCategories() {
+    try {
+      const { data } = await authInstance.get("ticket-category");
+      setCategories(data);
+    } catch (error) {}
+  }
+
+  async function getPriorities() {
+    try {
+      const { data } = await authInstance.get("ticket-priority");
+      setPriorities(data);
+    } catch (error) {}
+  }
+  useEffect(() => {
+    getCategories();
+    getPriorities();
+  }, []);
+
   async function storeTicket(ticket: StoreTicketInfer) {
     setIsLoading(true);
     try {
@@ -168,7 +184,7 @@ const page = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {data?.categories.map((category) => (
+                          {categories?.map((category) => (
                             <SelectItem value={category.name} key={category.id}>
                               {category.name}
                             </SelectItem>
@@ -195,7 +211,7 @@ const page = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {data?.priorities.map((priority) => (
+                          {priorities?.map((priority) => (
                             <SelectItem value={priority.name} key={priority.id}>
                               {priority.name}
                             </SelectItem>

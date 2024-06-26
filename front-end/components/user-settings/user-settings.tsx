@@ -61,7 +61,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* delete user content */}
         <CardContent>
-          <UserDeleteButton/>
+          <UserDeleteButton />
         </CardContent>
       </Card>
     </div>

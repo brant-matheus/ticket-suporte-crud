@@ -13,8 +13,7 @@ import ColorsController from '#controllers/colors_controller'
 router
   .group(() => {
     // user
-    router.resource('user', UsersController).apiOnly().use(['index'], middleware.admin())
-
+    router.resource('user', UsersController).apiOnly()
     // logout
     router.delete('auth', [AuthController, 'logout']).as('sign_out')
 

@@ -3,11 +3,13 @@ import User from '#models/user'
 import { PasswordValidator, PutUserValidator, StoreUserValidator } from '#validators/user'
 
 export default class UsersController {
-  async show({ params }: HttpContext) {}
+  async index({ request, response, auth }: HttpContext) {
+    const { page, pageSize, isProfile } = request.only(['page', 'pageSize', 'isProfile'])
 
-  async index({ request, response }: HttpContext) {
-    const { page, pageSize } = request.only(['page', 'pageSize'])
-
+    if (isProfile) {
+      const data = await User.findOrFail(auth.user?.id)
+      return response.ok(data)
+    }
     const data = await User.query().paginate(page, pageSize)
     return response.ok(data)
   }
@@ -49,7 +51,7 @@ export default class UsersController {
     }
 
     if (data.hasOwnProperty('email')) {
-      data.isAdmin ??= false
+      data.isAdmin ??= auth.user?.isAdmin
       const payload = await PutUserValidator.validate(data)
       const updatedUser = await user.merge(payload).save()
       return response.ok(updatedUser)

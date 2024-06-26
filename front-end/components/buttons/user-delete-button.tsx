@@ -18,8 +18,7 @@ interface UserSettings {
   userId: string;
 }
 const DeleteUserButton = () => {
-  const user = localStorage.getItem("user");
-  const userObject = JSON.parse(user!);
+  const userId = localStorage.getItem("userId");
   return (
     <div>
       <Dialog>
@@ -35,7 +34,7 @@ const DeleteUserButton = () => {
             </DialogDescription>
           </DialogHeader>
           {/* form  */}
-          <DeleteUserForm userId={userObject.id} />
+          <DeleteUserForm userId={parseInt(userId!)} />
         </DialogContent>
       </Dialog>
     </div>
