@@ -4,6 +4,7 @@ import TicketPriority from '#models/ticket_priority'
 import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
 import { TicketValidator } from '#validators/ticket'
+import auth from '@adonisjs/auth/services/main'
 export default class TicketsController {
   async index({ request, auth, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
@@ -107,11 +108,11 @@ export default class TicketsController {
     }
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, response, auth }: HttpContext) {
     const ticket = await Ticket.findOrFail(params.id)
     const pendingId = (await TicketStatus.findByOrFail('name', 'pendente')).id
 
-    if (ticket.ticketStatusId != pendingId) {
+    if (ticket.ticketStatusId != pendingId || ticket.createdById != auth.user?.id) {
       return response.badRequest('unable to delete a in progress ticket')
     }
 

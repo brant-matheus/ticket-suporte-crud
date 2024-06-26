@@ -82,7 +82,8 @@
     "all": true,
     "include": [
       "app/**",
-      "!app/models"
+      "!app/models",
+      "!app/middleware"
     ]
   }
 }
