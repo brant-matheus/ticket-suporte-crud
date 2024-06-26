@@ -91,7 +91,6 @@ export const TicketConfigForm = forwardRef((props, ref) => {
 
       setOpen(false);
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
       ToastFail({
         description: `${stateProps?.title} usado em ticket.`,

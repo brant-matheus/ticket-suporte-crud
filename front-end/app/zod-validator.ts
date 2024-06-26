@@ -105,7 +105,7 @@ export const StoreTicketValidation = z.object({
     .max(50, { message: "maximo 50 caracteres" }),
   description: z
     .string()
-    .min(25, { message: "minimo 25 caracteres" })
+    .min(3, { message: "minimo 3 caracteres" })
     .max(500, { message: "maximo 500 caracteres" }),
   category: z.string().min(1, { message: "Selecione uma categoria" }),
   priority: z.string().min(1, { message: "Selecione uma prioridade" }),

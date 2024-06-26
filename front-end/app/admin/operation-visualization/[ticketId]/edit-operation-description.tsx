@@ -26,7 +26,6 @@ export default function DescriptionForm({
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<DescriptionFormProps>();
   async function editDescription(descriptionForm: DescriptionFormProps) {
-    console.log(descriptionForm);
     setIsLoading(true);
     try {
       const { status, request } = await authInstance.put(

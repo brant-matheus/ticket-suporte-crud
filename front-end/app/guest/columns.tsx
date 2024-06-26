@@ -7,10 +7,7 @@ import { formatIso } from "@/components/utils/formatIso";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRef } from "react";
-import {
-  EditTicketModal,
-  ModalEditProps,
-} from "@/components/edit-ticket/edit-ticket";
+import { EditModalHandles, EditTicketForm } from "./edit-ticket-form";
 
 interface Color {
   name: string;
@@ -128,14 +125,23 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "ações",
     cell: ({ row }) => {
       const item = row.original;
-      const modalRef = useRef<ModalEditProps>(null);
+      const modalRef = useRef<EditModalHandles>();
       return (
         <>
+          <EditTicketForm ref={modalRef} />
           <div className="flex items-center gap-x-1">
-            <EditTicketModal ref={modalRef} />
-
             <DeleteDialog route="ticket" title="ticket" params={item.id} />
-
+            <EditButton
+              action={() =>
+                modalRef.current?.handleClick({
+                  ticketDescription: item.description,
+                  ticketId: item.id,
+                  ticketSubject: item.subject,
+                  ticketCategory: item.ticketCategory.name,
+                  ticketPriority: item.ticketPriority.name,
+                })
+              }
+            />
             <CommentaryOperationButton
               action={() =>
                 window.open(

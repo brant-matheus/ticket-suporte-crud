@@ -47,7 +47,6 @@ interface Ticket {
 interface ParamsProps {
   item: Ticket;
   title: string;
-  tabs: "priority" | "category";
 }
 export interface ModalEditProps {
   handleCLick: ({ item, title }: ParamsProps) => void;
