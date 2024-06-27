@@ -1,6 +1,6 @@
 "use client";
 import { authInstance } from "@/app/axios-config";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import { Textarea } from "../ui/textarea";
@@ -41,6 +41,7 @@ export default function ChatArea() {
   const params = useParams<{ "chat-area": string }>();
   const pathname = usePathname();
   const [data, setData] = useState<TicketCommentArray>([]);
+  const router = useRouter();
   async function getComments() {
     try {
       const { data } = await authInstance.get("comments", {
@@ -76,6 +77,7 @@ export default function ChatArea() {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<CommentaryProps>({
     resolver: zodResolver(commentSchema),
   });
@@ -86,7 +88,10 @@ export default function ChatArea() {
         params: { ticketId: parseInt(params["chat-area"]) },
       });
 
-      setIsLoading(false);
+      if (status == 201) {
+        setIsLoading(false);
+        location.reload();
+      }
     } catch (error) {
       setIsLoading(false);
     }
@@ -130,14 +135,14 @@ export default function ChatArea() {
       </div>
       <div className="space-y-1">
         <p className="flex justify-end mr-48 items-center gap-x-1">
-          Caracteres: limite: {limit}
+          Caracteres: {caracters} limite: {limit}
         </p>
         <form
           className="flex items-center gap-x-6 justify-center mt-auto "
           onSubmit={handleSubmit(storeComment)}
         >
           <Textarea
-            // maxLength={limit}
+            maxLength={limit}
             className="w-5/6 resize-none h-5"
             placeholder="Digite seu comentário"
             onChange={(e) => {

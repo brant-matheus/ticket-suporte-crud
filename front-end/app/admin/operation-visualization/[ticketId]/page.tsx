@@ -80,11 +80,20 @@ export default function Page() {
     setData(data);
   }
 
-  const ticket = data?.[0]?.ticket;
+  const [ticket, setTicket] = useState<Ticket>();
+  async function getTicket() {
+    const { data } = await authInstance.get(`ticket/${params.ticketId}`, {
+      params: { ticketId: parseInt(params.ticketId) },
+    });
+    setTicket(data);
+  }
+
+  console.log(ticket);
+
   const ticketProperties = [
     { title: "Assunto", item: ticket?.subject, key: 1 },
     { title: "Descrição", item: ticket?.description, key: 2 },
-    { title: "Categoria", item: ticket?.ticketCategory.name, key: 3 },
+    { title: "Categoria", item: ticket?.ticketCategory?.name, key: 3 },
     { title: "Prioridade", item: ticket?.ticketPriority.name, key: 4 },
     { title: "Status", item: ticket?.ticketStatus.name, key: 5 },
     { title: "Criado por email", item: ticket?.user.email, key: 6 },
@@ -95,11 +104,15 @@ export default function Page() {
       key: 8,
     },
   ];
+
+  console.log(ticketProperties);
   const modalRef = useRef<ModalProps>();
 
   useEffect(() => {
+    getTicket();
     getOperation();
   }, []);
+
   return (
     <Card>
       <CreateTicketOperation ref={modalRef} />

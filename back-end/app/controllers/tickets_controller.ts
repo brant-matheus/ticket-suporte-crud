@@ -5,6 +5,11 @@ import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
 import { TicketValidator } from '#validators/ticket'
 export default class TicketsController {
+  async show({ params, response }: HttpContext) {
+    const data = await Ticket.findOrFail(params.id)
+
+    return response.ok(data)
+  }
   async index({ request, auth, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 

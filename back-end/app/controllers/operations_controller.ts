@@ -2,24 +2,13 @@ import Operation from '#models/operation'
 import Ticket from '#models/ticket'
 import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
-import { DateTime } from 'luxon'
 
 export default class OperationsController {
-  async show({ params }: HttpContext) {}
-
-  async index({ request }: HttpContext) {
+  async index({ request, response }: HttpContext) {
     const { ticketId } = request.only(['ticketId'])
-    return await Operation.query()
-      .where('ticket_id', ticketId)
-      .preload('responsible')
+    const data = await Operation.query().where('ticket_id', ticketId).preload('responsible')
 
-      .preload('ticket', (ticketQuery) => {
-        ticketQuery
-          .preload('user')
-          .preload('ticketCategory')
-          .preload('ticketPriority')
-          .preload('ticketStatus')
-      })
+    return response.ok(data)
   }
 
   async store({ request, auth }: HttpContext) {
