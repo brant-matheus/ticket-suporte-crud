@@ -188,7 +188,7 @@ export const columns: ColumnDef<Ticket>[] = [
                 </div>
               </div>
               <Separator />
-              {item.ticketStatusId === 1 ? (
+              {item.ticketStatus.name === "pendente" ? (
                 "Nenhuma operação criada"
               ) : (
                 <div className="flex justify-center">

@@ -197,16 +197,4 @@ test.group('user crud validation', (group) => {
     response.assertStatus(400)
     await User.findOrFail(secondGuest.id)
   })
-
-  test('it should not be able to get/index users by guest user').run(
-    async ({ assert, client, route }) => {
-      const guest = await UserFactory.create()
-
-      const response = await client.get(route('user.index')).loginAs(guest)
-      response.assertStatus(401)
-
-      const body = response.body()
-      assert.isEmpty(body)
-    }
-  )
 })

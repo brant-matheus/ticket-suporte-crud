@@ -7,6 +7,7 @@ export default class extends BaseSeeder {
   async run() {
     const blueColor = await Color.findByOrFail('name', 'azul')
     const greenColor = await Color.findByOrFail('name', 'verde')
+    const yellow = await Color.findByOrFail('name', 'amarelo')
     const user = await User.findByOrFail('email', 'matheus@saga.com')
 
     await TicketStatus.updateOrCreateMany(
@@ -17,6 +18,7 @@ export default class extends BaseSeeder {
           responsibleId: user.id,
           colorId: blueColor.id,
         },
+        { name: 'em análise', colorId: yellow.id, responsibleId: user.id },
         {
           name: 'concluido',
           responsibleId: user.id,

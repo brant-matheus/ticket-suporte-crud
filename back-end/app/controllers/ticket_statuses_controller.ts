@@ -7,10 +7,21 @@ export default class TicketStatusesController {
   async index({ request, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
 
+    if (page && pageSize) {
+      const data = await TicketStatus.query()
+        .preload('responsible')
+        .preload('color')
+        .paginate(page, pageSize)
+
+      return response.ok(data)
+    }
+
     const data = await TicketStatus.query()
       .preload('responsible')
+      .where('name', '!=', 'pendente')
       .preload('color')
       .paginate(page, pageSize)
+
     return response.ok(data)
   }
 

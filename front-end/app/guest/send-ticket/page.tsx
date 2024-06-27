@@ -94,7 +94,10 @@ const page = () => {
       const { data, request } = await authInstance.post("ticket", ticket);
       ToastSuccess();
       setIsLoading(false);
+      setCharacter(0);
       form.reset();
+      form.resetField("category");
+      form.resetField("priority");
     } catch (error) {
       setIsLoading(false);
 

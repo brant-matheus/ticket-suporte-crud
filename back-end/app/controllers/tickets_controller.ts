@@ -4,7 +4,6 @@ import TicketPriority from '#models/ticket_priority'
 import TicketStatus from '#models/ticket_status'
 import type { HttpContext } from '@adonisjs/core/http'
 import { TicketValidator } from '#validators/ticket'
-import auth from '@adonisjs/auth/services/main'
 export default class TicketsController {
   async index({ request, auth, response }: HttpContext) {
     const { page, pageSize } = request.only(['page', 'pageSize'])
@@ -15,6 +14,7 @@ export default class TicketsController {
         .preload('ticketStatus', (ticketStatus) => ticketStatus.preload('color'))
         .preload('ticketCategory', (ticketCategory) => ticketCategory.preload('color'))
         .preload('ticketPriority', (ticketPriority) => ticketPriority.preload('color'))
+
         .paginate(page, pageSize)
       return response.ok(data)
     }
