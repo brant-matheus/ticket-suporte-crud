@@ -13,6 +13,7 @@ import UserDeleteButton from "../buttons/user-delete-button";
 import PasswordFormEdit from "../forms/password-from-edit";
 
 const UserSettings = () => {
+  const userId = localStorage.getItem("userId");
   return (
     <div className="container flex justify-center ">
       <Card className="w-11/12 ">
@@ -47,7 +48,7 @@ const UserSettings = () => {
         </CardHeader>
         {/* password content */}
         <CardContent>
-          <PasswordFormEdit />
+          <PasswordFormEdit userId={parseInt(userId!)} />
         </CardContent>
         <Separator />
 

@@ -65,6 +65,7 @@ export const columns: ColumnDef<TData>[] = [
     header: "ações",
     cell: ({ row }) => {
       const user = row.original;
+
       const modalRef = useRef<EditModalHandles>(null);
       return (
         <>

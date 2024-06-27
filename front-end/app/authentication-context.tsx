@@ -73,9 +73,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         registerForm
       );
       if (request.status ?? status === 200) {
-        setAuthData(data);
         localStorage.setItem("token", data.token.token);
         localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("fullName", data.fullName);
+        setAuthData(data);
+
         authInstance.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.token.token}`;
@@ -94,9 +97,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const { status, request, data } = await instance.post("auth", loginForm);
       if ((request.status ?? status) === 200) {
         // set item
-        setAuthData(data);
         localStorage.setItem("token", data.token.token);
         localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem("fullName", data.user.fullName);
+        setAuthData(data);
 
         authInstance.defaults.headers.common[
           "Authorization"

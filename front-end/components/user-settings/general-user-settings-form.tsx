@@ -31,25 +31,9 @@ interface User {
 const GeneralUserForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   // const [isPageLoading, setIsPageLoading] = useState(true);
-
-  const userId = localStorage.getItem("userId");
-
-  const [user, setUser] = useState<User>();
-  async function getSingleUser() {
-    try {
-      const { data } = await authInstance.get(`user`, {
-        params: {
-          isProfile: true,
-        },
-      });
-      setUser(data);
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("fullName", data.fullName);
-    } catch (error) {}
-  }
-  useEffect(() => {
-    getSingleUser();
-  }, []);
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
+  const [email, setEmail] = useState(localStorage.getItem("email"));
+  const [fullName, setFullName] = useState(localStorage.getItem("fullName"));
 
   const { ToastFail, ToastSuccess } = useToastContext();
 
@@ -63,7 +47,7 @@ const GeneralUserForm = () => {
 
   async function editUser(editForm: UserInfoProfileInfer) {
     setIsLoading(true);
-    if (editForm.email === user?.email && user?.fullName == editForm.fullName) {
+    if (editForm.email === email! && fullName == editForm.fullName) {
       ToastFail({ description: "Nenhum campo preenchido" });
       setIsLoading(false);
 
@@ -72,14 +56,13 @@ const GeneralUserForm = () => {
 
     try {
       const { request, status, data } = await authInstance.put(
-        `user/${user?.id}`,
+        `user/${userId}`,
         editForm
       );
       if ((request.status ?? status) == 200) {
         localStorage.setItem("userId", data.id);
         localStorage.setItem("email", data.email);
         localStorage.setItem("fullName", data.fullName);
-        setUser(data);
 
         ToastSuccess();
       }

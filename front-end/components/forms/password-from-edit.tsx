@@ -22,11 +22,10 @@ import LoaderButton from "../buttons/loader-button";
 
 interface props {
   closeDialog?: Function;
+  userId: number;
 }
 
-const PasswordFormEdit = ({ closeDialog }: props) => {
-  const userId = localStorage.getItem("userId");
-
+const PasswordFormEdit = ({ closeDialog, userId }: props) => {
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
 
@@ -40,7 +39,7 @@ const PasswordFormEdit = ({ closeDialog }: props) => {
   async function passwordRedefine(passwordForm: PasswordInfer) {
     setIsLoading(true);
     try {
-      await authInstance.put(`user/${userId!}`, passwordForm);
+      await authInstance.put(`user/${userId}`, passwordForm);
       if (typeof closeDialog === "function") {
         closeDialog();
       }

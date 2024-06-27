@@ -60,6 +60,7 @@ export const EditUserForm = forwardRef((props, ref) => {
   });
 
   async function userEdit(editForm: PutUserInfer) {
+    console.log(stateProps);
     setIsLoading(true);
     try {
       await authInstance.put(`user/${stateProps?.userId}`, editForm);
