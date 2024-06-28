@@ -1,4 +1,3 @@
-"use client";
 import { Badge } from "@/components/ui/badge";
 
 import DeleteDialog from "@/components/buttons/delete-dialog";
@@ -7,9 +6,9 @@ import DisabledEditButton from "@/components/buttons/disabled-edit-button";
 import EditButton from "@/components/buttons/edit-button";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRef } from "react";
-import { ModalHandles, TicketConfigForm } from "./edit-ticket-configs-form";
+
 import BadgeColumn from "@/components/utils/badgeColumn";
+import { EditTicketConfigHandles } from "./edit-ticket-configs-form";
 interface responsible {
   id: number;
   fullName: string;
@@ -36,11 +35,13 @@ export type TData = {
 interface TicketConfigsProps {
   title: string;
   route: string;
+  ticketConfigEdit: React.MutableRefObject<EditTicketConfigHandles | undefined>;
 }
 
 export function ticketConfigsColumns({
   title,
   route,
+  ticketConfigEdit,
 }: TicketConfigsProps): ColumnDef<TData>[] {
   return [
     { accessorKey: "id", header: "id" },
@@ -83,11 +84,9 @@ export function ticketConfigsColumns({
       header: "ações",
       cell: ({ row }) => {
         const item = row.original;
-        const modalRef = useRef<ModalHandles>(null);
 
         return (
           <div className="flex space-x-2">
-            <TicketConfigForm ref={modalRef} />
             {["pendente", "concluido"].includes(item.name) ? (
               <>
                 <DisabledDeleteButton />
@@ -97,14 +96,15 @@ export function ticketConfigsColumns({
               <>
                 <DeleteDialog params={item.id} route={route} title={title} />
                 <EditButton
-                  action={() =>
-                    modalRef.current?.handleClick({
+                  action={() => {
+                    ticketConfigEdit.current?.handleClick();
+                    ticketConfigEdit.current?.setStateProps({
                       ticketConfigName: item.name,
                       route: route,
                       title: title,
                       params: item.id,
-                    })
-                  }
+                    });
+                  }}
                 />
               </>
             )}

@@ -25,16 +25,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TicketConfigValidator, TicketConfigInfer } from "@/app/zod-validator";
+import { get } from "http";
 
-export interface ModalHandles {
-  handleClick: (props: HandleProps) => void;
+export interface EditTicketConfigHandles {
+  handleClick: () => void;
+  setStateProps: (props: EditTicketConfigProps) => void;
 }
 interface FormProps {
   name: string;
   color: string;
 }
 
-interface HandleProps {
+interface EditTicketConfigProps {
   ticketConfigName: string;
   title: string;
   params: number;
@@ -50,7 +52,7 @@ interface Colors {
 export const TicketConfigForm = forwardRef((props, ref) => {
   const { ToastSuccess, ToastFail } = useToastContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [stateProps, setStateProps] = useState<HandleProps>();
+  const [stateProps, setStateProps] = useState<EditTicketConfigProps>();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -58,21 +60,13 @@ export const TicketConfigForm = forwardRef((props, ref) => {
   };
   const [colors, SetColors] = useState<Colors[]>([]);
 
-  async function getColors() {
-    setIsLoading(true);
-    try {
-      const { status, request, data } = await authInstance.get("color");
-      if ((status ?? request.status) == 200) {
-        SetColors(data);
-        setIsLoading(false);
-      }
-    } catch (error) {}
-  }
   useImperativeHandle(ref, () => ({
-    handleClick(props: HandleProps) {
+    handleClick() {
       handleOpen();
+    },
+
+    setStateProps(props: EditTicketConfigProps) {
       setStateProps(props);
-      getColors();
     },
   }));
 
@@ -99,7 +93,18 @@ export const TicketConfigForm = forwardRef((props, ref) => {
   }
 
   useEffect(() => {
+    async function getColors() {
+      setIsLoading(true);
+      try {
+        const { status, request, data } = await authInstance.get("color");
+        if ((status ?? request.status) == 200) {
+          SetColors(data);
+          setIsLoading(false);
+        }
+      } catch (error) {}
+    }
     form.reset();
+    getColors();
   }, [open, form]);
   return (
     <>
@@ -166,4 +171,4 @@ export const TicketConfigForm = forwardRef((props, ref) => {
   );
 });
 
-TicketConfigForm.displayName = "ticket config form";
+TicketConfigForm.displayName = "ticket config edit form";

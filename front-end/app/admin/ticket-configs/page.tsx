@@ -10,10 +10,16 @@ import {
   CreateTicketConfigsForm,
   HandleClickType,
 } from "./create-ticket-configs-form";
+import {
+  EditTicketConfigHandles,
+  TicketConfigForm,
+} from "./edit-ticket-configs-form";
 const Page = () => {
   const formRef = useRef<HandleClickType>(null);
+  const ticketConfigEdit = useRef<EditTicketConfigHandles>();
   return (
     <>
+      <TicketConfigForm ref={ticketConfigEdit} />
       <CreateTicketConfigsForm ref={formRef} />
       <AdminSideBar />
       <Tabs defaultValue="categories" className="w-11/12 mt-4 ml-20 space-y-4">
@@ -29,6 +35,7 @@ const Page = () => {
                 columns={ticketConfigsColumns({
                   title: "categoria",
                   route: "ticket-category",
+                  ticketConfigEdit: ticketConfigEdit,
                 })}
                 component={
                   <CreateButton
@@ -54,6 +61,7 @@ const Page = () => {
                 columns={ticketConfigsColumns({
                   title: "prioridade",
                   route: "ticket-priority",
+                  ticketConfigEdit: ticketConfigEdit,
                 })}
                 component={
                   <CreateButton
@@ -79,6 +87,7 @@ const Page = () => {
                 columns={ticketConfigsColumns({
                   title: "status",
                   route: "ticket-status",
+                  ticketConfigEdit: ticketConfigEdit,
                 })}
                 component={
                   <CreateButton
