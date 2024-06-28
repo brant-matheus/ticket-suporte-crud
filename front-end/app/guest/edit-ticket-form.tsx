@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { StoreTicketInfer, StoreTicketValidation } from "../zod-validator";
+import { useToastContext } from "@/components/utils/context-toast";
 
 interface TicketConfigProps {
   id: number;
@@ -52,6 +53,8 @@ export const EditTicketForm = forwardRef((props, ref) => {
   const [item, setItem] = useState<TicketProps | null>(null);
   const [character, setCharacter] = useState<number>();
 
+  const { ToastSuccess, ToastFail } = useToastContext();
+
   useImperativeHandle(ref, () => ({
     handleClick() {
       setIsOpen(true);
@@ -73,8 +76,20 @@ export const EditTicketForm = forwardRef((props, ref) => {
   });
 
   async function updateTicket(ticket: StoreTicketInfer) {
-    console.log(ticket);
-    setIsOpen(false);
+    setIsLoading(true);
+    try {
+      const { status, request, data } = await authInstance.put(
+        `ticket/${item?.ticketId}`,
+        ticket
+      );
+
+      if ((status ?? request.status) == 200) {
+        ToastSuccess();
+        setIsOpen(false);
+      }
+    } catch (error) {
+      ToastFail({ description: "Error ao editar ticket" });
+    }
   }
 
   useEffect(() => {
@@ -102,7 +117,7 @@ export const EditTicketForm = forwardRef((props, ref) => {
         subject: item.ticketSubject,
       });
     }
-  }, [isOpen]);
+  }, [isOpen, form, item]);
 
   return (
     <>
