@@ -33,6 +33,4 @@ export default class OperationsController {
     const operation = await Operation.findOrFail(params.id)
     await operation.merge({ description: description }).save()
   }
-
-  async destroy({ params }: HttpContext) {}
 }

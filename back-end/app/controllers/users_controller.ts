@@ -43,7 +43,6 @@ export default class UsersController {
     }
     const data = request.all()
     const user = await User.findOrFail(params.id)
-    console.log(user.serialize())
 
     if (data.hasOwnProperty('password')) {
       console.log(request.all())

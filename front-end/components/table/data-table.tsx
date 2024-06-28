@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
         setData(data);
       }
     } catch (error) {}
-  }, [pagination]);
+  }, [pagination, route]);
   useEffect(() => {
     getData();
   }, [pagination, getData]);

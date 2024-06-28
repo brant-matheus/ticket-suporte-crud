@@ -183,3 +183,5 @@ export const CreateUserForm = forwardRef((props, ref) => {
     </>
   );
 });
+
+CreateUserForm.displayName = "Create user form";

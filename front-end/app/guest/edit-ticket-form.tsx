@@ -105,7 +105,7 @@ export const EditTicketForm = forwardRef((props, ref) => {
         subject: item.ticketSubject,
       });
     }
-  }, [item]);
+  }, [item, form]);
 
   return (
     <>
@@ -216,3 +216,5 @@ export const EditTicketForm = forwardRef((props, ref) => {
     </>
   );
 });
+
+EditTicketForm.displayName = "EditTicketForm";

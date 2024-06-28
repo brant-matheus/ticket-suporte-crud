@@ -1,5 +1,4 @@
 import Operation from '#models/operation'
-import User from '#models/user'
 import factory from '@adonisjs/lucid/factories'
 import { TicketFactory } from './ticket_factory.js'
 import { UserFactory } from './user_factory.js'

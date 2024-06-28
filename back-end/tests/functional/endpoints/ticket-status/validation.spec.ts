@@ -10,7 +10,7 @@ test.group('ticket status validation', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
   test('it should not be able to get/index ticket status by guest').run(
-    async ({ client, route, assert }) => {
+    async ({ client, route }) => {
       const user = await UserFactory.create()
 
       const response = await client.get(route('ticket_status.index')).loginAs(user)

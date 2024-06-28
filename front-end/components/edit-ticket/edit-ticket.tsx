@@ -1,3 +1,4 @@
+"use client";
 import { authInstance } from "@/app/axios-config";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -134,3 +135,5 @@ export const EditTicketModal = forwardRef((props, ref) => {
     </>
   );
 });
+
+EditTicketModal.displayName = "EditTicketModal";

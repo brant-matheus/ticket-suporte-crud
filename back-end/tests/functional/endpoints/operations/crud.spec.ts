@@ -1,7 +1,6 @@
 import { OperationFactory } from '#database/factories/operation_factory'
 import { TicketFactory } from '#database/factories/ticket_factory'
 import { UserFactory } from '#database/factories/user_factory'
-import TicketCategory from '#models/ticket_category'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
@@ -24,7 +23,7 @@ test.group('crud operation', (group) => {
 
         .create()
 
-      const operation = await OperationFactory.merge({
+      await OperationFactory.merge({
         responsibleId: admin.id,
         ticketId: ticket.id,
       }).createMany(2)
@@ -49,11 +48,11 @@ test.group('crud operation', (group) => {
     }
   )
 
-  test('it should be able to store operation for ticket by admin').run(
-    async ({ assert, client, route }) => {}
-  )
+  // test('it should be able to store operation for ticket by admin').run(
+  //   async ({ assert, client, route }) => {}
+  // )
 
-  test('it should be able to update operation description for ticket').run(
-    async ({ assert, client, route }) => {}
-  )
+  // test('it should be able to update operation description for ticket').run(
+  //   async ({ assert, client, route }) => {}
+  // )
 })

@@ -6,7 +6,7 @@ import { DataTable } from "@/components/table/data-table";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import CreateButton from "@/components/buttons/create-button";
-const page = () => {
+const Page = () => {
   const router = useRouter();
   return (
     <>
@@ -28,4 +28,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

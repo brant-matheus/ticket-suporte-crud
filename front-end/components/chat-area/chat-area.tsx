@@ -1,7 +1,7 @@
 "use client";
 import { authInstance } from "@/app/axios-config";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
@@ -41,18 +41,19 @@ export default function ChatArea() {
   const params = useParams<{ "chat-area": string }>();
   const pathname = usePathname();
   const [data, setData] = useState<TicketCommentArray>([]);
-  const router = useRouter();
-  async function getComments() {
+
+  const getComments = useCallback(async () => {
     try {
       const { data } = await authInstance.get("comments", {
         params: { ticketId: params["chat-area"] },
       });
       setData(data);
     } catch (error) {}
-  }
+  }, [params]);
+
   useEffect(() => {
     getComments();
-  }, []);
+  }, [getComments]);
   const scrollAreaRef = useRef<HTMLDivElement>(null); // Explicitly specify the type
 
   useEffect(() => {

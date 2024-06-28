@@ -73,7 +73,7 @@ export const EditUserForm = forwardRef((props, ref) => {
   }
   useEffect(() => {
     form.reset();
-  }, [open]);
+  }, [open, form]);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -192,3 +192,5 @@ export const EditUserForm = forwardRef((props, ref) => {
     </>
   );
 });
+
+EditUserForm.displayName = "edit user form";

@@ -86,54 +86,50 @@ test.group('ticket crud validation', (group) => {
     }
   )
 
-  test('it should not be able to delete a ticket as admin').run(
-    async ({ assert, client, route }) => {
-      const user = await UserFactory.create()
-      const admin = await UserFactory.apply('admin').create()
+  test('it should not be able to delete a ticket as admin').run(async ({ client, route }) => {
+    const user = await UserFactory.create()
+    const admin = await UserFactory.apply('admin').create()
 
-      const ticket = await TicketFactory.merge({
-        createdById: user.id,
-      })
-        .with('ticketStatus', 1, (ticketStatus) => ticketStatus.merge({ responsibleId: admin.id }))
-        .with('ticketCategory', 1, (ticketCategory) =>
-          ticketCategory.merge({ responsibleId: admin.id })
-        )
-        .with('ticketPriority', 1, (ticketPriority) =>
-          ticketPriority.merge({ responsibleId: admin.id })
-        )
-        .create()
+    const ticket = await TicketFactory.merge({
+      createdById: user.id,
+    })
+      .with('ticketStatus', 1, (ticketStatus) => ticketStatus.merge({ responsibleId: admin.id }))
+      .with('ticketCategory', 1, (ticketCategory) =>
+        ticketCategory.merge({ responsibleId: admin.id })
+      )
+      .with('ticketPriority', 1, (ticketPriority) =>
+        ticketPriority.merge({ responsibleId: admin.id })
+      )
+      .create()
 
-      const response = await client.delete(route('ticket.destroy', [ticket.id])).loginAs(admin)
+    const response = await client.delete(route('ticket.destroy', [ticket.id])).loginAs(admin)
 
-      response.assertStatus(401)
-    }
-  )
+    response.assertStatus(401)
+  })
 
-  test('it should not be able to delete a ticket in progress').run(
-    async ({ assert, client, route }) => {
-      const user = await UserFactory.create()
-      const admin = await UserFactory.apply('admin').create()
+  test('it should not be able to delete a ticket in progress').run(async ({ client, route }) => {
+    const user = await UserFactory.create()
+    const admin = await UserFactory.apply('admin').create()
 
-      const ticket = await TicketFactory.merge({
-        createdById: user.id,
-      })
-        .with('ticketStatus', 1, (ticketStatus) => ticketStatus.merge({ responsibleId: admin.id }))
-        .with('ticketCategory', 1, (ticketCategory) =>
-          ticketCategory.merge({ responsibleId: admin.id })
-        )
-        .with('ticketPriority', 1, (ticketPriority) =>
-          ticketPriority.merge({ responsibleId: admin.id })
-        )
-        .create()
+    const ticket = await TicketFactory.merge({
+      createdById: user.id,
+    })
+      .with('ticketStatus', 1, (ticketStatus) => ticketStatus.merge({ responsibleId: admin.id }))
+      .with('ticketCategory', 1, (ticketCategory) =>
+        ticketCategory.merge({ responsibleId: admin.id })
+      )
+      .with('ticketPriority', 1, (ticketPriority) =>
+        ticketPriority.merge({ responsibleId: admin.id })
+      )
+      .create()
 
-      const response = await client.delete(route('ticket.destroy', [ticket.id])).loginAs(user)
+    const response = await client.delete(route('ticket.destroy', [ticket.id])).loginAs(user)
 
-      response.assertStatus(400)
-    }
-  )
+    response.assertStatus(400)
+  })
 
   test('it should not be able to delete a ticket with not user ticket').run(
-    async ({ assert, client, route }) => {
+    async ({ client, route }) => {
       const user = await UserFactory.create()
       const admin = await UserFactory.apply('admin').create()
       const notOwnerUser = await UserFactory.create()

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { afterFind, BaseModel, beforeFind, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeFind, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from '#models/user'
 import TicketCategory from '#models/ticket_category'

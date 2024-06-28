@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -19,11 +18,13 @@ import { authInstance } from "@/app/axios-config";
 import { Button } from "@/components/ui/button";
 import { ChevronsUpDown, PlusCircle } from "lucide-react";
 import { formatIso } from "@/components/utils/formatIso";
-import Link from "next/link";
-import ActionCreateButton from "@/components/buttons/action-create-button";
 
 import CreateButton from "@/components/buttons/create-button";
-import { CreateTicketOperation, ModalProps } from "../../create-operation-form";
+import {
+  CreateTicketOperation,
+  ModalHandles,
+} from "../../create-operation-form";
+
 interface TicketConfig {
   id: number;
   name: string;
@@ -73,20 +74,8 @@ export default function Page() {
   const params = useParams<{ ticketId: string }>();
 
   const [data, setData] = useState<Operation[] | undefined>([]);
-  async function getOperation() {
-    const { data } = await authInstance.get("operation", {
-      params: { ticketId: parseInt(params.ticketId) },
-    });
-    setData(data);
-  }
 
   const [ticket, setTicket] = useState<Ticket>();
-  async function getTicket() {
-    const { data } = await authInstance.get(`ticket/${params.ticketId}`, {
-      params: { ticketId: parseInt(params.ticketId) },
-    });
-    setTicket(data);
-  }
 
   console.log(ticket);
 
@@ -105,17 +94,30 @@ export default function Page() {
     },
   ];
 
-  console.log(ticketProperties);
-  const modalRef = useRef<ModalProps>();
+  const createTicketOperationModalRef = useRef<ModalHandles>();
 
   useEffect(() => {
+    async function getTicket() {
+      const { data } = await authInstance.get(`ticket/${params.ticketId}`, {
+        params: { ticketId: parseInt(params.ticketId) },
+      });
+      setTicket(data);
+    }
+
+    async function getOperation() {
+      const { data } = await authInstance.get("operation", {
+        params: { ticketId: parseInt(params.ticketId) },
+      });
+      setData(data);
+    }
+
     getTicket();
     getOperation();
-  }, []);
+  }, [params]);
 
   return (
     <Card>
-      <CreateTicketOperation ref={modalRef} />
+      <CreateTicketOperation ref={createTicketOperationModalRef} />
 
       <CardHeader>
         <CardTitle>Operações</CardTitle>
@@ -126,7 +128,9 @@ export default function Page() {
         <CardDescription>
           <CreateButton
             action={() =>
-              modalRef.current?.handleClick({ ticketId: params.ticketId })
+              createTicketOperationModalRef.current?.handleClick({
+                ticketId: params.ticketId,
+              })
             }
             title="operação"
           />

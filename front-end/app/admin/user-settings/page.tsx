@@ -1,7 +1,7 @@
 import React from "react";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import UserSettings from "@/components/user-settings/user-settings";
-const page = () => {
+const Page = () => {
   return (
     <>
       <AdminSideBar />
@@ -10,4 +10,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

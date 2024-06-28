@@ -1,3 +1,4 @@
+"use client";
 import { authInstance } from "@/app/axios-config";
 import LoaderButton from "@/components/buttons/loader-button";
 import { Button } from "@/components/ui/button";
@@ -96,7 +97,7 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
   }
   useEffect(() => {
     form.reset();
-  }, [open]);
+  }, [open, form]);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -159,3 +160,5 @@ export const CreateTicketConfigsForm = forwardRef((props, ref) => {
     </>
   );
 });
+
+CreateTicketConfigsForm.displayName = "create ticket configuration form";

@@ -1,3 +1,4 @@
+"use client";
 import { authInstance } from "@/app/axios-config";
 import LoaderButton from "@/components/buttons/loader-button";
 import { Button } from "@/components/ui/button";

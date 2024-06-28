@@ -8,10 +8,9 @@ import { UserFactory } from './user_factory.js'
 export const TicketFactory = factory
   .define(Ticket, async ({ faker }) => {
     return {
-      description:
-        'The has many relationship is defined using the @hasMany decorator on a model property.',
+      description: faker.word.words({ count: 5 }),
 
-      subject: 'has many relationship',
+      subject: faker.word.words({ count: 10 }),
     }
   })
   .relation('ticketPriority', () => TicketPriorityFactory)

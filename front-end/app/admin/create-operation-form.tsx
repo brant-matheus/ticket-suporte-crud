@@ -1,14 +1,9 @@
 "use client";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "../../components/ui/dialog";
+import { Dialog, DialogContent } from "../../components/ui/dialog";
 import { authInstance } from "@/app/axios-config";
 import { useToastContext } from "../../components/utils/context-toast";
 import { Textarea } from "../../components/ui/textarea";
@@ -18,7 +13,7 @@ interface OperationProps {
   description: string;
 }
 
-export interface ModalProps {
+export interface ModalHandles {
   handleClick: Function;
 }
 interface TicketProps {
@@ -36,6 +31,7 @@ export const CreateTicketOperation = forwardRef((props, ref) => {
     },
   }));
   const form = useForm<OperationProps>();
+
   async function storeDescription(description: OperationProps) {
     setIsLoading(true);
     const data = Object.assign(description, { ticketId: ticketId });
@@ -75,3 +71,5 @@ export const CreateTicketOperation = forwardRef((props, ref) => {
     </>
   );
 });
+
+CreateTicketOperation.displayName = "Create operation ticket";

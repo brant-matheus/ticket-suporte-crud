@@ -125,15 +125,15 @@ export const columns: ColumnDef<Ticket>[] = [
     header: "ações",
     cell: ({ row }) => {
       const item = row.original;
-      const modalRef = useRef<EditModalHandles>();
+      const ModalRef = useRef<EditModalHandles>();
       return (
         <>
-          <EditTicketForm ref={modalRef} />
+          <EditTicketForm ref={ModalRef} />
           <div className="flex items-center gap-x-1">
             <DeleteDialog route="ticket" title="ticket" params={item.id} />
             <EditButton
               action={() =>
-                modalRef.current?.handleClick({
+                ModalRef.current?.handleClick({
                   ticketDescription: item.description,
                   ticketId: item.id,
                   ticketSubject: item.subject,

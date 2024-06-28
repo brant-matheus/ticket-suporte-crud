@@ -17,8 +17,4 @@ export default class CommentsController {
 
     return response.created(data)
   }
-
-  async update() {}
-
-  async destroy() {}
 }

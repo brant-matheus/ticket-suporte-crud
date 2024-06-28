@@ -100,7 +100,7 @@ export const TicketConfigForm = forwardRef((props, ref) => {
 
   useEffect(() => {
     form.reset();
-  }, [open]);
+  }, [open, form]);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -165,3 +165,5 @@ export const TicketConfigForm = forwardRef((props, ref) => {
     </>
   );
 });
+
+TicketConfigForm.displayName = "ticket config form";

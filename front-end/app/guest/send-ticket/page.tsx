@@ -52,7 +52,7 @@ interface TicketConfigSelect {
   color: ColorProps;
 }
 
-const page = () => {
+const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { ToastFail, ToastSuccess } = useToastContext();
   const [categories, setCategories] = useState<TicketConfigSelect[]>();
@@ -95,9 +95,8 @@ const page = () => {
       ToastSuccess();
       setIsLoading(false);
       setCharacter(0);
-      form.reset();
-      form.resetField("category");
-      form.resetField("priority");
+
+      location.reload();
     } catch (error) {
       setIsLoading(false);
 
@@ -228,4 +227,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

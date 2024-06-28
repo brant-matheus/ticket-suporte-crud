@@ -10,8 +10,7 @@ import {
   CreateTicketConfigsForm,
   HandleClickType,
 } from "./create-ticket-configs-form";
-import { authInstance } from "@/app/axios-config";
-const page = () => {
+const Page = () => {
   const formRef = useRef<HandleClickType>(null);
   return (
     <>
@@ -103,4 +102,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

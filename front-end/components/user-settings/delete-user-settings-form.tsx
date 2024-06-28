@@ -36,7 +36,7 @@ const UserDeleteForm = ({ userId }: deleteUserPops) => {
   const form = useForm<z.infer<typeof deleteSchema>>({
     resolver: zodResolver(deleteSchema),
     defaultValues: {
-      confirmation: "",
+      confirmation: "DELETAR",
     },
   });
   async function deleteUser() {
@@ -69,7 +69,7 @@ const UserDeleteForm = ({ userId }: deleteUserPops) => {
               //a single field
               <FormItem>
                 {/* what is shown to user */}
-                <FormLabel>Para confirmar sua ação digite "DELETAR"</FormLabel>
+                <FormLabel>Para confirmar sua ação digite: DELETAR</FormLabel>
                 {/* register, validate then save the input, linked to dataType in ...field*/}
                 <FormControl>
                   <Input

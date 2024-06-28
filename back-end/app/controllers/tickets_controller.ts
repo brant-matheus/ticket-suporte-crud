@@ -19,8 +19,8 @@ export default class TicketsController {
         .preload('ticketStatus', (ticketStatus) => ticketStatus.preload('color'))
         .preload('ticketCategory', (ticketCategory) => ticketCategory.preload('color'))
         .preload('ticketPriority', (ticketPriority) => ticketPriority.preload('color'))
-
         .paginate(page, pageSize)
+
       return response.ok(data)
     }
 
