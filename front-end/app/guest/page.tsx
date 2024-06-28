@@ -1,19 +1,21 @@
 "use client";
-import React from "react";
-import { columns } from "./columns";
+import CreateButton from "@/components/buttons/create-button";
 import { GuestNavBar } from "@/components/layout/guest-side-bar";
 import { DataTable } from "@/components/table/data-table";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import CreateButton from "@/components/buttons/create-button";
+import { columns } from "./columns";
+import { EditTicketModalHandles, EditTicketForm } from "./edit-ticket-form";
+import { useRef } from "react";
 const Page = () => {
   const router = useRouter();
+  const editTicketModalRef = useRef<EditTicketModalHandles>();
   return (
     <>
       <GuestNavBar />
+      <EditTicketForm ref={editTicketModalRef} />
       <div className="container pt-0 pl-20 pb-5 ">
         <DataTable
-          columns={columns}
+          columns={columns({ EditTicketModalHandles: editTicketModalRef })}
           route="ticket"
           component={
             <CreateButton

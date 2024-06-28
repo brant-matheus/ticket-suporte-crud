@@ -1,4 +1,3 @@
-"use client";
 import CommentaryOperationButton from "@/components/buttons/commentary-operation-button";
 import DeleteDialog from "@/components/buttons/delete-dialog";
 import EditButton from "@/components/buttons/edit-button";
@@ -6,8 +5,7 @@ import BadgeColumn from "@/components/utils/badgeColumn";
 import { formatIso } from "@/components/utils/formatIso";
 import ModificationEye from "@/components/utils/modification-datetime-eye";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRef } from "react";
-import { EditModalHandles, EditTicketForm } from "./edit-ticket-form";
+import { EditTicketModalHandles } from "./edit-ticket-form";
 
 interface Color {
   name: string;
@@ -49,111 +47,124 @@ interface Ticket {
   user: User;
 }
 
-export const columns: ColumnDef<Ticket>[] = [
-  { accessorKey: "id", header: "Id do ticket" },
-  {
-    accessorKey: "ticketCategory",
-    id: "Categoria",
+interface EditTicketModalProps {
+  EditTicketModalHandles: React.MutableRefObject<
+    EditTicketModalHandles | undefined
+  >;
+}
 
-    header: "Categoria",
-    cell: ({ row }) => {
-      const item = row.original;
-      return BadgeColumn({
-        title: item.ticketCategory.name,
-        hex: item.ticketCategory.color.hex,
-      });
-    },
-  },
-  {
-    accessorKey: "ticketPriority",
-    id: "Prioridade",
+export function columns({
+  EditTicketModalHandles,
+}: EditTicketModalProps): ColumnDef<Ticket>[] {
+  return [
+    { accessorKey: "id", header: "Id do ticket" },
+    {
+      accessorKey: "ticketCategory",
+      id: "Categoria",
 
-    header: "Prioridade",
-    cell: ({ row }) => {
-      const item = row.original;
-      return BadgeColumn({
-        title: item.ticketPriority.name,
-        hex: item.ticketPriority.color.hex,
-      });
+      header: "Categoria",
+      cell: ({ row }) => {
+        const item = row.original;
+        return BadgeColumn({
+          title: item.ticketCategory.name,
+          hex: item.ticketCategory.color.hex,
+        });
+      },
     },
-  },
-  {
-    accessorKey: "ticketStatus",
-    id: "status",
+    {
+      accessorKey: "ticketPriority",
+      id: "Prioridade",
 
-    header: "status",
-    cell: ({ row }) => {
-      const item = row.original;
-      return BadgeColumn({
-        title: item.ticketStatus.name,
-        hex: item.ticketStatus.color.hex,
-      });
+      header: "Prioridade",
+      cell: ({ row }) => {
+        const item = row.original;
+        return BadgeColumn({
+          title: item.ticketPriority.name,
+          hex: item.ticketPriority.color.hex,
+        });
+      },
     },
-  },
-  {
-    accessorKey: "modificatedAt",
-    id: "modificado em",
-    header: "modificado em",
-    cell: ({ row }) => {
-      const item = row.original;
-      return (
-        <>
-          <ModificationEye
-            createdAtProps={item.createdAt}
-            updatedAtProps={item.updatedAt}
-            title="ticket"
-          />
-        </>
-      );
+    {
+      accessorKey: "ticketStatus",
+      id: "status",
+
+      header: "status",
+      cell: ({ row }) => {
+        const item = row.original;
+        return BadgeColumn({
+          title: item.ticketStatus.name,
+          hex: item.ticketStatus.color.hex,
+        });
+      },
     },
-  },
-  {
-    accessorKey: "isConclued",
-    id: "concluído",
-    header: "Concluido em",
-    cell: ({ row }) => {
-      const item = row.original;
-      return (
-        <>
-          {item.isConclued ? formatIso(item.updatedAt) : <p>Não conclusivo</p>}
-        </>
-      );
-    },
-  },
-  {
-    id: "ações",
-    header: "ações",
-    cell: ({ row }) => {
-      const item = row.original;
-      const ModalRef = useRef<EditModalHandles>();
-      return (
-        <>
-          <EditTicketForm ref={ModalRef} />
-          <div className="flex items-center gap-x-1">
-            <DeleteDialog route="ticket" title="ticket" params={item.id} />
-            <EditButton
-              action={() =>
-                ModalRef.current?.handleClick({
-                  ticketDescription: item.description,
-                  ticketId: item.id,
-                  ticketSubject: item.subject,
-                  ticketCategory: item.ticketCategory.name,
-                  ticketPriority: item.ticketPriority.name,
-                })
-              }
+    {
+      accessorKey: "modificatedAt",
+      id: "modificado em",
+      header: "modificado em",
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <>
+            <ModificationEye
+              createdAtProps={item.createdAt}
+              updatedAtProps={item.updatedAt}
+              title="ticket"
             />
-            <CommentaryOperationButton
-              action={() =>
-                window.open(
-                  `/guest/chat-area/${item.id}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                )
-              }
-            />
-          </div>
-        </>
-      );
+          </>
+        );
+      },
     },
-  },
-];
+    {
+      accessorKey: "isConclued",
+      id: "concluído",
+      header: "Concluido em",
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <>
+            {item.isConclued ? (
+              formatIso(item.updatedAt)
+            ) : (
+              <p>Não conclusivo</p>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      id: "ações",
+      header: "ações",
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <>
+            <div className="flex items-center gap-x-1">
+              <DeleteDialog route="ticket" title="ticket" params={item.id} />
+              <EditButton
+                action={() => {
+                  EditTicketModalHandles.current?.handleClick();
+                  EditTicketModalHandles.current?.setTicketProps({
+                    ticketCategory: item.ticketCategory.name,
+                    ticketDescription: item.description,
+                    ticketId: item.id,
+                    ticketPriority: item.ticketPriority.name,
+                    ticketSubject: item.subject,
+                  });
+                }}
+              />
+              <CommentaryOperationButton
+                action={() =>
+                  window.open(
+                    `/guest/chat-area/${item.id}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+              />
+            </div>
+          </>
+        );
+      },
+    },
+  ];
+}

@@ -1,13 +1,9 @@
 "use client";
 
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useToastContext } from "@/components/utils/context-toast";
+import { authInstance } from "@/app/axios-config";
+import LoaderButton from "@/components/buttons/loader-button";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -16,15 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { authInstance } from "@/app/axios-config";
-import LoaderButton from "@/components/buttons/loader-button";
-import { StoreTicketInfer, StoreTicketValidation } from "../zod-validator";
-import { Textarea } from "@/components/ui/textarea";
-import { register } from "module";
 import {
   Select,
   SelectContent,
@@ -32,6 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { useForm } from "react-hook-form";
+import { StoreTicketInfer, StoreTicketValidation } from "../zod-validator";
 
 interface TicketConfigProps {
   id: number;
@@ -46,25 +39,12 @@ interface TicketProps {
   ticketPriority: string;
 }
 
-export interface EditModalHandles {
-  handleClick: (item: TicketProps) => void;
+export interface EditTicketModalHandles {
+  handleClick: () => void;
+  setTicketProps: (item: TicketProps) => void;
 }
 
 export const EditTicketForm = forwardRef((props, ref) => {
-  async function getCategories() {
-    try {
-      const { data } = await authInstance.get("ticket-category");
-      setCategories(data);
-    } catch (error) {}
-  }
-
-  async function getPriorities() {
-    try {
-      const { data } = await authInstance.get("ticket-priority");
-      setPriorities(data);
-    } catch (error) {}
-  }
-
   const [priorities, setPriorities] = useState<TicketConfigProps[]>([]);
   const [categories, setCategories] = useState<TicketConfigProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,11 +53,12 @@ export const EditTicketForm = forwardRef((props, ref) => {
   const [character, setCharacter] = useState<number>();
 
   useImperativeHandle(ref, () => ({
-    handleClick(item: TicketProps) {
+    handleClick() {
       setIsOpen(true);
+    },
+
+    setTicketProps(item: TicketProps) {
       setItem(item);
-      getCategories();
-      getPriorities();
     },
   }));
 
@@ -93,9 +74,25 @@ export const EditTicketForm = forwardRef((props, ref) => {
 
   async function updateTicket(ticket: StoreTicketInfer) {
     console.log(ticket);
+    setIsOpen(false);
   }
 
   useEffect(() => {
+    async function getCategories() {
+      try {
+        const { data } = await authInstance.get("ticket-category");
+        setCategories(data);
+      } catch (error) {}
+    }
+
+    async function getPriorities() {
+      try {
+        const { data } = await authInstance.get("ticket-priority");
+        setPriorities(data);
+      } catch (error) {}
+    }
+    getCategories();
+    getPriorities();
     if (item) {
       setCharacter(item.ticketDescription.length);
       form.reset({
@@ -105,7 +102,7 @@ export const EditTicketForm = forwardRef((props, ref) => {
         subject: item.ticketSubject,
       });
     }
-  }, [item, form]);
+  }, [isOpen]);
 
   return (
     <>
