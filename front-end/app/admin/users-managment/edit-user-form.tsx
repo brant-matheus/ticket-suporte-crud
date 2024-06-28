@@ -1,15 +1,10 @@
 "use client";
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Card, CardContent } from "@/components/ui/card";
-import { useToastContext } from "@/components/utils/context-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { authInstance } from "@/app/axios-config";
+import LoaderButton from "@/components/buttons/loader-button";
 import PasswordFormEdit from "@/components/forms/password-from-edit";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -18,33 +13,38 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToastContext } from "@/components/utils/context-toast";
 import { PutUserInfer, PutUserValidator } from "@/validators/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { authInstance } from "@/app/axios-config";
-import LoaderButton from "@/components/buttons/loader-button";
 
-export interface EditModalHandles {
-  handleClick: Function;
+export interface EditUserModalHandle {
+  handleClick: () => void;
+  // setUserStateProps: (props: EditUserProps) => void;
+  setUserStateProps: (props: EditUserProps) => void;
 }
 
-interface FormProps {
-  fullName?: string;
+interface EditUserProps {
+  fullName: string;
   email: string;
   isAdmin: boolean;
   userId: number;
 }
 
 export const EditUserForm = forwardRef((props, ref) => {
-  const [stateProps, setStateProps] = useState<FormProps>();
+  const [stateProps, setStateProps] = useState<EditUserProps>();
+  const [open, setOpen] = useState(false);
 
   useImperativeHandle(ref, () => ({
-    handleClick(props: FormProps) {
-      setStateProps(props);
+    handleClick() {
       setOpen(true);
+    },
+    setUserStateProps(props: EditUserProps) {
+      setStateProps(props);
     },
   }));
   function closeDialog() {
@@ -53,14 +53,12 @@ export const EditUserForm = forwardRef((props, ref) => {
   const { ToastFail, ToastSuccess } = useToastContext();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
 
   const form = useForm<PutUserInfer>({
     resolver: zodResolver(PutUserValidator),
   });
 
   async function userEdit(editForm: PutUserInfer) {
-    console.log(stateProps);
     setIsLoading(true);
     try {
       await authInstance.put(`user/${stateProps?.userId}`, editForm);

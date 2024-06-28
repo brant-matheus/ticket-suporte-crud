@@ -3,20 +3,23 @@ import { TData, columns } from "./columns";
 import { DataTable } from "@/components/table/data-table";
 import AdminSideBar from "@/components/layout/admin-side-bar";
 import { CreateUserForm, ModalHandles } from "./create-user-form";
+import { EditUserModalHandle, EditUserForm } from "./edit-user-form";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import CreateButton from "@/components/buttons/create-button";
 
-export default function DemoPage() {
+export default function Page() {
   const modalRef = useRef<ModalHandles>(null);
+  const editUserModalRef = useRef<EditUserModalHandle>();
 
   return (
     <>
       <AdminSideBar />
+      <EditUserForm ref={editUserModalRef} />
       <CreateUserForm ref={modalRef} />
       <div className="container pt-0 pl-20 pb-5">
         <DataTable
-          columns={columns}
+          columns={columns({ editUserModalRef: editUserModalRef })}
           filterColumn="email"
           route="user"
           showFilter={true}
@@ -28,7 +31,6 @@ export default function DemoPage() {
             ></CreateButton>
           }
           // generic
-          fromTable=""
         />
       </div>
     </>

@@ -25,7 +25,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TicketConfigValidator, TicketConfigInfer } from "@/app/zod-validator";
-import { get } from "http";
 
 export interface EditTicketConfigHandles {
   handleClick: () => void;
